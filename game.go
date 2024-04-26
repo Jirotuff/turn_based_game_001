@@ -34,6 +34,28 @@ var player_inventory []string
 var player_special int
 
 // player stats
+type player struct {
+    health int		//player health
+    skill_points int
+    strength int		// increases physical damage
+    intelligence int	// increases magical damage
+    agility int		// increases chance to dodge
+    endurance int		// reduces damage taken
+    social int		// reduces shop prices
+}
+
+// player stats
+var player_1 player {
+	health int = 100 //player health
+	skill_points int = 80
+	strength int = 10     // increases physical damage
+	intelligence int = 10 // increases magical damage
+	agility int = 10      // increases chance to dodge
+	endurance int = 10    // reduces damage taken
+	social int = 10       // reduces shop prices
+}
+
+// player stats
 var player_health int = 100 //player health
 var player_skill_points int = 80
 var player_strength int = 10     // increases physical damage

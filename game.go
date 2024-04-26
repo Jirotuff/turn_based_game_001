@@ -68,15 +68,12 @@ func main() {
 	}
 
 	fmt.Println(player_name, "  Health:", player_health, "SP:", player_skill_points, "Gold:", gold)
-	fmt.Println("")
-	fmt.Println("What do you want to do?")
-	fmt.Println("")
-
-	fmt.Println("battle		> finds opponent")
-	fmt.Println("shop		> enter the shop")
-	fmt.Println("stats		> show player stats")
-	fmt.Println("inv		> show player inventory")
-	fmt.Println("exit		> exits the game")
+	fmt.Println("\nWhat do you want to do?")
+	fmt.Println("\nbattle\t\t> finds opponent")
+	fmt.Println("shop\t\t> enter the shop")
+	fmt.Println("stats\t\t> show player stats")
+	fmt.Println("inv\t\t> show player inventory")
+	fmt.Println("exit\t\t> exits the game")
 	fmt.Println("")
 
 	for {
@@ -111,8 +108,7 @@ func save(slot1 any, data interface{}) {
 
 // starts the combat encounter
 func combat() {
-	fmt.Println("")
-	fmt.Println("Combat started!")
+	fmt.Println("\n\nCombat started!")
 
 	for {
 		check_player_life()
@@ -137,19 +133,15 @@ func player_turn() {
 			fmt.Println(colored)
 		}
 	}
-	fmt.Println("")
-	fmt.Println(">", player_name)
+	fmt.Println("\n>", player_name)
 	fmt.Println("Health:", player_health, "SP:", player_skill_points)
-	fmt.Println("")
-	fmt.Println("> Enemy")
+	fmt.Println("\n> Enemy")
 	fmt.Println("Health:", enemy_health)
-	fmt.Println("")
-	fmt.Println("What's your move?")
-	fmt.Println("")
-	fmt.Println(">> strike			> Use your basic weapon	")
-	fmt.Println(">> heal				> Use an healing item	")
-	fmt.Println(">> force | 20 SP		> High citical chance attack")
-	fmt.Println(">> soul 			> Regenerates some SP")
+	fmt.Println("\nWhat's your move?")
+	fmt.Println("\n>> strike\t\t\t> Use your basic weapon\t")
+	fmt.Println(">> heal\t\t\t\t> Use an healing item\t")
+	fmt.Println(">> force | 20 SP\t\t> High citical chance attack")
+	fmt.Println(">> soul \t\t\t> Regenerates some SP")
 	fmt.Println("")
 
 	fmt.Scanln(&user_input)
@@ -223,11 +215,9 @@ func enemy_turn() {
 func tutorial() {
 	display_tutorial = false
 	fmt.Println("Welcome to this game...")
-	fmt.Println("")
-	fmt.Println("This is a turn based game, as the player you can type the one of the moves to execute it.")
+	fmt.Println("\nThis is a turn based game, as the player you can type the one of the moves to execute it.")
 	fmt.Println("Your goal at this moment is to acquire as much gold as possible")
-	fmt.Println("")
-	fmt.Println("What is you name?")
+	fmt.Println("\nWhat is you name?")
 	fmt.Println("")
 	fmt.Scanln(&user_input)
 	player_name = user_input
@@ -238,10 +228,8 @@ func tutorial() {
 func check_player_life() {
 	if player_health <= 0 {
 		fmt.Println("You have been killed!")
-		fmt.Println("")
-		fmt.Println("Gold:", gold, "Player level:", player_lv)
-		fmt.Println("")
-		fmt.Println("Type anything to quit")
+		fmt.Println("\nGold:", gold, "Player level:", player_lv)
+		fmt.Println("\nType anything to quit")
 
 		fmt.Scanln("")
 		fmt.Scanf("%s", &user_input)
@@ -440,14 +428,10 @@ func player_level_up() {
 			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 92, "Level up!")
 			fmt.Println(colored)
 		}
-		fmt.Println("")
-		fmt.Println("Max HP:", player_max_health, "Max SP:", player_max_skill_points)
-		fmt.Println("")
-		fmt.Println("What stat would you like to improve?")
-		fmt.Println("")
-		fmt.Println("Type the first 2 letters...")
-		fmt.Println("")
-		fmt.Println("Strength:", player_strength)
+		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
+		fmt.Println("\nWhat stat would you like to improve?")
+		fmt.Println("\nType the first 2 letters...")
+		fmt.Println("\nStrength:", player_strength)
 		fmt.Println("Intelligence", player_intelligence)
 		fmt.Println("Agility:", player_agility)
 		fmt.Println("Endurance:", player_endurance)
@@ -476,12 +460,9 @@ func player_level_up() {
 		player_max_skill_points += 5
 		player_health = player_max_health
 		player_skill_points = player_max_skill_points
-		fmt.Println("")
-		fmt.Println("Level up!!")
-		fmt.Println("")
-		fmt.Println("Max HP:", player_max_health, "Max SP:", player_max_skill_points)
-		fmt.Println("")
-		fmt.Println("What stat would you like to improve?")
+		fmt.Println("\nLevel up!!")
+		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
+		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Println("")
 		fmt.Scanln(&user_input)
 
@@ -505,12 +486,9 @@ func player_level_up() {
 		player_max_skill_points += 5
 		player_health = player_max_health
 		player_skill_points = player_max_skill_points
-		fmt.Println("")
-		fmt.Println("Level up!!")
-		fmt.Println("")
-		fmt.Println("Max HP:", player_max_health, "Max SP:", player_max_skill_points)
-		fmt.Println("")
-		fmt.Println("What stat would you like to improve?")
+		fmt.Println("\nLevel up!!")
+		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
+		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Println("")
 		fmt.Scanln(&user_input)
 
@@ -534,12 +512,9 @@ func player_level_up() {
 		player_max_skill_points += 5
 		player_health = player_max_health
 		player_skill_points = player_max_skill_points
-		fmt.Println("")
-		fmt.Println("Level up!!")
-		fmt.Println("")
-		fmt.Println("Max HP:", player_max_health, "Max SP:", player_max_skill_points)
-		fmt.Println("")
-		fmt.Println("What stat would you like to improve?")
+		fmt.Println("\nLevel up!!")
+		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
+		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Println("")
 		fmt.Scanln(&user_input)
 
@@ -564,13 +539,9 @@ func player_level_up() {
 		player_max_skill_points += 5
 		player_health = player_max_health
 		player_skill_points = player_max_skill_points
-		fmt.Println("")
-		fmt.Println("Level up!!")
-		fmt.Println("")
-		fmt.Println("Max HP:", player_max_health, "Max SP:", player_max_skill_points)
-		fmt.Println("")
-		fmt.Println("What stat would you like to improve?")
-		fmt.Println("")
+		fmt.Println("\nLevel up!!")
+		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
+		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Scanln(&user_input)
 
 		switch user_input {
@@ -593,14 +564,11 @@ func player_level_up() {
 func shop() {
 
 	fmt.Println("Welcome to the shop")
-	fmt.Println("")
-	fmt.Println("We have a variety of products available, please take your time choosing")
-	fmt.Println("")
-	fmt.Println("- potion")
+	fmt.Println("\nWe have a variety of products available, please take your time choosing")
+	fmt.Println("\n- potion")
 	fmt.Println("- sword")
 	fmt.Println("- shield")
-	fmt.Println("")
-	fmt.Println("leave the shop (back)")
+	fmt.Println("\nleave the shop (back)")
 
 	for {
 
@@ -631,18 +599,14 @@ func shop() {
 }
 
 func display_stats() {
-	fmt.Println("")
-	fmt.Println("Player lv:", player_lv)
+	fmt.Println("\nPlayer lv:", player_lv)
 	fmt.Println("Exp:", player_exp)
-	fmt.Println("")
-	fmt.Println("Strength:", player_strength)
+	fmt.Println("\nStrength:", player_strength)
 	fmt.Println("Intelligence", player_intelligence)
 	fmt.Println("Agility:", player_agility)
 	fmt.Println("Endurance:", player_endurance)
 	fmt.Println("Social:", player_social)
-	fmt.Println("")
-	fmt.Println("")
-	fmt.Println("[back]")
+	fmt.Println("\n[back]")
 
 	fmt.Scanln(&user_input)
 
@@ -661,8 +625,7 @@ func display_inventory() {
 
 	fmt.Println(player_inventory)
 
-	fmt.Println("")
-	fmt.Println("[back]")
+	fmt.Println("\n[back]")
 
 	fmt.Scanln(&user_input)
 

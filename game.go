@@ -8,7 +8,7 @@ import (
 	"runtime"
 )
 
-/* Stuff to remember
+/* notes
 
 
 this is a way to print colored text
@@ -17,13 +17,16 @@ this is a way to print colored text
 			colored := fmt.Sprintf("\x1b[%dm%ds\x1b[0m", 91, "Sample text")
 			fmt.Println(colored)
 		}
+
 */
 
 // constants
-		name_1 = "Dario"
-		name_2 = "Pilgrim"
-		name_3 = "Fie"
-		name_4 = "Rean"
+const (
+	name_1 = "Dario"
+	name_2 = "Pilgrim"
+	name_3 = "Fie"
+	name_4 = "Rean"
+)
 
 // variables
 var display_tutorial bool = true
@@ -33,7 +36,7 @@ var display_tutorial bool = true
 var user_input string //player input
 var victory bool = false
 
-// player stats
+// player as struct
 type player struct {
 	max_health       int
 	max_skill_points int
@@ -52,35 +55,41 @@ type player struct {
 	social           int // reduces shop prices
 }
 
-// player stats
 var player_1 = player{
-	name:         "Dario",
-	health:       100, // player health
-	skill_points: 80,
-	strength:     10, // increases physical damage
-	intelligence: 10, // increases magical damage
-	agility:      10, // increases chance to dodge
-	endurance:    10, // reduces damage taken
-	social:       10, // reduces shop prices
+	max_health:       100,
+	max_skill_points: 50,
+	name:             name_1,
+	special:          0,
+	inventory:        []string,
+	exp:              0,
+	lv:               1,
+	gold:             50,
+	health:           100,
+	skill_points:     50,
+	strength:         10,
+	intelligence:     10,
+	agility:          10,
+	endurance:        10,
+	social:           10,
 }
 
-/*
-player stats
-var player_health int = 100 player health
-var player_skill_points int = 80
-var player_strength int = 10     // increases physical damage
-var player_intelligence int = 10 // increases magical damage
-var player_agility int = 10      // increases chance to dodge
-var player_endurance int = 10    // reduces damage taken
-var player_social int = 10       // reduces shop prices
-*/
-
-// enemy status
-var enemy_input int        //enemy input
-var enemy_health int = 100 //enemy health
-var enemy_skill_points int = 100
-var enemy_max_skill_points int = 80
-var enemy_max_health int = 100
+var player_2 = player{
+	max_health:       100,
+	max_skill_points: 50,
+	name:             name_2,
+	special:          0,
+	inventory:        []string,
+	exp:              0,
+	lv:               1,
+	gold:             50,
+	health:           100,
+	skill_points:     50,
+	strength:         10,
+	intelligence:     10,
+	agility:          10,
+	endurance:        10,
+	social:           10,
+}
 
 // enemy as struct
 
@@ -92,60 +101,24 @@ type enemy struct {
 	max_health       int
 }
 
-var enemy_1 enemy {
-	input				:	0,
-	health				:	100,
-	skill_points		:	100,
-	max_skill_points	:	80,
-	max_health			:	100,
+var enemy_1 = enemy{
+	input:            0,
+	health:           100,
+	skill_points:     100,
+	max_skill_points: 80,
+	max_health:       100,
 }
 
-var enemy_2 enemy {
-	input				:	0,
-	health				:	100,
-	skill_points		:	100,
-	max_skill_points	:	80,
-	max_health			:	100,
+var enemy_2 = enemy{
+	input:            0,
+	health:           100,
+	skill_points:     100,
+	max_skill_points: 80,
+	max_health:       100,
 }
 
 // start of program
 func main() {
-
-	player := player{
-	max_health: 100 ,      
-	max_skill_points: 50 ,
-	name: name_1,         
-	special: 0,    
-	inventory:        
-	exp              
-	lv              
-	gold             
-	health           
-	skill_points    
-	strength        
-	intelligence    
-	agility         
-	endurance        
-	social        
-	}
-
-	player_2 := player{
-		max_health:       100,
-		max_skill_points: 50,
-		name:             name_2,
-		special:          0,
-		inventory:        []string,
-		exp:              0,
-		lv:               1,
-		gold:             50,
-		health:           100,
-		skill_points:     50,
-		strength:         10,
-		intelligence:     10,
-		agility:          10,
-		endurance:        10,
-		social:           10,
-	}
 
 	clear_screen()
 

@@ -12,10 +12,12 @@ import (
 
 ive been here
 
+ive also been here
+
 this is a way to print colored text
 
 {
-			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 91, "Sample text")
+			colored := fmt.Sprintf("\x1b[%dm%ds\x1b[0m", 91, "Sample text")
 			fmt.Println(colored)
 		}
 */

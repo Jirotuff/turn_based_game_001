@@ -19,6 +19,12 @@ this is a way to print colored text
 		}
 */
 
+// constants
+		name_1 = "Dario"
+		name_2 = "Pilgrim"
+		name_3 = "Fie"
+		name_4 = "Rean"
+
 // variables
 var display_tutorial bool = true
 
@@ -46,6 +52,18 @@ type player struct {
 	social           int // reduces shop prices
 }
 
+// player stats
+var player_1 = player{
+	name:         "Dario",
+	health:       100, // player health
+	skill_points: 80,
+	strength:     10, // increases physical damage
+	intelligence: 10, // increases magical damage
+	agility:      10, // increases chance to dodge
+	endurance:    10, // reduces damage taken
+	social:       10, // reduces shop prices
+}
+
 /*
 player stats
 var player_health int = 100 player health
@@ -67,32 +85,48 @@ var enemy_max_health int = 100
 // enemy as struct
 
 type enemy struct {
-	enemy_input            int //enemy input
-	enemy_health           int //enemy health
-	enemy_skill_points     int
-	enemy_max_skill_points int
-	enemy_max_health       int
+	input            int //enemy input
+	health           int //enemy health
+	skill_points     int
+	max_skill_points int
+	max_health       int
+}
+
+var enemy_1 enemy {
+	input				:	0,
+	health				:	100,
+	skill_points		:	100,
+	max_skill_points	:	80,
+	max_health			:	100,
+}
+
+var enemy_2 enemy {
+	input				:	0,
+	health				:	100,
+	skill_points		:	100,
+	max_skill_points	:	80,
+	max_health			:	100,
 }
 
 // start of program
 func main() {
 
-	player_1 := player{
-		max_health:       100,
-		max_skill_points: 50,
-		name:             name_1,
-		special:          0,
-		inventory:        []string,
-		exp:              0,
-		lv:               1,
-		gold:             50,
-		health:           100,
-		skill_points:     50,
-		strength:         10,
-		intelligence:     10,
-		agility:          10,
-		endurance:        10,
-		social:           10,
+	player := player{
+	max_health: 100 ,      
+	max_skill_points: 50 ,
+	name: name_1,         
+	special: 0,    
+	inventory:        
+	exp              
+	lv              
+	gold             
+	health           
+	skill_points    
+	strength        
+	intelligence    
+	agility         
+	endurance        
+	social        
 	}
 
 	player_2 := player{

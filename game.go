@@ -94,6 +94,8 @@ func main() {
 
 	//fmt.Println(player_name, "  Health:", player_health, "SP:", player_skill_points, "Gold:", gold)
 
+	fmt.Println("player_1: "player_1.health, "testtesttest...")
+
 	fmt.Println("\nWhat do you want to do?")
 	fmt.Println("\nbattle\t\t> finds opponent")
 	fmt.Println("shop\t\t> enter the shop")
@@ -159,7 +161,7 @@ func player_turn() {
 			fmt.Println(colored)
 		}
 	}
-	fmt.Println("\n>", player_name)
+	fmt.Println("\n>", player_1.name)
 	fmt.Println("Health:", player_health, "SP:", player_skill_points)
 	fmt.Println("\n> Enemy")
 	fmt.Println("Health:", enemy_health)
@@ -246,7 +248,7 @@ func tutorial() {
 	fmt.Println("\nWhat is you name?")
 	fmt.Println("")
 	fmt.Scanln(&user_input)
-	player_name = user_input
+	player_1.name = user_input
 
 }
 

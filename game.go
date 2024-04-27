@@ -37,6 +37,7 @@ var player_special int
 // player stats
 type player struct {
 	name         string
+	gold         int
 	health       int //player health
 	skill_points int
 	strength     int // increases physical damage
@@ -94,7 +95,7 @@ func main() {
 
 	//fmt.Println(player_name, "  Health:", player_health, "SP:", player_skill_points, "Gold:", gold)
 
-	fmt.Println("player_1: "player_1.health, "testtesttest...")
+	fmt.Println("player_1:\nhealth: ", player_1.health, "skill points: ", player_1.skill_points, "gold: ", player_1.gold)
 
 	fmt.Println("\nWhat do you want to do?")
 	fmt.Println("\nbattle\t\t> finds opponent")

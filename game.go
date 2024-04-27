@@ -95,6 +95,24 @@ func main() {
 		social:           10,
 	}
 
+	player_2 := player{
+		max_health:       100,
+		max_skill_points: 50,
+		name:             name_2,
+		special:          0,
+		inventory:        []string,
+		exp:              0,
+		lv:               1,
+		gold:             50,
+		health:           100,
+		skill_points:     50,
+		strength:         10,
+		intelligence:     10,
+		agility:          10,
+		endurance:        10,
+		social:           10,
+	}
+
 	clear_screen()
 
 	if display_tutorial != false {

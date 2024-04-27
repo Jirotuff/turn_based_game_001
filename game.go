@@ -26,25 +26,24 @@ var display_tutorial bool = true
 
 var user_input string //player input
 var victory bool = false
-var gold int = 50
-var player_lv int = 1
-var player_exp int = 0
-var player_max_health int = 100
-var player_max_skill_points int = 80
-var player_inventory []string
-var player_special int
 
 // player stats
 type player struct {
-	name         string
-	gold         int
-	health       int //player health
-	skill_points int
-	strength     int // increases physical damage
-	intelligence int // increases magical damage
-	agility      int // increases chance to dodge
-	endurance    int // reduces damage taken
-	social       int // reduces shop prices
+	max_health       int
+	max_skill_points int
+	name             string
+	special          int
+	inventory        []string
+	exp              int
+	lv               int
+	gold             int
+	health           int //player health
+	skill_points     int
+	strength         int // increases physical damage
+	intelligence     int // increases magical damage
+	agility          int // increases chance to dodge
+	endurance        int // reduces damage taken
+	social           int // reduces shop prices
 }
 
 // player stats
@@ -59,14 +58,16 @@ var player_1 = player{
 	social:       10, // reduces shop prices
 }
 
-// player stats
-var player_health int = 100 //player health
+/*
+player stats
+var player_health int = 100 player health
 var player_skill_points int = 80
 var player_strength int = 10     // increases physical damage
 var player_intelligence int = 10 // increases magical damage
 var player_agility int = 10      // increases chance to dodge
 var player_endurance int = 10    // reduces damage taken
 var player_social int = 10       // reduces shop prices
+*/
 
 // enemy status
 var enemy_input int        //enemy input
@@ -88,14 +89,14 @@ func main() {
 		victory = false
 		enemy_health = enemy_max_health
 		enemy_skill_points = enemy_max_skill_points
-		player_exp += rand.Intn(50) + 50
+		player_1.exp += rand.Intn(50) + 50
 		player_level_up()
 		main()
 	}
 
 	//fmt.Println(player_name, "  Health:", player_health, "SP:", player_skill_points, "Gold:", gold)
 
-	fmt.Println("player_1:\nhealth: ", player_1.health, "skill points: ", player_1.skill_points, "gold: ", player_1.gold)
+	fmt.Println("player_1:\nhealth: ", player.health, "skill points: ", player_1.skill_points, "gold: ", player_1.gold)
 
 	fmt.Println("\nWhat do you want to do?")
 	fmt.Println("\nbattle\t\t> finds opponent")
@@ -143,7 +144,7 @@ func combat() {
 		check_player_life()
 		check_enemy_life()
 		if victory == true {
-			gold += rand.Intn(10) + 5
+			player_1.gold += rand.Intn(10) + 5
 			main()
 		}
 
@@ -156,7 +157,7 @@ func combat() {
 
 func player_turn() {
 	fmt.Println("")
-	if player_special >= 3 {
+	if player_1.special >= 3 {
 		{
 			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 91, "You feel a strange power welling up inside... (type 'special' to unleash it)")
 			fmt.Println(colored)
@@ -200,8 +201,8 @@ func player_turn() {
 		player_skill_kill()
 
 	case "special":
-		if player_special > 2 {
-			player_special = 0
+		if player_1.special > 2 {
+			player_1.special = 0
 			player_skill_special()
 		} else {
 			fmt.Println("You dont have the energy for this move")
@@ -215,11 +216,11 @@ func player_turn() {
 // function for enemy turn
 func enemy_turn() {
 
-	if player_health > player_max_health {
-		player_health = player_max_health
+	if player_health > player_1.max_health {
+		player_health = player_1.max_health
 	}
-	if player_skill_points > player_max_skill_points {
-		player_skill_points = player_max_skill_points
+	if player_skill_points > player_1.max_skill_points {
+		player_skill_points = player_1.max_skill_points
 	}
 
 	enemy_input = rand.Intn(3) //gives different options to the enemy

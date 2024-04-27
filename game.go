@@ -76,6 +76,16 @@ var enemy_skill_points int = 100
 var enemy_max_skill_points int = 80
 var enemy_max_health int = 100
 
+// enemy as struct
+
+type enemy struct {
+	enemy_input            int //enemy input
+	enemy_health           int //enemy health
+	enemy_skill_points     int
+	enemy_max_skill_points int
+	enemy_max_health       int
+}
+
 // start of program
 func main() {
 

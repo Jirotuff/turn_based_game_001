@@ -10,9 +10,6 @@ import (
 
 /* Stuff to remember
 
-ive been here
-
-ive also been here
 
 this is a way to print colored text
 
@@ -95,7 +92,8 @@ func main() {
 		main()
 	}
 
-	fmt.Println(player_name, "  Health:", player_health, "SP:", player_skill_points, "Gold:", gold)
+	//fmt.Println(player_name, "  Health:", player_health, "SP:", player_skill_points, "Gold:", gold)
+
 	fmt.Println("\nWhat do you want to do?")
 	fmt.Println("\nbattle\t\t> finds opponent")
 	fmt.Println("shop\t\t> enter the shop")

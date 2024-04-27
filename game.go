@@ -55,35 +55,7 @@ type player struct {
 	social           int // reduces shop prices
 }
 
-// player stats
 var player_1 = player{
-	name:         "Dario",
-	health:       100, // player health
-	skill_points: 80,
-	strength:     10, // increases physical damage
-	intelligence: 10, // increases magical damage
-	agility:      10, // increases chance to dodge
-	endurance:    10, // reduces damage taken
-	social:       10, // reduces shop prices
-}
-
-/*
-player stats
-var player_health int = 100 player health
-var player_skill_points int = 80
-var player_strength int = 10     // increases physical damage
-var player_intelligence int = 10 // increases magical damage
-var player_agility int = 10      // increases chance to dodge
-var player_endurance int = 10    // reduces damage taken
-var player_social int = 10       // reduces shop prices
-*/
-
-// enemy status
-var enemy_input int        //enemy input
-var enemy_health int = 100 //enemy health
-var enemy_skill_points int = 100
-var enemy_max_skill_points int = 80
-var enemy_max_health int = 100
 	max_health:       100,
 	max_skill_points: 50,
 	name:             name_1,

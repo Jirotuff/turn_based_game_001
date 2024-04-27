@@ -79,6 +79,24 @@ var enemy_max_health int = 100
 // start of program
 func main() {
 
+	player := player{
+	max_health: 100 ,      
+	max_skill_points: 50 ,
+	name: "Dario",         
+	special: 0,    
+	inventory:        
+	exp              
+	lv              
+	gold             
+	health           
+	skill_points    
+	strength        
+	intelligence    
+	agility         
+	endurance        
+	social        
+	}
+
 	clear_screen()
 
 	if display_tutorial != false {

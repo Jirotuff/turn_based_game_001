@@ -46,18 +46,6 @@ type player struct {
 	social           int // reduces shop prices
 }
 
-// player stats
-var player_1 = player{
-	name:         "Dario",
-	health:       100, // player health
-	skill_points: 80,
-	strength:     10, // increases physical damage
-	intelligence: 10, // increases magical damage
-	agility:      10, // increases chance to dodge
-	endurance:    10, // reduces damage taken
-	social:       10, // reduces shop prices
-}
-
 /*
 player stats
 var player_health int = 100 player health
@@ -89,22 +77,22 @@ type enemy struct {
 // start of program
 func main() {
 
-	player := player{
-	max_health: 100 ,      
-	max_skill_points: 50 ,
-	name: "Dario",         
-	special: 0,    
-	inventory:        
-	exp              
-	lv              
-	gold             
-	health           
-	skill_points    
-	strength        
-	intelligence    
-	agility         
-	endurance        
-	social        
+	player_1 := player{
+		max_health:       100,
+		max_skill_points: 50,
+		name:             name_1,
+		special:          0,
+		inventory:        []string,
+		exp:              0,
+		lv:               1,
+		gold:             50,
+		health:           100,
+		skill_points:     50,
+		strength:         10,
+		intelligence:     10,
+		agility:          10,
+		endurance:        10,
+		social:           10,
 	}
 
 	clear_screen()

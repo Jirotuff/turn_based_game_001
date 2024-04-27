@@ -60,7 +60,7 @@ var player_1 = player{
 	max_skill_points: 50,
 	name:             name_1,
 	special:          0,
-	inventory:        []string,
+	inventory:        []string{},
 	exp:              0,
 	lv:               1,
 	gold:             50,
@@ -78,7 +78,7 @@ var player_2 = player{
 	max_skill_points: 50,
 	name:             name_2,
 	special:          0,
-	inventory:        []string,
+	inventory:        []string{},
 	exp:              0,
 	lv:               1,
 	gold:             50,
@@ -131,7 +131,7 @@ func main() {
 		enemy_health = enemy_max_health
 		enemy_skill_points = enemy_max_skill_points
 		player_1.exp += rand.Intn(50) + 50
-		player_level_up()
+		player_level_up(player_1)
 		main()
 	}
 
@@ -487,13 +487,13 @@ func clear_screen() {
 }
 
 // checks the exp and increases the player_lv
-func player_level_up() {
-	if player_exp >= 100 && player_lv < 2 {
-		player_lv += 1
-		player_max_health += 20
-		player_max_skill_points += 5
-		player_health = player_max_health
-		player_skill_points = player_max_skill_points
+func player_level_up(player_instance player) {
+	if player_instance.player_exp >= 100 && player_lv < 2 {
+		player_instance.player_lv += 1
+		player_instance.player_max_health += 20
+		player_instance.player_max_skill_points += 5
+		player_instance.player_health = player_max_health
+		player_instance.player_skill_points = player_max_skill_points
 		fmt.Println("")
 		{
 			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 92, "Level up!")

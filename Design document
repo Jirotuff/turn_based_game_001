@@ -8,7 +8,8 @@ Characters:
 - 1 protagonist
 - 3 side characters 
 - Enemies 
-- Boss enemies
+- 1 boss enemy 
+- 1 sub boss enemy 
 
 Shops: (in town)
 - weapon + armor shop
@@ -21,3 +22,7 @@ Dungeon:
 - has some amount of floors
 - will spawn a random amount of enemy groups
 - defeating all enemy groups on a floor you can advance to the next floor
+
+options:
+
+- user should be able to save progress

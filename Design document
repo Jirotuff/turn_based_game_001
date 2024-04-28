@@ -1,0 +1,23 @@
+Goal:
+- Kill the final boss at the end of the dungeon 
+
+
+Objects:
+
+Characters:
+- 1 protagonist
+- 3 side characters 
+- Enemies 
+- Boss enemies
+
+Shops: (in town)
+- weapon + armor shop
+- item shop
+- crafting shop (crafting weapons and armor with resources collected after battles)
+- item crafting shop (resources obtained after battles)
+
+Dungeon:
+- can go to the dungeon from the town
+- has some amount of floors
+- will spawn a random amount of enemy groups
+- defeating all enemy groups on a floor you can advance to the next floor

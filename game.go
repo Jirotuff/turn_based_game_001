@@ -55,41 +55,35 @@ type player struct {
 	social           int // reduces shop prices
 }
 
+// player stats
 var player_1 = player{
-	max_health:       100,
-	max_skill_points: 50,
-	name:             name_1,
-	special:          0,
-	inventory:        []string{},
-	exp:              0,
-	lv:               1,
-	gold:             50,
-	health:           100,
-	skill_points:     50,
-	strength:         10,
-	intelligence:     10,
-	agility:          10,
-	endurance:        10,
-	social:           10,
+	name:         "Dario",
+	health:       100, // player health
+	skill_points: 80,
+	strength:     10, // increases physical damage
+	intelligence: 10, // increases magical damage
+	agility:      10, // increases chance to dodge
+	endurance:    10, // reduces damage taken
+	social:       10, // reduces shop prices
 }
 
-var player_2 = player{
-	max_health:       100,
-	max_skill_points: 50,
-	name:             name_2,
-	special:          0,
-	inventory:        []string{},
-	exp:              0,
-	lv:               1,
-	gold:             50,
-	health:           100,
-	skill_points:     50,
-	strength:         10,
-	intelligence:     10,
-	agility:          10,
-	endurance:        10,
-	social:           10,
-}
+/*
+player stats
+var player_health int = 100 player health
+var player_skill_points int = 80
+var player_strength int = 10     // increases physical damage
+var player_intelligence int = 10 // increases magical damage
+var player_agility int = 10      // increases chance to dodge
+var player_endurance int = 10    // reduces damage taken
+var player_social int = 10       // reduces shop prices
+*/
+
+// enemy status
+var enemy_input int        //enemy input
+var enemy_health int = 100 //enemy health
+var enemy_skill_points int = 100
+var enemy_max_skill_points int = 80
+var enemy_max_health int = 100
 
 // enemy as struct
 
@@ -149,7 +143,7 @@ func main() {
 		enemy_health = enemy_max_health
 		enemy_skill_points = enemy_max_skill_points
 		player_1.exp += rand.Intn(50) + 50
-		player_level_up(player_1)
+		player_level_up()
 		main()
 	}
 
@@ -162,7 +156,8 @@ func main() {
 	fmt.Println("shop\t\t> enter the shop")
 	fmt.Println("stats\t\t> show player stats")
 	fmt.Println("inv\t\t> show player inventory")
-	fmt.Println("exit\t\t> exits the game\n")
+	fmt.Println("exit\t\t> exits the game")
+	fmt.Println("")
 
 	for {
 		fmt.Scanln(&user_input)
@@ -229,7 +224,8 @@ func player_turn() {
 	fmt.Println("\n>> strike\t\t\t> Use your basic weapon\t")
 	fmt.Println(">> heal\t\t\t\t> Use an healing item\t")
 	fmt.Println(">> force | 20 SP\t\t> High citical chance attack")
-	fmt.Println(">> soul \t\t\t> Regenerates some SP\n")
+	fmt.Println(">> soul \t\t\t> Regenerates some SP")
+	fmt.Println("")
 
 	fmt.Scanln(&user_input)
 
@@ -503,13 +499,13 @@ func clear_screen() {
 }
 
 // checks the exp and increases the player_lv
-func player_level_up(player_instance player) {
-	if player_instance.player_exp >= 100 && player_lv < 2 {
-		player_instance.player_lv += 1
-		player_instance.player_max_health += 20
-		player_instance.player_max_skill_points += 5
-		player_instance.player_health = player_max_health
-		player_instance.player_skill_points = player_max_skill_points
+func player_level_up() {
+	if player_exp >= 100 && player_lv < 2 {
+		player_lv += 1
+		player_max_health += 20
+		player_max_skill_points += 5
+		player_health = player_max_health
+		player_skill_points = player_max_skill_points
 		fmt.Println("")
 		{
 			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 92, "Level up!")

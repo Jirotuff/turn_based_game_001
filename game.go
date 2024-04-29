@@ -6,37 +6,25 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
-	"errors"
 )
-
-/* Stuff to remember
-
-
-this is a way to print colored text
-
-{
-			colored := fmt.Sprintf("\x1b[%dm%ds\x1b[0m", 91, "Sample text")
-			fmt.Println(colored)
-		}
-*/
 
 // constants
 const (
-		name_1 string = "Dario"
-		name_2 string = "Pilgrim"
-		name_3 string = "Fie"
-		name_4 string = "Rean"
+	name_1 string = "Dario"
+	name_2 string = "Pilgrim"
+	name_3 string = "Fie"
+	name_4 string = "Rean"
 )
 
 // variables
-var display_tutorial bool = true
 
-// player general
+// user
 
 var user_input string //player input
 var victory bool = false
+var display_tutorial bool = true
 
-// player stats
+// player struct
 type player struct {
 	max_health       int
 	max_skill_points int
@@ -46,8 +34,8 @@ type player struct {
 	exp              int
 	lv               int
 	gold             int
-	health           int //player health
-	skill_points     int
+	health           int // player health
+	skill_points     int // points used to cast magic spells
 	strength         int // increases physical damage
 	intelligence     int // increases magical damage
 	agility          int // increases chance to dodge
@@ -55,37 +43,81 @@ type player struct {
 	social           int // reduces shop prices
 }
 
-// player stats
-var player_1 = player{
-	name:         "Dario",
-	health:       100, // player health
-	skill_points: 80,
-	strength:     10, // increases physical damage
-	intelligence: 10, // increases magical damage
-	agility:      10, // increases chance to dodge
-	endurance:    10, // reduces damage taken
-	social:       10, // reduces shop prices
+// players
+
+var Dario = player{
+	max_health:       100,
+	max_skill_points: 50,
+	name:             name_1,
+	special:          0,
+	inventory:        []string{},
+	exp:              0,
+	lv:               0,
+	gold:             50,
+	health:           100,
+	skill_points:     75,
+	strength:         11,
+	intelligence:     11,
+	agility:          11,
+	endurance:        11,
+	social:           11,
 }
 
-/*
-player stats
-var player_health int = 100 player health
-var player_skill_points int = 80
-var player_strength int = 10     // increases physical damage
-var player_intelligence int = 10 // increases magical damage
-var player_agility int = 10      // increases chance to dodge
-var player_endurance int = 10    // reduces damage taken
-var player_social int = 10       // reduces shop prices
-*/
+var Pilgrim = player{
+	max_health:       120,
+	max_skill_points: 50,
+	name:             name_2,
+	special:          0,
+	inventory:        []string{},
+	exp:              0,
+	lv:               0,
+	gold:             50,
+	health:           120,
+	skill_points:     70,
+	strength:         10,
+	intelligence:     8,
+	agility:          8,
+	endurance:        14,
+	social:           10,
+}
 
-// enemy status
-var enemy_input int        //enemy input
-var enemy_health int = 100 //enemy health
-var enemy_skill_points int = 100
-var enemy_max_skill_points int = 80
-var enemy_max_health int = 100
+var Fie = player{
+	max_health:       90,
+	max_skill_points: 50,
+	name:             name_3,
+	special:          0,
+	inventory:        []string{},
+	exp:              0,
+	lv:               0,
+	gold:             50,
+	health:           90,
+	skill_points:     80,
+	strength:         10,
+	intelligence:     10,
+	agility:          14,
+	endurance:        8,
+	social:           10,
+}
 
-// enemy as struct
+var Rean = player{
+	max_health:       100,
+	max_skill_points: 50,
+	name:             name_4,
+	special:          0,
+	inventory:        []string{},
+	exp:              0,
+	lv:               0,
+	gold:             50,
+	health:           100,
+	skill_points:     75,
+	strength:         12,
+	intelligence:     10,
+	agility:          12,
+	endurance:        10,
+	social:           12,
+}
+
+// enemy struct
 
 type enemy struct {
 	input            int //enemy input
@@ -95,61 +127,37 @@ type enemy struct {
 	max_health       int
 }
 
-var enemy_1 = enemy {
-	input				:	0,
-	health				:	100,
-	skill_points		:	100,
-	max_skill_points	:	80,
-	max_health			:	100,
+//enemies
+
+var enemy_1 = enemy{
+	input:            0,
+	health:           100,
+	skill_points:     100,
+	max_skill_points: 80,
+	max_health:       100,
 }
 
-var enemy_2 = enemy {
-	input				:	0,
-	health				:	100,
-	skill_points		:	100,
-	max_skill_points	:	80,
-	max_health			:	100,
+var enemy_2 = enemy{
+	input:            0,
+	health:           100,
+	skill_points:     100,
+	max_skill_points: 80,
+	max_health:       100,
 }
 
 // start of program
 func main() {
 
-	player := player{
-	max_health: 100 ,      
-	max_skill_points: 50 ,
-	name: name_1,         
-	special: 0,    
-	inventory:  []  ,    
-	exp : 0  ,        
-	lv        :0     , 
-	gold             
-	health           
-	skill_points    
-	strength        
-	intelligence    
-	agility         
-	endurance        
-	social        
-	}
-
 	clear_screen()
+	check_victory()
 
 	if display_tutorial != false {
 		tutorial()
 	}
 
-	if victory != false {
-		victory = false
-		enemy_health = enemy_max_health
-		enemy_skill_points = enemy_max_skill_points
-		player_1.exp += rand.Intn(50) + 50
-		player_level_up()
-		main()
-	}
-
 	//fmt.Println(player_name, "  Health:", player_health, "SP:", player_skill_points, "Gold:", gold)
 
-	fmt.Println("player_1:\nhealth: ", player.health, "skill points: ", player_1.skill_points, "gold: ", player_1.gold)
+	show_status()
 
 	fmt.Println("\nWhat do you want to do?")
 	fmt.Println("\nbattle\t\t> finds opponent")
@@ -188,6 +196,24 @@ func main() {
 func save(slot1 any, data interface{}) {
 
 }
+func show_status() {
+	fmt.Println("player_1:\nhealth: ", Dario.health, "skill points: ", Dario.skill_points, "gold: ", Dario.gold)
+	fmt.Println("player_1:\nhealth: ", Pilgrim.health, "skill points: ", Pilgrim.skill_points, "gold: ", Pilgrim.gold)
+	fmt.Println("player_1:\nhealth: ", Fie.health, "skill points: ", Fie.skill_points, "gold: ", Fie.gold)
+	fmt.Println("player_1:\nhealth: ", Rean.health, "skill points: ", Rean.skill_points, "gold: ", Rean.gold)
+}
+
+func check_victory() {
+	if victory != false {
+		victory = false
+		Dario.exp += rand.Intn(50) + 50
+		Pilgrim.exp += rand.Intn(50) + 50
+		Fie.exp += rand.Intn(50) + 50
+		Rean.exp += rand.Intn(50) + 50
+		player_level_up()
+		main()
+	}
+}
 
 // starts the combat encounter
 func combat() {
@@ -197,7 +223,10 @@ func combat() {
 		check_player_life()
 		check_enemy_life()
 		if victory == true {
-			player_1.gold += rand.Intn(10) + 5
+			Dario.gold += rand.Intn(10) + 5
+			Pilgrim.gold += rand.Intn(10) + 5
+			Fie.gold += rand.Intn(10) + 5
+			Rean.gold += rand.Intn(10) + 5
 			main()
 		}
 
@@ -210,14 +239,14 @@ func combat() {
 
 func player_turn() {
 	fmt.Println("")
-	if player_1.special >= 3 {
+	if Dario.special >= 3 {
 		{
 			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 91, "You feel a strange power welling up inside... (type 'special' to unleash it)")
 			fmt.Println(colored)
 		}
 	}
-	fmt.Println("\n>", player_1.name)
-	fmt.Println("Health:", player_health, "SP:", player_skill_points)
+	fmt.Println("\n>", player.name)
+	fmt.Println("Health:", player.health, "SP:", player.skill_points)
 	fmt.Println("\n> Enemy")
 	fmt.Println("Health:", enemy_health)
 	fmt.Println("\nWhat's your move?")
@@ -254,8 +283,8 @@ func player_turn() {
 		player_skill_kill()
 
 	case "special":
-		if player_1.special > 2 {
-			player_1.special = 0
+		if player.special > 2 {
+			player.special = 0
 			player_skill_special()
 		} else {
 			fmt.Println("You dont have the energy for this move")
@@ -309,7 +338,7 @@ func tutorial() {
 
 // checks if the player is dead
 func check_player_life() {
-	if player_health <= 0 {
+	if Dario.health <= 0 {
 		fmt.Println("You have been killed!")
 		fmt.Println("\nGold:", gold, "Player level:", player_lv)
 		fmt.Println("\nType anything to quit")
@@ -500,18 +529,18 @@ func clear_screen() {
 
 // checks the exp and increases the player_lv
 func player_level_up() {
-	if player_exp >= 100 && player_lv < 2 {
-		player_lv += 1
-		player_max_health += 20
-		player_max_skill_points += 5
-		player_health = player_max_health
-		player_skill_points = player_max_skill_points
+	if player.exp >= 100 && player.lv < 2 {
+		player.lv += 1
+		player.max_health += 20
+		player.max_skill_points += 5
+		player.health = player_max_health
+		player.skill_points = player.max_skill_points
 		fmt.Println("")
 		{
 			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 92, "Level up!")
 			fmt.Println(colored)
 		}
-		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
+		fmt.Println("\nMax HP:", player.max_health, "Max SP:", player.max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Println("\nType the first 2 letters...")
 		fmt.Println("\nStrength:", player_strength)

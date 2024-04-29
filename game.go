@@ -95,7 +95,7 @@ type enemy struct {
 	max_health       int
 }
 
-var enemy_1 enemy {
+var enemy_1 = enemy {
 	input				:	0,
 	health				:	100,
 	skill_points		:	100,
@@ -103,7 +103,7 @@ var enemy_1 enemy {
 	max_health			:	100,
 }
 
-var enemy_2 enemy {
+var enemy_2 = enemy {
 	input				:	0,
 	health				:	100,
 	skill_points		:	100,
@@ -119,9 +119,9 @@ func main() {
 	max_skill_points: 50 ,
 	name: name_1,         
 	special: 0,    
-	inventory:        
-	exp              
-	lv              
+	inventory:  []  ,    
+	exp : 0  ,        
+	lv        :0     , 
 	gold             
 	health           
 	skill_points    

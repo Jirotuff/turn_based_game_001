@@ -259,7 +259,7 @@ func (p *player) player_turn() {
 
 	fmt.Scanln(&user_input)
 
-	switch string.ToLower(user_input) { //gives different options to the player
+	switch strings.ToLower(user_input) { //gives different options to the player
 
 	case "strike", "st", "str", "stri", "stri":
 		Dario.player_skill_strike(&enemy_1)

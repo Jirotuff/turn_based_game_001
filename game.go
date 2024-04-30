@@ -152,7 +152,7 @@ func main() {
 	clear_screen()
 	check_victory()
 
-	if display_tutorial != false {
+	if !display_tutorial {
 		tutorial()
 	}
 
@@ -568,21 +568,21 @@ func (p *player) shop() {
 
 		fmt.Scanln(&user_input)
 
-		switch user_input { //gives different options to the player
+		switch strings.ToLower(user_input) { //gives different options to the player
 
-		case "potion":
+		case "potion", "po", "pot", "poti":
 			fmt.Println("you have bought a potion")
 			p.inventory = append(p.inventory, "potion")
 
-		case "sword":
+		case "sword", "sw", "swo", "swor":
 			fmt.Println("you have bought a sword")
 			p.inventory = append(p.inventory, "sword")
 
-		case "shield":
+		case "shield", "sh", "shi", "shie":
 			fmt.Println("you have bought a shield")
 			p.inventory = append(p.inventory, "shield")
 
-		case "back":
+		case "back", "b", "ba", "bac":
 			main()
 
 		default:

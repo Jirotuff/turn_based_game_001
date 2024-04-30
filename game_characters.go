@@ -75,28 +75,27 @@ var Fie = player{
 	social:           10,
 }
 
-var Rean = player{
-	max_health:       100,
-	max_skill_points: 50,
+var Jessy = player{
+	max_health:       80,
+	max_skill_points: 90,
 	name:             name_4,
 	special:          0,
 	inventory:        []string{},
 	exp:              0,
 	lv:               0,
 	gold:             50,
-	health:           100,
-	skill_points:     75,
-	strength:         12,
-	intelligence:     10,
+	health:           80,
+	skill_points:     90,
+	strength:         8,
+	intelligence:     14,
 	agility:          12,
 	endurance:        10,
-	social:           12,
+	social:           14,
 }
 
 // enemy struct
 
 type enemy struct {
-	input            int //enemy input
 	health           int //enemy health
 	skill_points     int
 	max_skill_points int
@@ -106,7 +105,7 @@ type enemy struct {
 //enemies
 
 var enemy_1 = enemy{
-	input:            0,
+
 	health:           100,
 	skill_points:     100,
 	max_skill_points: 80,
@@ -114,7 +113,7 @@ var enemy_1 = enemy{
 }
 
 var enemy_2 = enemy{
-	input:            0,
+
 	health:           100,
 	skill_points:     100,
 	max_skill_points: 80,

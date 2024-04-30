@@ -13,7 +13,7 @@ const (
 	name_1 string = "Dario"
 	name_2 string = "Pilgrim"
 	name_3 string = "Fie"
-	name_4 string = "Rean"
+	name_4 string = "Jessy"
 )
 
 // variables
@@ -23,6 +23,9 @@ const (
 var user_input string //player input
 var victory bool = false
 var display_tutorial bool = true
+
+// Enemy
+var enemy_input int //enemy input
 
 // start of program
 func main() {
@@ -55,13 +58,13 @@ func main() {
 			combat()
 
 		case "shop":
-			shop()
+			Dario.shop()
 
 		case "stats":
-			display_stats()
+			Dario.display_stats()
 
 		case "inv":
-			display_inventory()
+			Dario.display_inventory()
 
 		case "exit":
 			quit()
@@ -79,7 +82,7 @@ func show_status() {
 	fmt.Println("player_1:\nhealth: ", Dario.health, "skill points: ", Dario.skill_points, "gold: ", Dario.gold)
 	fmt.Println("player_1:\nhealth: ", Pilgrim.health, "skill points: ", Pilgrim.skill_points, "gold: ", Pilgrim.gold)
 	fmt.Println("player_1:\nhealth: ", Fie.health, "skill points: ", Fie.skill_points, "gold: ", Fie.gold)
-	fmt.Println("player_1:\nhealth: ", Rean.health, "skill points: ", Rean.skill_points, "gold: ", Rean.gold)
+	fmt.Println("player_1:\nhealth: ", Jessy.health, "skill points: ", Jessy.skill_points, "gold: ", Jessy.gold)
 }
 
 func check_victory() {
@@ -88,8 +91,11 @@ func check_victory() {
 		Dario.exp += rand.Intn(50) + 50
 		Pilgrim.exp += rand.Intn(50) + 50
 		Fie.exp += rand.Intn(50) + 50
-		Rean.exp += rand.Intn(50) + 50
-		player_level_up()
+		Jessy.exp += rand.Intn(50) + 50
+		Dario.level_check()
+		Fie.level_check()
+		Pilgrim.level_check()
+		Jessy.level_check()
 		main()
 	}
 }
@@ -105,18 +111,18 @@ func combat() {
 			Dario.gold += rand.Intn(10) + 5
 			Pilgrim.gold += rand.Intn(10) + 5
 			Fie.gold += rand.Intn(10) + 5
-			Rean.gold += rand.Intn(10) + 5
+			Jessy.gold += rand.Intn(10) + 5
 			main()
 		}
 
-		player_turn()
+		Dario_turn()
 
-		enemy_turn()
+		enemy_1.enemy_turn()
 
 	}
 }
 
-func player_turn() {
+func (p *player) Dario_turn() {
 	fmt.Println("")
 	if Dario.special >= 3 {
 		{
@@ -124,10 +130,7 @@ func player_turn() {
 			fmt.Println(colored)
 		}
 	}
-	fmt.Println("\n>", player.name)
-	fmt.Println("Health:", player.health, "SP:", player.skill_points)
-	fmt.Println("\n> Enemy")
-	fmt.Println("Health:", enemy_health)
+
 	fmt.Println("\nWhat's your move?")
 	fmt.Println("\n>> strike\t\t\t> Use your basic weapon\t")
 	fmt.Println(">> heal\t\t\t\t> Use an healing item\t")
@@ -137,56 +140,47 @@ func player_turn() {
 
 	fmt.Scanln(&user_input)
 
-	if enemy_health > enemy_max_health {
-		enemy_health = enemy_max_health
-	}
-	if enemy_skill_points > enemy_max_skill_points {
-		enemy_skill_points = enemy_max_skill_points
-	}
-
 	switch user_input { //gives different options to the player
 
 	case "strike":
-		player_skill_strike()
+		Dario.player_skill_strike()
 
 	case "heal":
-		player_skill_heal()
+		Jessy.player_skill_heal()
 
 	case "force":
-		player_skill_force()
+		Jessy.player_skill_force()
 
 	case "soul":
-		player_skill_soul()
+		Jessy.player_skill_soul()
 
 	case "kill":
-		player_skill_kill()
+		Dario.player_skill_kill()
 
 	case "special":
-		if player.special > 2 {
-			player.special = 0
-			player_skill_special()
+		if Dario.special > 2 {
+			Dario.special = 0
+			Dario_skill_special()
 		} else {
 			fmt.Println("You dont have the energy for this move")
 		}
 	default:
 		fmt.Println("Thats a typo! lost your turn XD")
 	}
-
+	if Dario.health > Dario.max_health {
+		Dario.health = Dario.max_health
+	}
+	if Dario.skill_points > Dario.skill_points {
+		Dario.skill_points = Dario.max_skill_points
+	}
 }
 
 // function for enemy turn
-func enemy_turn() {
-
-	if player_health > player_1.max_health {
-		player_health = player_1.max_health
-	}
-	if player_skill_points > player_1.max_skill_points {
-		player_skill_points = player_1.max_skill_points
-	}
+func (e *enemy) enemy_turn() {
 
 	enemy_input = rand.Intn(3) //gives different options to the enemy
 
-	if enemy_health >= 1 {
+	if e.health >= 1 {
 		switch enemy_input {
 
 		case 0:
@@ -199,6 +193,12 @@ func enemy_turn() {
 			enemy_skill_force()
 		}
 	}
+	if e.health > e.max_health {
+		e.health = e.max_health
+	}
+	if e.skill_points > e.max_skill_points {
+		e.skill_points = e.max_skill_points
+	}
 
 }
 
@@ -208,18 +208,14 @@ func tutorial() {
 	fmt.Println("Welcome to this game...")
 	fmt.Println("\nThis is a turn based game, as the player you can type the one of the moves to execute it.")
 	fmt.Println("Your goal at this moment is to acquire as much gold as possible")
-	fmt.Println("\nWhat is you name?")
-	fmt.Println("")
-	fmt.Scanln(&user_input)
-	player_1.name = user_input
 
 }
 
 // checks if the player is dead
 func check_player_life() {
 	if Dario.health <= 0 {
-		fmt.Println("You have been killed!")
-		fmt.Println("\nGold:", gold, "Player level:", player_lv)
+		fmt.Println("Your hero has been killed!")
+		fmt.Println("\nGold:", Dario.gold, "Player level:", Dario.lv)
 		fmt.Println("\nType anything to quit")
 
 		fmt.Scanln("")
@@ -234,66 +230,66 @@ func check_player_life() {
 }
 
 // player skill: kill (THIS IS A TEST FEATURE, NOT MEANT FOR FINAL PRODUCT)
-func player_skill_kill() {
-	damage := rand.Intn(20) + 5 + player_strength + 999
-	critical_damage := rand.Intn(20) + 30 + player_strength + 999
+func (e *enemy) Dario_skill_kill() {
+	damage := rand.Intn(20) + 5 + Dario.strength + 999
+	critical_damage := rand.Intn(20) + 30 + Dario.strength + 999
 
 	if rand.Intn(11) == 9 { //Critical hit chance
-		enemy_health -= critical_damage
+		e.health -= critical_damage
 		fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		fmt.Println("")
 		user_input = ""
 	} else {
-		enemy_health -= damage
+		e.health -= damage
 		fmt.Println(damage, "DMG")
 		user_input = ""
 	}
 }
 
 // player skill: strike
-func player_skill_strike() {
-	damage := rand.Intn(20) + 5 + player_strength
-	critical_damage := rand.Intn(20) + 30 + player_strength
+func (e *enemy) Dario_skill_strike() {
+	damage := rand.Intn(20) + 5 + Dario.strength
+	critical_damage := rand.Intn(20) + 30 + Dario.strength
 
-	player_special += 1
+	Dario.special += 1
 
 	if rand.Intn(11) == 9 { //Critical hit chance
-		enemy_health -= critical_damage
+		e.health -= critical_damage
 		fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		fmt.Println("")
 		user_input = ""
 	} else {
-		enemy_health -= damage
+		e.health -= damage
 		fmt.Println(damage, "DMG")
 		user_input = ""
 	}
 }
 
 // player skill: soul
-func player_skill_soul() {
+func Jessy_skill_soul() {
 	if true == true {
-		player_skill_points += 25
+		Jessy.skill_points += 25
 	}
 }
 
 // player skill: force
-func player_skill_force() {
-	damage := rand.Intn(5) + 20 + player_intelligence
-	critical_damage := rand.Intn(20) + 30 + player_intelligence
+func (e *enemy) Jessy_skill_force() {
+	damage := rand.Intn(5) + 20 + Jessy.intelligence
+	critical_damage := rand.Intn(20) + 30 + Jessy.intelligence
 
-	if player_skill_points >= 20 {
+	if Jessy.skill_points >= 20 {
 
-		player_skill_points -= 20
+		Jessy.skill_points -= 20
 
-		player_special += 1
+		Jessy.special += 1
 
 		if rand.Intn(3) == 2 { //Critical hit chance
 
-			enemy_health -= critical_damage
+			e.health -= critical_damage
 			fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 			user_input = ""
 		} else {
-			enemy_health -= damage
+			e.health -= damage
 			fmt.Println(damage, "DMG")
 			user_input = ""
 		}
@@ -304,50 +300,53 @@ func player_skill_force() {
 }
 
 // player skill: heal
-func player_skill_heal() {
-	heal := rand.Intn(20) + 5 + player_intelligence //amount healed
-	player_health += heal
+func Jessy_skill_heal() {
+	heal := rand.Intn(20) + 5 + Jessy.intelligence //amount healed
+	Jessy.health += heal
+	Dario.health += heal
+	Pilgrim.health += heal
+	Fie.health += heal
 	fmt.Println(heal, "Healed")
 	user_input = ""
 }
 
-func player_skill_special() {
-	damage := 70 + player_strength
-	critical_damage := rand.Intn(20) + 75 + player_strength
+func (e *enemy) Dario_skill_special() {
+	damage := 70 + Dario.strength
+	critical_damage := rand.Intn(20) + 75 + Dario.strength
 
 	if rand.Intn(11) == 9 { //Critical hit chance
-		enemy_health -= critical_damage
+		e.health -= critical_damage
 		fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		fmt.Println("")
 		user_input = ""
 	} else {
-		enemy_health -= damage
+		e.health -= damage
 		fmt.Println(damage, "DMG")
 		user_input = ""
 	}
 }
 
 // checks if the enemy is dead
-func check_enemy_life() {
-	if enemy_health <= 0 {
+func (e *enemy) check_enemy_life() {
+	if e.health <= 0 {
 		fmt.Println("Victory!")
 		victory = true
 	}
 }
 
 // enemy skill: strike
-func enemy_skill_strike() {
+func (p *player) enemy_skill_strike() {
 	fmt.Println("Enemy used strike")
-	damage := rand.Intn(20) + 5 - player_endurance
-	critical_damage := rand.Intn(20) + 30 - player_endurance
+	damage := rand.Intn(20) + 5 - p.endurance
+	critical_damage := rand.Intn(20) + 30 - p.endurance
 
-	if rand.Intn(100) > player_agility {
+	if rand.Intn(100) > p.agility {
 
 		if rand.Intn(11) == 9 { //Critical hit chance
-			player_health -= critical_damage
+			p.health -= critical_damage
 			fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		} else {
-			player_health -= damage
+			p.health -= damage
 			fmt.Println(damage, "DMG")
 		}
 	} else {
@@ -356,32 +355,32 @@ func enemy_skill_strike() {
 }
 
 // enemy skill: heal
-func enemy_skill_heal() {
+func (e *enemy) enemy_skill_heal() {
 	heal := rand.Intn(20) + 5 //amount healed
 	fmt.Println("Enemy has healed")
-	enemy_health += heal
+	e.health += heal
 	fmt.Println(heal, "Healed")
 }
 
 // enemy skill: force
-func enemy_skill_force() {
+func (p *player) enemy_skill_force(e *enemy) {
 
-	damage := rand.Intn(10) + 20 - player_endurance
-	critical_damage := rand.Intn(20) + 30 - player_endurance
+	damage := rand.Intn(10) + 20 - p.endurance
+	critical_damage := rand.Intn(20) + 30 - p.endurance
 
 	fmt.Println("Enemy cast force")
 
-	if enemy_skill_points >= 20 {
+	if e.skill_points >= 20 {
 
-		enemy_skill_points -= 20
+		e.skill_points -= 20
 
-		if rand.Intn(100) >= player_agility {
+		if rand.Intn(100) >= p.agility {
 
 			if rand.Intn(3) == 1 { //Critical hit chance
-				player_health -= critical_damage
+				p.health -= critical_damage
 				fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 			} else {
-				player_health -= damage
+				p.health -= damage
 				fmt.Println(damage, "DMG")
 			}
 		} else {
@@ -390,7 +389,7 @@ func enemy_skill_force() {
 	} else {
 		fmt.Println("but nothing happened...")
 		damage = 0
-		player_health -= damage
+		p.health -= damage
 		fmt.Println(damage, "DMG")
 		fmt.Scanln()
 	}
@@ -407,152 +406,36 @@ func clear_screen() {
 }
 
 // checks the exp and increases the player_lv
-func player_level_up() {
-	if player.exp >= 100 && player.lv < 2 {
-		player.lv += 1
-		player.max_health += 20
-		player.max_skill_points += 5
-		player.health = player_max_health
-		player.skill_points = player.max_skill_points
-		fmt.Println("")
-		{
-			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 92, "Level up!")
-			fmt.Println(colored)
-		}
-		fmt.Println("\nMax HP:", player.max_health, "Max SP:", player.max_skill_points)
-		fmt.Println("\nWhat stat would you like to improve?")
-		fmt.Println("\nType the first 2 letters...")
-		fmt.Println("\nStrength:", player_strength)
-		fmt.Println("Intelligence", player_intelligence)
-		fmt.Println("Agility:", player_agility)
-		fmt.Println("Endurance:", player_endurance)
-		fmt.Println("Social:", player_social)
-		fmt.Println("")
-
-		fmt.Scanln(&user_input)
-
-		switch user_input {
-
-		case "st":
-			player_strength += 2
-		case "in":
-			player_intelligence += 2
-		case "ag":
-			player_agility += 2
-		case "en":
-			player_endurance += 2
-		case "so":
-			player_social += 2
-		}
-	}
-	if player_exp >= 200 && player_lv < 3 {
-		player_lv += 1
-		player_max_health += 20
-		player_max_skill_points += 5
-		player_health = player_max_health
-		player_skill_points = player_max_skill_points
+func (p *player) level_check() {
+	if p.exp >= 100*p.lv {
+		p.lv++
+		p.max_health += 20
+		p.max_skill_points += 5
+		p.health = p.max_health
+		p.skill_points = p.max_skill_points
 		fmt.Println("\nLevel up!!")
-		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
+		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.max_health, p.max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Println("")
 		fmt.Scanln(&user_input)
 
 		switch user_input {
-
 		case "st":
-			player_strength += 2
+			p.strength += 2
 		case "in":
-			player_intelligence += 2
+			p.intelligence += 2
 		case "ag":
-			player_agility += 2
+			p.agility += 2
 		case "en":
-			player_endurance += 2
+			p.endurance += 2
 		case "so":
-			player_social += 2
-		}
-	}
-	if player_exp >= 500 && player_lv < 4 {
-		player_lv += 1
-		player_max_health += 20
-		player_max_skill_points += 5
-		player_health = player_max_health
-		player_skill_points = player_max_skill_points
-		fmt.Println("\nLevel up!!")
-		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
-		fmt.Println("\nWhat stat would you like to improve?")
-		fmt.Println("")
-		fmt.Scanln(&user_input)
-
-		switch user_input {
-
-		case "st":
-			player_strength += 2
-		case "in":
-			player_intelligence += 2
-		case "ag":
-			player_agility += 2
-		case "en":
-			player_endurance += 2
-		case "so":
-			player_social += 2
-		}
-	}
-	if player_exp >= 1000 && player_lv < 5 {
-		player_lv += 1
-		player_max_health += 20
-		player_max_skill_points += 5
-		player_health = player_max_health
-		player_skill_points = player_max_skill_points
-		fmt.Println("\nLevel up!!")
-		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
-		fmt.Println("\nWhat stat would you like to improve?")
-		fmt.Println("")
-		fmt.Scanln(&user_input)
-
-		switch user_input {
-
-		case "st":
-			player_strength += 2
-		case "in":
-			player_intelligence += 2
-		case "ag":
-			player_agility += 2
-		case "en":
-			player_endurance += 2
-		case "so":
-			player_social += 2
-		}
-
-	}
-	if player_exp >= 2000 && player_lv < 6 {
-		player_lv += 1
-		player_max_health += 20
-		player_max_skill_points += 5
-		player_health = player_max_health
-		player_skill_points = player_max_skill_points
-		fmt.Println("\nLevel up!!")
-		fmt.Println("\nMax HP:", player_max_health, "Max SP:", player_max_skill_points)
-		fmt.Println("\nWhat stat would you like to improve?")
-		fmt.Scanln(&user_input)
-
-		switch user_input {
-
-		case "st":
-			player_strength += 2
-		case "in":
-			player_intelligence += 2
-		case "ag":
-			player_agility += 2
-		case "en":
-			player_endurance += 2
-		case "so":
-			player_social += 2
+			p.social += 2
 		}
 	}
 }
 
 // Makes the shop work | not finished yet
-func shop() {
+func (p *player) shop() {
 
 	fmt.Println("Welcome to the shop")
 	fmt.Println("\nWe have a variety of products available, please take your time choosing")
@@ -569,15 +452,15 @@ func shop() {
 
 		case "potion":
 			fmt.Println("you have bought a potion")
-			player_inventory = append(player_inventory, "potion")
+			p.inventory = append(p.inventory, "potion")
 
 		case "sword":
 			fmt.Println("you have bought a sword")
-			player_inventory = append(player_inventory, "sword")
+			p.inventory = append(p.inventory, "sword")
 
 		case "shield":
 			fmt.Println("you have bought a shield")
-			player_inventory = append(player_inventory, "shield")
+			p.inventory = append(p.inventory, "shield")
 
 		case "back":
 			main()
@@ -589,14 +472,14 @@ func shop() {
 	}
 }
 
-func display_stats() {
-	fmt.Println("\nPlayer lv:", player_lv)
-	fmt.Println("Exp:", player_exp)
-	fmt.Println("\nStrength:", player_strength)
-	fmt.Println("Intelligence", player_intelligence)
-	fmt.Println("Agility:", player_agility)
-	fmt.Println("Endurance:", player_endurance)
-	fmt.Println("Social:", player_social)
+func (p *player) display_stats() {
+	fmt.Println("\nPlayer lv:", p.lv)
+	fmt.Println("Exp:", p.exp)
+	fmt.Println("\nStrength:", p.strength)
+	fmt.Println("Intelligence", p.intelligence)
+	fmt.Println("Agility:", p.agility)
+	fmt.Println("Endurance:", p.endurance)
+	fmt.Println("Social:", p.social)
 	fmt.Println("\n[back]")
 
 	fmt.Scanln(&user_input)
@@ -612,9 +495,9 @@ func display_stats() {
 }
 
 // displays the player's inventory | doesn't work yet
-func display_inventory() {
+func (p *player) display_inventory() {
 
-	fmt.Println(player_inventory)
+	fmt.Println(p.inventory)
 
 	fmt.Println("\n[back]")
 

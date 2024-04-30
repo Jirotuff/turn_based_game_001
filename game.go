@@ -205,7 +205,7 @@ func show_status() {
 }
 
 func check_victory() {
-	if victory != false {
+	if !victory {
 		victory = false
 		Dario.exp += rand.Intn(50) + 50
 		Pilgrim.exp += rand.Intn(50) + 50
@@ -226,7 +226,7 @@ func combat() {
 	for {
 		Dario.check_player_life()
 		enemy_1.check_enemy_life()
-		if victory == true {
+		if victory {
 			Dario.gold += rand.Intn(10) + 5
 			Pilgrim.gold += rand.Intn(10) + 5
 			Fie.gold += rand.Intn(10) + 5
@@ -261,7 +261,7 @@ func (p *player) player_turn() {
 
 	switch strings.ToLower(user_input) { //gives different options to the player
 
-	case "strike", "st", "str", "stri", "stri":
+	case "strike", "st", "str", "stri":
 		Dario.player_skill_strike(&enemy_1)
 
 	case "heal", "h", "he", "hea":

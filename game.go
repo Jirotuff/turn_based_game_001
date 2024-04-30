@@ -105,8 +105,8 @@ func combat() {
 	fmt.Println("\n\nCombat started!")
 
 	for {
-		check_player_life()
-		check_enemy_life()
+		Dario.check_player_life()
+		enemy_1.check_enemy_life()
 		if victory == true {
 			Dario.gold += rand.Intn(10) + 5
 			Pilgrim.gold += rand.Intn(10) + 5
@@ -115,14 +115,14 @@ func combat() {
 			main()
 		}
 
-		Dario_turn()
+		Dario.player_turn()
 
 		enemy_1.enemy_turn()
 
 	}
 }
 
-func (p *player) Dario_turn() {
+func (p *player) player_turn() {
 	fmt.Println("")
 	if Dario.special >= 3 {
 		{
@@ -143,24 +143,24 @@ func (p *player) Dario_turn() {
 	switch user_input { //gives different options to the player
 
 	case "strike":
-		Dario.player_skill_strike()
+		Dario.player_skill_strike(&enemy_1)
 
 	case "heal":
 		Jessy.player_skill_heal()
 
 	case "force":
-		Jessy.player_skill_force()
+		Jessy.player_skill_force(&enemy_1)
 
 	case "soul":
 		Jessy.player_skill_soul()
 
 	case "kill":
-		Dario.player_skill_kill()
+		Dario.player_skill_kill(&enemy_1)
 
 	case "special":
 		if Dario.special > 2 {
 			Dario.special = 0
-			Dario_skill_special()
+			Dario.player_skill_special(&enemy_1)
 		} else {
 			fmt.Println("You dont have the energy for this move")
 		}
@@ -184,13 +184,13 @@ func (e *enemy) enemy_turn() {
 		switch enemy_input {
 
 		case 0:
-			enemy_skill_strike()
+			enemy_1.enemy_skill_strike(&Dario)
 
 		case 1:
-			enemy_skill_heal()
+			enemy_1.enemy_skill_heal()
 
 		case 2:
-			enemy_skill_force()
+			enemy_1.enemy_skill_force(&Dario)
 		}
 	}
 	if e.health > e.max_health {
@@ -212,7 +212,7 @@ func tutorial() {
 }
 
 // checks if the player is dead
-func check_player_life() {
+func (p *player) check_player_life() {
 	if Dario.health <= 0 {
 		fmt.Println("Your hero has been killed!")
 		fmt.Println("\nGold:", Dario.gold, "Player level:", Dario.lv)
@@ -230,7 +230,7 @@ func check_player_life() {
 }
 
 // player skill: kill (THIS IS A TEST FEATURE, NOT MEANT FOR FINAL PRODUCT)
-func (e *enemy) Dario_skill_kill() {
+func (p *player) player_skill_kill(e *enemy) {
 	damage := rand.Intn(20) + 5 + Dario.strength + 999
 	critical_damage := rand.Intn(20) + 30 + Dario.strength + 999
 
@@ -247,7 +247,7 @@ func (e *enemy) Dario_skill_kill() {
 }
 
 // player skill: strike
-func (e *enemy) Dario_skill_strike() {
+func (p *player) player_skill_strike(e *enemy) {
 	damage := rand.Intn(20) + 5 + Dario.strength
 	critical_damage := rand.Intn(20) + 30 + Dario.strength
 
@@ -266,14 +266,14 @@ func (e *enemy) Dario_skill_strike() {
 }
 
 // player skill: soul
-func Jessy_skill_soul() {
+func (p *player) player_skill_soul() {
 	if true == true {
 		Jessy.skill_points += 25
 	}
 }
 
 // player skill: force
-func (e *enemy) Jessy_skill_force() {
+func (p *player) player_skill_force(e *enemy) {
 	damage := rand.Intn(5) + 20 + Jessy.intelligence
 	critical_damage := rand.Intn(20) + 30 + Jessy.intelligence
 
@@ -300,7 +300,7 @@ func (e *enemy) Jessy_skill_force() {
 }
 
 // player skill: heal
-func Jessy_skill_heal() {
+func (p *player) player_skill_heal() {
 	heal := rand.Intn(20) + 5 + Jessy.intelligence //amount healed
 	Jessy.health += heal
 	Dario.health += heal
@@ -310,7 +310,7 @@ func Jessy_skill_heal() {
 	user_input = ""
 }
 
-func (e *enemy) Dario_skill_special() {
+func (p *player) player_skill_special(e *enemy) {
 	damage := 70 + Dario.strength
 	critical_damage := rand.Intn(20) + 75 + Dario.strength
 
@@ -335,7 +335,7 @@ func (e *enemy) check_enemy_life() {
 }
 
 // enemy skill: strike
-func (p *player) enemy_skill_strike() {
+func (e *enemy) enemy_skill_strike(p *player) {
 	fmt.Println("Enemy used strike")
 	damage := rand.Intn(20) + 5 - p.endurance
 	critical_damage := rand.Intn(20) + 30 - p.endurance
@@ -363,7 +363,7 @@ func (e *enemy) enemy_skill_heal() {
 }
 
 // enemy skill: force
-func (p *player) enemy_skill_force(e *enemy) {
+func (e *enemy) enemy_skill_force(p *player) {
 
 	damage := rand.Intn(10) + 20 - p.endurance
 	critical_damage := rand.Intn(20) + 30 - p.endurance

@@ -8,7 +8,7 @@ import (
 	"runtime"
 )
 
-// constants
+// Constants
 const (
 	name_1 string = "Dario"
 	name_2 string = "Pilgrim"
@@ -16,9 +16,127 @@ const (
 	name_4 string = "Jessy"
 )
 
-// variables
+// Variables
 
-// user
+// player struct
+type player struct {
+	max_health       int
+	max_skill_points int
+	name             string
+	special          int
+	inventory        []string
+	exp              int
+	lv               int
+	gold             int
+	health           int // player health
+	skill_points     int // points used to cast magic spells
+	strength         int // increases physical damage
+	intelligence     int // increases magical damage
+	agility          int // increases chance to dodge
+	endurance        int // reduces damage taken
+	social           int // reduces shop prices
+}
+
+// players
+
+var Dario = player{
+	max_health:       100,
+	max_skill_points: 50,
+	name:             name_1,
+	special:          0,
+	inventory:        []string{},
+	exp:              0,
+	lv:               0,
+	gold:             50,
+	health:           100,
+	skill_points:     75,
+	strength:         11,
+	intelligence:     11,
+	agility:          11,
+	endurance:        11,
+	social:           11,
+}
+
+var Pilgrim = player{
+	max_health:       120,
+	max_skill_points: 50,
+	name:             name_2,
+	special:          0,
+	inventory:        []string{},
+	exp:              0,
+	lv:               0,
+	gold:             50,
+	health:           120,
+	skill_points:     70,
+	strength:         10,
+	intelligence:     8,
+	agility:          8,
+	endurance:        14,
+	social:           10,
+}
+
+var Fie = player{
+	max_health:       90,
+	max_skill_points: 50,
+	name:             name_3,
+	special:          0,
+	inventory:        []string{},
+	exp:              0,
+	lv:               0,
+	gold:             50,
+	health:           90,
+	skill_points:     80,
+	strength:         10,
+	intelligence:     10,
+	agility:          14,
+	endurance:        8,
+	social:           10,
+}
+
+var Jessy = player{
+	max_health:       80,
+	max_skill_points: 90,
+	name:             name_4,
+	special:          0,
+	inventory:        []string{},
+	exp:              0,
+	lv:               0,
+	gold:             50,
+	health:           100,
+	skill_points:     90,
+	strength:         8,
+	intelligence:     14,
+	agility:          12,
+	endurance:        10,
+	social:           12,
+}
+
+// enemy struct
+
+type enemy struct {
+	health           int //enemy health
+	skill_points     int
+	max_skill_points int
+	max_health       int
+}
+
+//enemies
+
+var enemy_1 = enemy{
+	health:           100,
+	skill_points:     100,
+	max_skill_points: 80,
+	max_health:       100,
+}
+
+var enemy_2 = enemy{
+	health:           100,
+	skill_points:     100,
+	max_skill_points: 80,
+	max_health:       100,
+}
+
+// User
 
 var user_input string //player input
 var victory bool = false
@@ -27,7 +145,7 @@ var display_tutorial bool = true
 // Enemy
 var enemy_input int //enemy input
 
-// start of program
+// Start of program
 func main() {
 
 	clear_screen()
@@ -100,7 +218,7 @@ func check_victory() {
 	}
 }
 
-// starts the combat encounter
+// Starts the combat encounter
 func combat() {
 	fmt.Println("\n\nCombat started!")
 
@@ -122,6 +240,7 @@ func combat() {
 	}
 }
 
+// Function for player turn
 func (p *player) player_turn() {
 	fmt.Println("")
 	if Dario.special >= 3 {
@@ -175,7 +294,7 @@ func (p *player) player_turn() {
 	}
 }
 
-// function for enemy turn
+// Function for enemy turn
 func (e *enemy) enemy_turn() {
 
 	enemy_input = rand.Intn(3) //gives different options to the enemy
@@ -202,7 +321,7 @@ func (e *enemy) enemy_turn() {
 
 }
 
-// displays a tutorial if display_tutorial == true
+// Displays a tutorial if display_tutorial == true
 func tutorial() {
 	display_tutorial = false
 	fmt.Println("Welcome to this game...")
@@ -211,7 +330,7 @@ func tutorial() {
 
 }
 
-// checks if the player is dead
+// Checks if the player is dead
 func (p *player) check_player_life() {
 	if Dario.health <= 0 {
 		fmt.Println("Your hero has been killed!")
@@ -229,7 +348,7 @@ func (p *player) check_player_life() {
 	}
 }
 
-// player skill: kill (THIS IS A TEST FEATURE, NOT MEANT FOR FINAL PRODUCT)
+// Player skill: kill (THIS IS A TEST FEATURE, NOT MEANT FOR FINAL PRODUCT)
 func (p *player) player_skill_kill(e *enemy) {
 	damage := rand.Intn(20) + 5 + Dario.strength + 999
 	critical_damage := rand.Intn(20) + 30 + Dario.strength + 999
@@ -246,7 +365,7 @@ func (p *player) player_skill_kill(e *enemy) {
 	}
 }
 
-// player skill: strike
+// Player skill: strike
 func (p *player) player_skill_strike(e *enemy) {
 	damage := rand.Intn(20) + 5 + Dario.strength
 	critical_damage := rand.Intn(20) + 30 + Dario.strength
@@ -265,14 +384,14 @@ func (p *player) player_skill_strike(e *enemy) {
 	}
 }
 
-// player skill: soul
+// Player skill: soul
 func (p *player) player_skill_soul() {
 	if true == true {
 		Jessy.skill_points += 25
 	}
 }
 
-// player skill: force
+// Player skill: force
 func (p *player) player_skill_force(e *enemy) {
 	damage := rand.Intn(5) + 20 + Jessy.intelligence
 	critical_damage := rand.Intn(20) + 30 + Jessy.intelligence
@@ -299,7 +418,7 @@ func (p *player) player_skill_force(e *enemy) {
 	}
 }
 
-// player skill: heal
+// Player skill: heal
 func (p *player) player_skill_heal() {
 	heal := rand.Intn(20) + 5 + Jessy.intelligence //amount healed
 	Jessy.health += heal
@@ -310,6 +429,7 @@ func (p *player) player_skill_heal() {
 	user_input = ""
 }
 
+// Triggers a special move when the requirement is met
 func (p *player) player_skill_special(e *enemy) {
 	damage := 70 + Dario.strength
 	critical_damage := rand.Intn(20) + 75 + Dario.strength
@@ -326,7 +446,7 @@ func (p *player) player_skill_special(e *enemy) {
 	}
 }
 
-// checks if the enemy is dead
+// Checks if the enemy is dead
 func (e *enemy) check_enemy_life() {
 	if e.health <= 0 {
 		fmt.Println("Victory!")
@@ -334,7 +454,7 @@ func (e *enemy) check_enemy_life() {
 	}
 }
 
-// enemy skill: strike
+// Enemy skill: strike
 func (e *enemy) enemy_skill_strike(p *player) {
 	fmt.Println("Enemy used strike")
 	damage := rand.Intn(20) + 5 - p.endurance
@@ -354,7 +474,7 @@ func (e *enemy) enemy_skill_strike(p *player) {
 	}
 }
 
-// enemy skill: heal
+// Enemy skill: heal
 func (e *enemy) enemy_skill_heal() {
 	heal := rand.Intn(20) + 5 //amount healed
 	fmt.Println("Enemy has healed")
@@ -362,7 +482,7 @@ func (e *enemy) enemy_skill_heal() {
 	fmt.Println(heal, "Healed")
 }
 
-// enemy skill: force
+// Enemy skill: force
 func (e *enemy) enemy_skill_force(p *player) {
 
 	damage := rand.Intn(10) + 20 - p.endurance
@@ -395,7 +515,7 @@ func (e *enemy) enemy_skill_force(p *player) {
 	}
 }
 
-// clear the screen in the CLI
+// Clear the screen in the CLI
 func clear_screen() {
 	cmd := exec.Command("clear") // for Unix/Linux
 	if runtime.GOOS == "windows" {
@@ -405,7 +525,7 @@ func clear_screen() {
 	cmd.Run()
 }
 
-// checks the exp and increases the player_lv
+// Checks the exp and increases the player_lv
 func (p *player) level_check() {
 	if p.exp >= 100*p.lv {
 		p.lv++
@@ -472,6 +592,7 @@ func (p *player) shop() {
 	}
 }
 
+// Displays a player's lv, exp and stats
 func (p *player) display_stats() {
 	fmt.Println("\nPlayer lv:", p.lv)
 	fmt.Println("Exp:", p.exp)
@@ -494,7 +615,7 @@ func (p *player) display_stats() {
 	}
 }
 
-// displays the player's inventory | doesn't work yet
+// Displays the player's inventory
 func (p *player) display_inventory() {
 
 	fmt.Println(p.inventory)
@@ -513,6 +634,7 @@ func (p *player) display_inventory() {
 	}
 }
 
+// Exits the game
 func quit() {
 	os.Exit(0)
 }

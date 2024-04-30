@@ -252,32 +252,31 @@ func (p *player) player_turn() {
 	}
 
 	fmt.Println("\nWhat's your move?")
-	fmt.Println("\n>> strike\t\t\t> Use your basic weapon\t")
-	fmt.Println(">> heal\t\t\t\t> Use an healing item\t")
-	fmt.Println(">> force | 20 SP\t\t> High citical chance attack")
-	fmt.Println(">> soul \t\t\t> Regenerates some SP")
-	fmt.Println("")
+	fmt.Println("\n>> (st)rike\t\t\t> Use your basic weapon\t")
+	fmt.Println(">> (h)eal\t\t\t\t> Use an healing item\t")
+	fmt.Println(">> (f)orce | 20 SP\t\t> High citical chance attack")
+	fmt.Println(">> (so)ul \t\t\t> Regenerates some SP\n")
 
 	fmt.Scanln(&user_input)
 
-	switch user_input { //gives different options to the player
+	switch string.ToLower(user_input) { //gives different options to the player
 
-	case "strike":
+	case "strike", "st", "str", "stri", "stri":
 		Dario.player_skill_strike(&enemy_1)
 
-	case "heal":
+	case "heal", "h", "he", "hea":
 		Jessy.player_skill_heal()
 
-	case "force":
+	case "force", "f", "fo", "for", "forc":
 		Jessy.player_skill_force(&enemy_1)
 
-	case "soul":
+	case "soul", "so", "sou":
 		Jessy.player_skill_soul()
 
-	case "kill":
+	case "kill", "k", "ki", "kil":
 		Dario.player_skill_kill(&enemy_1)
 
-	case "special":
+	case "special", "sp", "spe", "spec":
 		if Dario.special > 2 {
 			Dario.special = 0
 			Dario.player_skill_special(&enemy_1)

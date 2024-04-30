@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 // Constants
@@ -170,18 +171,18 @@ func main() {
 	for {
 		fmt.Scanln(&user_input)
 
-		switch user_input {
+		switch strings.ToLower(user_input) {
 
-		case "battle":
+		case "battle", "b", "ba", "bat":
 			combat()
 
-		case "shop":
+		case "shop", "sh", "sho":
 			Dario.shop()
 
-		case "stats":
+		case "stats", "st", "sta", "stat":
 			Dario.display_stats()
 
-		case "inv":
+		case "inv", "i", "in":
 			Dario.display_inventory()
 
 		case "exit":

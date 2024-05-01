@@ -158,7 +158,10 @@ func main() {
 
 	//fmt.Println(player_name, "  Health:", player_health, "SP:", player_skill_points, "Gold:", gold)
 
-	show_status()
+	Dario.show_status()
+	Pilgrim.show_status()
+	Fie.show_status()
+	Jessy.show_status()
 
 	fmt.Println("\nWhat do you want to do?")
 	fmt.Println("\nbattle\t\t> finds opponent")
@@ -194,18 +197,15 @@ func main() {
 	}
 }
 
-func save(slot1 any, data interface{}) {
+// func save(slot1 any, data interface{}) {}
 
-}
-func show_status() {
-	fmt.Println("player_1:\nhealth: ", Dario.health, "skill points: ", Dario.skill_points, "gold: ", Dario.gold)
-	fmt.Println("player_1:\nhealth: ", Pilgrim.health, "skill points: ", Pilgrim.skill_points, "gold: ", Pilgrim.gold)
-	fmt.Println("player_1:\nhealth: ", Fie.health, "skill points: ", Fie.skill_points, "gold: ", Fie.gold)
-	fmt.Println("player_1:\nhealth: ", Jessy.health, "skill points: ", Jessy.skill_points, "gold: ", Jessy.gold)
+func (p *player) show_status() {
+	fmt.Println(p.name, ":\nhealth: ", p.health, "skill points: ", p.skill_points, "gold: ", p.gold)
+
 }
 
 func check_victory() {
-	if !victory {
+	if victory {
 		victory = false
 		Dario.exp += rand.Intn(50) + 50
 		Pilgrim.exp += rand.Intn(50) + 50
@@ -235,16 +235,24 @@ func combat() {
 		}
 
 		Dario.player_turn()
+		Pilgrim.player_turn()
+		Fie.player_turn()
+		Jessy.player_turn()
 
 		enemy_1.enemy_turn()
+		enemy_2.enemy_turn()
 
+		Dario.show_status()
+		Pilgrim.show_status()
+		Fie.show_status()
+		Jessy.show_status()
 	}
 }
 
 // Function for player turn
 func (p *player) player_turn() {
 	fmt.Println("")
-	if Dario.special >= 3 {
+	if p.special >= 3 {
 		{
 			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 91, "You feel a strange power welling up inside... (type 'special' to unleash it)")
 			fmt.Println(colored)
@@ -255,42 +263,42 @@ func (p *player) player_turn() {
 	fmt.Println("\n>> (st)rike\t\t\t> Use your basic weapon\t")
 	fmt.Println(">> (h)eal\t\t\t\t> Use an healing item\t")
 	fmt.Println(">> (f)orce | 20 SP\t\t> High citical chance attack")
-	fmt.Println(">> (so)ul \t\t\t> Regenerates some SP\n")
+	fmt.Println(">> (so)ul \t\t\t> Regenerates some SP")
 
 	fmt.Scanln(&user_input)
 
 	switch strings.ToLower(user_input) { //gives different options to the player
 
 	case "strike", "st", "str", "stri":
-		Dario.player_skill_strike(&enemy_1)
+		p.player_skill_strike(&enemy_1)
 
 	case "heal", "h", "he", "hea":
-		Jessy.player_skill_heal()
+		p.player_skill_heal()
 
 	case "force", "f", "fo", "for", "forc":
-		Jessy.player_skill_force(&enemy_1)
+		p.player_skill_force(&enemy_1)
 
 	case "soul", "so", "sou":
-		Jessy.player_skill_soul()
+		p.player_skill_soul()
 
 	case "kill", "k", "ki", "kil":
-		Dario.player_skill_kill(&enemy_1)
+		p.player_skill_kill(&enemy_1)
 
 	case "special", "sp", "spe", "spec":
-		if Dario.special > 2 {
-			Dario.special = 0
-			Dario.player_skill_special(&enemy_1)
+		if p.special > 2 {
+			p.special = 0
+			p.player_skill_special(&enemy_1)
 		} else {
 			fmt.Println("You dont have the energy for this move")
 		}
 	default:
 		fmt.Println("Thats a typo! lost your turn XD")
 	}
-	if Dario.health > Dario.max_health {
-		Dario.health = Dario.max_health
+	if p.health > p.max_health {
+		p.health = p.max_health
 	}
-	if Dario.skill_points > Dario.skill_points {
-		Dario.skill_points = Dario.max_skill_points
+	if p.skill_points > p.max_skill_points {
+		p.skill_points = p.max_skill_points
 	}
 }
 
@@ -303,22 +311,52 @@ func (e *enemy) enemy_turn() {
 		switch enemy_input {
 
 		case 0:
-			enemy_1.enemy_skill_strike(&Dario)
+			enemy_input = rand.Intn(3)
+
+			switch enemy_input {
+
+			case 0:
+				e.enemy_skill_strike(&Dario)
+
+			case 1:
+				e.enemy_skill_strike(&Pilgrim)
+
+			case 2:
+				e.enemy_skill_strike(&Fie)
+
+			case 3:
+				e.enemy_skill_strike(&Jessy)
+			}
 
 		case 1:
-			enemy_1.enemy_skill_heal()
+			e.enemy_skill_heal()
 
 		case 2:
-			enemy_1.enemy_skill_force(&Dario)
-		}
-	}
-	if e.health > e.max_health {
-		e.health = e.max_health
-	}
-	if e.skill_points > e.max_skill_points {
-		e.skill_points = e.max_skill_points
-	}
+			enemy_input = rand.Intn(3)
 
+			switch enemy_input {
+
+			case 0:
+				e.enemy_skill_force(&Dario)
+
+			case 1:
+				e.enemy_skill_force(&Pilgrim)
+
+			case 2:
+				e.enemy_skill_force(&Fie)
+
+			case 3:
+				e.enemy_skill_force(&Jessy)
+			}
+		}
+		if e.health > e.max_health {
+			e.health = e.max_health
+		}
+		if e.skill_points > e.max_skill_points {
+			e.skill_points = e.max_skill_points
+		}
+
+	}
 }
 
 // Displays a tutorial if display_tutorial == true
@@ -386,9 +424,9 @@ func (p *player) player_skill_strike(e *enemy) {
 
 // Player skill: soul
 func (p *player) player_skill_soul() {
-	if true == true {
-		Jessy.skill_points += 25
-	}
+
+	p.skill_points += 25
+
 }
 
 // Player skill: force
@@ -527,13 +565,13 @@ func clear_screen() {
 
 // Checks the exp and increases the player_lv
 func (p *player) level_check() {
-	if p.exp >= 100*p.lv {
+	if p.exp >= 100 && p.lv < 2 {
 		p.lv++
 		p.max_health += 20
 		p.max_skill_points += 5
 		p.health = p.max_health
 		p.skill_points = p.max_skill_points
-		fmt.Println("\nLevel up!!")
+		fmt.Println("\n", p.name, ": Leveled up!!")
 		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.max_health, p.max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Println("")

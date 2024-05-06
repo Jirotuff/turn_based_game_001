@@ -19,23 +19,25 @@ const (
 
 // Variables
 
+var inventory []string
+
 // player struct
 type player struct {
 	max_health       int
 	max_skill_points int
 	name             string
 	special          int
-	inventory        []string
-	exp              int
-	lv               int
-	gold             int
-	health           int // player health
-	skill_points     int // points used to cast magic spells
-	strength         int // increases physical damage
-	intelligence     int // increases magical damage
-	agility          int // increases chance to dodge
-	endurance        int // reduces damage taken
-	social           int // reduces shop prices
+
+	exp          int
+	lv           int
+	gold         int
+	health       int // player health
+	skill_points int // points used to cast magic spells
+	strength     int // increases physical damage
+	intelligence int // increases magical damage
+	agility      int // increases chance to dodge
+	endurance    int // reduces damage taken
+	social       int // reduces shop prices
 }
 
 // players
@@ -45,7 +47,6 @@ var Dario = player{
 	max_skill_points: 50,
 	name:             name_1,
 	special:          0,
-	inventory:        []string{},
 	exp:              0,
 	lv:               1,
 	gold:             50,
@@ -63,7 +64,6 @@ var Pilgrim = player{
 	max_skill_points: 50,
 	name:             name_2,
 	special:          0,
-	inventory:        []string{},
 	exp:              0,
 	lv:               1,
 	gold:             50,
@@ -81,7 +81,6 @@ var Fie = player{
 	max_skill_points: 50,
 	name:             name_3,
 	special:          0,
-	inventory:        []string{},
 	exp:              0,
 	lv:               1,
 	gold:             50,
@@ -99,7 +98,6 @@ var Jessy = player{
 	max_skill_points: 90,
 	name:             name_4,
 	special:          0,
-	inventory:        []string{},
 	exp:              0,
 	lv:               1,
 	gold:             50,
@@ -266,6 +264,7 @@ func combat() {
 
 // Function for player turn
 func (p *player) player_turn() {
+	clear_screen()
 
 	Dario.show_status()
 	Pilgrim.show_status()
@@ -282,16 +281,17 @@ func (p *player) player_turn() {
 	fmt.Println(p.name, "'s turn")
 	fmt.Println("\nWhat's your move?")
 	fmt.Println("\n>> (st)rike\t\t\t> Use your basic weapon\t")
-	fmt.Println(">> (h)eal\t\t\t> Use an healing item\t")
+	fmt.Println(">> (h)eal	| 10 SP\t\t> Use an healing spell\t")
 	fmt.Println(">> (f)orce | 20 SP\t\t> High citical chance attack")
 	fmt.Println(">> (so)ul \t\t\t> Regenerates some SP")
+	fmt.Println(">> (It)em \t\t\t> Use an item")
 
 	fmt.Scanln(&user_input)
 
 	switch strings.ToLower(user_input) { //gives different options to the player
 
-	case "use item":
-		use_item(&player{})
+	case "item", "i", "it", "ite":
+		p.use_item()
 
 	case "strike", "st", "str", "stri":
 		p.player_skill_strike(&Bandit)
@@ -318,14 +318,7 @@ func (p *player) player_turn() {
 	default:
 		fmt.Println("Thats a typo! lost your turn XD")
 	}
-	if p.health > p.max_health {
-		p.health = p.max_health
-	}
-	if p.skill_points > p.max_skill_points {
-		p.skill_points = p.max_skill_points
-	}
-
-	clear_screen()
+	p.normalize_stats()
 }
 
 // Function for enemy turn
@@ -376,12 +369,7 @@ func (e *enemy) enemy_turn() {
 				e.enemy_skill_force(&Jessy)
 			}
 		}
-		if e.health > e.max_health {
-			e.health = e.max_health
-		}
-		if e.skill_points > e.max_skill_points {
-			e.skill_points = e.max_skill_points
-		}
+		e.normalize_stats_enemy()
 	}
 }
 
@@ -668,15 +656,15 @@ func (p *player) shop() {
 
 		case "potion", "po", "pot", "poti":
 			fmt.Println("you have bought a potion")
-			p.inventory = append(p.inventory, "potion")
+			inventory = append(inventory, "potion")
 
 		case "sword", "sw", "swo", "swor":
 			fmt.Println("you have bought a sword")
-			p.inventory = append(p.inventory, "sword")
+			inventory = append(inventory, "sword")
 
 		case "shield", "sh", "shi", "shie":
 			fmt.Println("you have bought a shield")
-			p.inventory = append(p.inventory, "shield")
+			inventory = append(inventory, "shield")
 
 		case "back", "b", "ba", "bac":
 			main()
@@ -704,7 +692,7 @@ func (p *player) display_stats() {
 // Displays the player's inventory
 func (p *player) display_inventory() {
 
-	fmt.Println(p.inventory)
+	fmt.Println(inventory)
 
 	fmt.Println("\n Type 'back' to retun to main menu")
 
@@ -730,14 +718,60 @@ func contains_string(slice []string, target string) bool {
 	return false
 }
 
-func use_item(p *player) {
+func (p *player) use_item() {
+	fmt.Println(inventory, "\n\nWhat item to use...")
 	fmt.Scanln(&user_input)
+	switch strings.ToLower(user_input) {
+
+	case "potion", "p", "po", "pot", "poti":
+		if contains_string(inventory, "potion") {
+			fmt.Println("You have used a potion...")
+			p.health = +30
+		} else {
+			fmt.Println("You do not have a potion")
+		}
+	case "sword":
+		if contains_string(inventory, "sword") {
+			fmt.Println("You have used a sword...")
+			fmt.Println("... DEBUG DEBUG DEBUG ...")
+		}
+	}
+
 	if user_input == "potion" {
-		if contains_string(p.inventory, "potion") {
+		if contains_string(inventory, "potion") {
 			fmt.Println("You have used a potion... DEBUG DEBUG DEBUG")
+			p.health = +30
+
+		}
+		if contains_string(inventory, "sword") {
+			fmt.Println("You have used a sword... DEBUG DEBUG DEBUG")
 		}
 	}
 }
+
+func (p *player) normalize_stats() {
+	if p.health > p.max_health {
+		p.health = p.max_health
+	}
+	if p.skill_points > p.max_skill_points {
+		p.skill_points = p.max_skill_points
+	}
+}
+
+func (e *enemy) normalize_stats_enemy() {
+	if e.health > e.max_health {
+		e.health = e.max_health
+	}
+	if e.skill_points > e.max_skill_points {
+		e.skill_points = e.max_skill_points
+	}
+}
+
+/*
+func remove_item(s []string, index int) []string {
+	return append(s[:index], s[index+1:]...)
+}
+*/
 
 // Exits the game
 func quit() {

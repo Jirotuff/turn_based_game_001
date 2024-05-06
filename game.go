@@ -20,6 +20,9 @@ const (
 // Variables
 
 var inventory []string
+var gold int
+var exp_gained int
+var gold_earned int
 
 // player struct
 type player struct {
@@ -27,30 +30,27 @@ type player struct {
 	max_skill_points int
 	name             string
 	special          int
-
-	exp          int
-	lv           int
-	gold         int
-	health       int // player health
-	skill_points int // points used to cast magic spells
-	strength     int // increases physical damage
-	intelligence int // increases magical damage
-	agility      int // increases chance to dodge
-	endurance    int // reduces damage taken
-	social       int // reduces shop prices
+	exp              int
+	lv               int
+	health           int // player health
+	skill_points     int // points used to cast magic spells
+	strength         int // increases physical damage
+	intelligence     int // increases magical damage
+	agility          int // increases chance to dodge
+	endurance        int // reduces damage taken
+	social           int // reduces shop prices
 }
 
 // players
 
 var Dario = player{
-	max_health:       100,
+	max_health:       250,
 	max_skill_points: 50,
 	name:             name_1,
 	special:          0,
 	exp:              0,
 	lv:               1,
-	gold:             50,
-	health:           100,
+	health:           250,
 	skill_points:     75,
 	strength:         11,
 	intelligence:     11,
@@ -66,7 +66,6 @@ var Pilgrim = player{
 	special:          0,
 	exp:              0,
 	lv:               1,
-	gold:             50,
 	health:           120,
 	skill_points:     70,
 	strength:         10,
@@ -83,7 +82,6 @@ var Fie = player{
 	special:          0,
 	exp:              0,
 	lv:               1,
-	gold:             50,
 	health:           90,
 	skill_points:     80,
 	strength:         10,
@@ -100,7 +98,6 @@ var Jessy = player{
 	special:          0,
 	exp:              0,
 	lv:               1,
-	gold:             50,
 	health:           100,
 	skill_points:     90,
 	strength:         8,
@@ -124,10 +121,10 @@ type enemy struct {
 
 var Bandit = enemy{
 	name:             "Bandit",
-	health:           200,
-	skill_points:     80,
-	max_skill_points: 80,
-	max_health:       200,
+	health:           300,
+	skill_points:     200,
+	max_skill_points: 200,
+	max_health:       300,
 }
 
 // User
@@ -204,25 +201,25 @@ func main() {
 
 // func save(slot1 any, data interface{}) {}
 
-func (p *player) show_status() {
-	fmt.Println(p.name, ":\nhealth: ", p.health, "skill points: ", p.skill_points, "gold: ", p.gold)
-}
-
 func check_victory() {
 	if victory {
 		victory = false
 
 		fmt.Println("Victory!")
 
-		Dario.exp += rand.Intn(50) + 50
-		Pilgrim.exp += rand.Intn(50) + 50
-		Fie.exp += rand.Intn(50) + 50
-		Jessy.exp += rand.Intn(50) + 50
+		exp_gained = rand.Intn(50) + 50
 
-		Dario.gold += rand.Intn(10) + 5
-		Pilgrim.gold += rand.Intn(10) + 5
-		Fie.gold += rand.Intn(10) + 5
-		Jessy.gold += rand.Intn(10) + 5
+		Dario.exp += exp_gained
+		Pilgrim.exp += exp_gained
+		Fie.exp += exp_gained
+		Jessy.exp += exp_gained
+
+		gold_earned = rand.Intn(30) + 10
+
+		fmt.Println("\nLoot:\n\nexp:", exp_gained, "\ngold: ", gold_earned)
+
+		gold_earned = 0
+		exp_gained = 0
 
 		Dario.level_check()
 		Fie.level_check()
@@ -251,11 +248,17 @@ func combat() {
 		Bandit.check_enemy_life()
 		Dario.player_turn()
 		Bandit.check_enemy_life()
-		Pilgrim.player_turn()
+		if Pilgrim.health > 0 {
+			Pilgrim.player_turn()
+		}
 		Bandit.check_enemy_life()
-		Fie.player_turn()
+		if Fie.health > 0 {
+			Fie.player_turn()
+		}
 		Bandit.check_enemy_life()
-		Jessy.player_turn()
+		if Jessy.health > 0 {
+			Jessy.player_turn()
+		}
 		Bandit.check_enemy_life()
 
 		Bandit.enemy_turn()
@@ -393,7 +396,7 @@ func tutorial() {
 func (p *player) check_player_life() {
 	if Dario.health <= 0 {
 		fmt.Println("Your hero has been killed!")
-		fmt.Println("\nGold:", Dario.gold, "Player level:", Dario.lv)
+		fmt.Println("\nGold:", gold, "Player level:", Dario.lv)
 		fmt.Println("\nType anything to quit")
 
 		fmt.Scanln("")
@@ -484,11 +487,17 @@ func (p *player) player_skill_heal() {
 		p.skill_points = -10
 
 		heal := rand.Intn(20) + 5 + Jessy.intelligence //amount healed
-		Jessy.health += heal
-		Dario.health += heal
-		Pilgrim.health += heal
-		Fie.health += heal
 
+		Dario.health += heal
+		if Jessy.health > 0 {
+			Jessy.health += heal
+		}
+		if Pilgrim.health > 0 {
+			Pilgrim.health += heal
+		}
+		if Fie.health > 0 {
+			Fie.health += heal
+		}
 		if Dario.health > Dario.max_health {
 			Dario.health = Dario.max_health
 		}
@@ -534,8 +543,8 @@ func (e *enemy) check_enemy_life() {
 // Enemy skill: strike
 func (e *enemy) enemy_skill_strike(p *player) {
 	fmt.Println(e.name, "used strike")
-	damage := rand.Intn(20) + 5 - p.endurance
-	critical_damage := rand.Intn(20) + 30 - p.endurance
+	damage := rand.Intn(10) + 50 - p.endurance
+	critical_damage := rand.Intn(20) + 60 - p.endurance
 
 	if rand.Intn(100) > p.agility {
 
@@ -553,7 +562,7 @@ func (e *enemy) enemy_skill_strike(p *player) {
 
 // Enemy skill: heal
 func (e *enemy) enemy_skill_heal() {
-	heal := rand.Intn(20) + 5 //amount healed
+	heal := rand.Intn(50) + 50 //amount healed
 	fmt.Println(e.name, "has healed")
 	e.health += heal
 	fmt.Println(heal, "Healed")
@@ -562,8 +571,8 @@ func (e *enemy) enemy_skill_heal() {
 // Enemy skill: force
 func (e *enemy) enemy_skill_force(p *player) {
 
-	damage := rand.Intn(10) + 20 - p.endurance
-	critical_damage := rand.Intn(20) + 30 - p.endurance
+	damage := rand.Intn(10) + 70 - p.endurance
+	critical_damage := rand.Intn(20) + 80 - p.endurance
 
 	fmt.Println(e.name, "cast force")
 
@@ -647,7 +656,7 @@ func shop() {
 	fmt.Println("\nWe have a variety of products available, please take your time choosing")
 	fmt.Println("\n- potion")
 	fmt.Println("- fire_gem")
-	fmt.Println("- shield")
+	fmt.Println("- revival bead")
 	fmt.Println("\nleave the shop (back)")
 
 	for {
@@ -664,9 +673,9 @@ func shop() {
 			fmt.Println("you have bought a fire_gem")
 			inventory = append(inventory, "fire_gem")
 
-		case "shield", "sh", "shi", "shie":
-			fmt.Println("you have bought a shield")
-			inventory = append(inventory, "shield")
+		case "revival bead", "re", "rev", "revi":
+			fmt.Println("you have bought a revival bead")
+			inventory = append(inventory, "revival bead")
 
 		case "back", "b", "ba", "bac":
 			main()
@@ -689,6 +698,14 @@ func (p *player) display_stats() {
 	fmt.Println("Social:", p.social)
 	fmt.Println("\n[back]")
 
+}
+
+func (p *player) show_status() {
+	if p.health > 0 {
+		fmt.Println(p.name, ":\nhealth: ", p.health, "skill points: ", p.skill_points)
+	} else {
+		fmt.Println(p.name, ":\n\033[95m DEAD...\033[0m")
+	}
 }
 
 // Displays the player's inventory
@@ -736,6 +753,20 @@ func (p *player) use_item() {
 		if contains_string(inventory, "fire_gem") {
 			fmt.Println(p.name, ": has used a fire_gem...")
 			fmt.Println("... DEBUG DEBUG DEBUG ...")
+		}
+	case "revival bead", "re", "rev", "revi", "reviv":
+		if contains_string(inventory, "revival bead") {
+			fmt.Println("You have used a revival bead...")
+
+			if Pilgrim.health < 1 {
+				Pilgrim.health = 50
+			}
+			if Fie.health < 1 {
+				Fie.health = 50
+			}
+			if Jessy.health < 1 {
+				Jessy.health = 50
+			}
 		}
 	case "back", "ba", "bac":
 

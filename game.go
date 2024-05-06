@@ -144,6 +144,7 @@ var enemy_input int //enemy input
 // Start of program
 func main() {
 
+	user_input = ""
 	check_victory()
 
 	if display_tutorial {
@@ -207,7 +208,6 @@ func main() {
 
 func (p *player) show_status() {
 	fmt.Println(p.name, ":\nhealth: ", p.health, "skill points: ", p.skill_points, "gold: ", p.gold)
-
 }
 
 func check_victory() {
@@ -289,6 +289,9 @@ func (p *player) player_turn() {
 	fmt.Scanln(&user_input)
 
 	switch strings.ToLower(user_input) { //gives different options to the player
+
+	case "use item":
+		use_item(&player{})
 
 	case "strike", "st", "str", "stri":
 		p.player_skill_strike(&Bandit)
@@ -455,7 +458,6 @@ func (p *player) player_skill_strike(e *enemy) {
 func (p *player) player_skill_soul() {
 
 	p.skill_points += 25
-
 }
 
 // Player skill: force
@@ -618,7 +620,7 @@ func (p *player) level_check() {
 		p.max_skill_points += 5
 		p.health = p.max_health
 		p.skill_points = p.max_skill_points
-		fmt.Println("\n", p.name, ": Leveled up!!")
+		fmt.Println("\n", p.name, ":\033[92m Level up!!\033[0m")
 		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.max_health, p.max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Println("(St)rength:", p.strength, "\n(In)telligence: ", p.intelligence, "\n(Ag)ility: ", p.agility, "\n(En)durance: ", p.endurance, "\n(So)cial: ", p.social, "")
@@ -715,6 +717,25 @@ func (p *player) display_inventory() {
 
 	default:
 		main()
+	}
+}
+
+func contains_string(slice []string, target string) bool {
+	for _, element := range slice {
+		if element == target {
+			return true
+		}
+
+	}
+	return false
+}
+
+func use_item(p *player) {
+	fmt.Scanln(&user_input)
+	if user_input == "potion" {
+		if contains_string(p.inventory, "potion") {
+			fmt.Println("You have used a potion... DEBUG DEBUG DEBUG")
+		}
 	}
 }
 

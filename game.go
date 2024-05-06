@@ -47,7 +47,7 @@ var Dario = player{
 	special:          0,
 	inventory:        []string{},
 	exp:              0,
-	lv:               0,
+	lv:               1,
 	gold:             50,
 	health:           100,
 	skill_points:     75,
@@ -65,7 +65,7 @@ var Pilgrim = player{
 	special:          0,
 	inventory:        []string{},
 	exp:              0,
-	lv:               0,
+	lv:               1,
 	gold:             50,
 	health:           120,
 	skill_points:     70,
@@ -83,7 +83,7 @@ var Fie = player{
 	special:          0,
 	inventory:        []string{},
 	exp:              0,
-	lv:               0,
+	lv:               1,
 	gold:             50,
 	health:           90,
 	skill_points:     80,
@@ -101,7 +101,7 @@ var Jessy = player{
 	special:          0,
 	inventory:        []string{},
 	exp:              0,
-	lv:               0,
+	lv:               1,
 	gold:             50,
 	health:           100,
 	skill_points:     90,
@@ -144,10 +144,9 @@ var enemy_input int //enemy input
 // Start of program
 func main() {
 
-	clear_screen()
 	check_victory()
 
-	if !display_tutorial {
+	if display_tutorial {
 		tutorial()
 	}
 
@@ -179,6 +178,18 @@ func main() {
 
 		case "stats", "st", "sta", "stat":
 			Dario.display_stats()
+			Pilgrim.display_stats()
+			Fie.display_stats()
+			Jessy.display_stats()
+
+			fmt.Scanln(&user_input)
+
+			switch strings.ToLower(user_input) {
+
+			case "back", "b", "ba", "bac":
+				main()
+
+			}
 
 		case "inv", "i", "in":
 			Dario.display_inventory()
@@ -255,7 +266,6 @@ func combat() {
 
 // Function for player turn
 func (p *player) player_turn() {
-	clear_screen()
 
 	Dario.show_status()
 	Pilgrim.show_status()
@@ -311,6 +321,8 @@ func (p *player) player_turn() {
 	if p.skill_points > p.max_skill_points {
 		p.skill_points = p.max_skill_points
 	}
+
+	clear_screen()
 }
 
 // Function for enemy turn
@@ -367,7 +379,6 @@ func (e *enemy) enemy_turn() {
 		if e.skill_points > e.max_skill_points {
 			e.skill_points = e.max_skill_points
 		}
-
 	}
 }
 
@@ -476,13 +487,31 @@ func (p *player) player_skill_force(e *enemy) {
 
 // Player skill: heal
 func (p *player) player_skill_heal() {
-	heal := rand.Intn(20) + 5 + Jessy.intelligence //amount healed
-	Jessy.health += heal
-	Dario.health += heal
-	Pilgrim.health += heal
-	Fie.health += heal
-	fmt.Println(heal, "Healed")
-	user_input = ""
+	if p.skill_points >= 10 {
+
+		p.skill_points = -10
+
+		heal := rand.Intn(20) + 5 + Jessy.intelligence //amount healed
+		Jessy.health += heal
+		Dario.health += heal
+		Pilgrim.health += heal
+		Fie.health += heal
+
+		if Dario.health > Dario.max_health {
+			Dario.health = Dario.max_health
+		}
+		if Pilgrim.health > Pilgrim.max_health {
+			Pilgrim.health = Pilgrim.max_health
+		}
+		if Fie.health > Fie.max_health {
+			Fie.health = Fie.max_health
+		}
+		if Jessy.health > Jessy.max_health {
+			Jessy.health = Jessy.max_health
+		}
+
+		user_input = ""
+	}
 }
 
 // Triggers a special move when the requirement is met
@@ -592,20 +621,29 @@ func (p *player) level_check() {
 		fmt.Println("\n", p.name, ": Leveled up!!")
 		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.max_health, p.max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
-		fmt.Println("")
+		fmt.Println("(St)rength:", p.strength, "\n(In)telligence: ", p.intelligence, "\n(Ag)ility: ", p.agility, "\n(En)durance: ", p.endurance, "\n(So)cial: ", p.social, "")
 		fmt.Scanln(&user_input)
 
-		switch strings.ToLower(user_input) {
-		case "st":
+		switch user_input {
+
+		case "strength", "st", "str", "stre":
 			p.strength += 2
-		case "in":
+
+		case "intelligence", "in", "int", "inte":
 			p.intelligence += 2
-		case "ag":
+
+		case "agility", "ag", "agi", "agil":
 			p.agility += 2
-		case "en":
+
+		case "endurance", "en", "end", "endu":
 			p.endurance += 2
-		case "so":
+
+		case "social", "so", "soc", "soci":
 			p.social += 2
+
+		default:
+			fmt.Println("Something went wrong")
+			p.level_check()
 		}
 	}
 }
@@ -650,7 +688,7 @@ func (p *player) shop() {
 
 // Displays a player's lv, exp and stats
 func (p *player) display_stats() {
-	fmt.Println("\n", p.name, p.lv)
+	fmt.Println("\n", p.name, "lv:", p.lv)
 	fmt.Println("Exp:", p.exp)
 	fmt.Println("\nStrength:", p.strength)
 	fmt.Println("Intelligence", p.intelligence)
@@ -659,16 +697,6 @@ func (p *player) display_stats() {
 	fmt.Println("Social:", p.social)
 	fmt.Println("\n[back]")
 
-	fmt.Scanln(&user_input)
-
-	switch strings.ToLower(user_input) {
-
-	case "back", "b", "ba", "bac":
-		main()
-
-	default:
-		main()
-	}
 }
 
 // Displays the player's inventory

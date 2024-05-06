@@ -115,6 +115,7 @@ var Jessy = player{
 // enemy struct
 
 type enemy struct {
+	name             string
 	health           int //enemy health
 	skill_points     int
 	max_skill_points int
@@ -123,16 +124,10 @@ type enemy struct {
 
 //enemies
 
-var enemy_1 = enemy{
+var Bandit = enemy{
+	name:             "Bandit",
 	health:           100,
-	skill_points:     100,
-	max_skill_points: 80,
-	max_health:       100,
-}
-
-var enemy_2 = enemy{
-	health:           100,
-	skill_points:     100,
+	skill_points:     80,
 	max_skill_points: 80,
 	max_health:       100,
 }
@@ -207,15 +202,34 @@ func (p *player) show_status() {
 func check_victory() {
 	if victory {
 		victory = false
+
+		fmt.Println("Victory!")
+
 		Dario.exp += rand.Intn(50) + 50
 		Pilgrim.exp += rand.Intn(50) + 50
 		Fie.exp += rand.Intn(50) + 50
 		Jessy.exp += rand.Intn(50) + 50
+
+		Dario.gold += rand.Intn(10) + 5
+		Pilgrim.gold += rand.Intn(10) + 5
+		Fie.gold += rand.Intn(10) + 5
+		Jessy.gold += rand.Intn(10) + 5
+
 		Dario.level_check()
 		Fie.level_check()
 		Pilgrim.level_check()
 		Jessy.level_check()
-		main()
+
+		reset_enemy(&Bandit)
+
+		fmt.Println("\nType any key to continue")
+		fmt.Scanln(&user_input)
+		if user_input == (" ") {
+			main()
+		} else {
+			main()
+		}
+
 	}
 }
 
@@ -223,45 +237,42 @@ func check_victory() {
 func combat() {
 	fmt.Println("\n\nCombat started!")
 
-	for {
+	for !victory {
 		Dario.check_player_life()
-		enemy_1.check_enemy_life()
-		if victory {
-			Dario.gold += rand.Intn(10) + 5
-			Pilgrim.gold += rand.Intn(10) + 5
-			Fie.gold += rand.Intn(10) + 5
-			Jessy.gold += rand.Intn(10) + 5
-			main()
-		}
-
+		Bandit.check_enemy_life()
 		Dario.player_turn()
+		Bandit.check_enemy_life()
 		Pilgrim.player_turn()
+		Bandit.check_enemy_life()
 		Fie.player_turn()
+		Bandit.check_enemy_life()
 		Jessy.player_turn()
+		Bandit.check_enemy_life()
 
-		enemy_1.enemy_turn()
-		enemy_2.enemy_turn()
-
-		Dario.show_status()
-		Pilgrim.show_status()
-		Fie.show_status()
-		Jessy.show_status()
+		Bandit.enemy_turn()
 	}
 }
 
 // Function for player turn
 func (p *player) player_turn() {
+	clear_screen()
+
+	Dario.show_status()
+	Pilgrim.show_status()
+	Fie.show_status()
+	Jessy.show_status()
 	fmt.Println("")
+
 	if p.special >= 3 {
 		{
 			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 91, "You feel a strange power welling up inside... (type 'special' to unleash it)")
 			fmt.Println(colored)
 		}
 	}
-
+	fmt.Println(p.name, "'s turn")
 	fmt.Println("\nWhat's your move?")
 	fmt.Println("\n>> (st)rike\t\t\t> Use your basic weapon\t")
-	fmt.Println(">> (h)eal\t\t\t\t> Use an healing item\t")
+	fmt.Println(">> (h)eal\t\t\t> Use an healing item\t")
 	fmt.Println(">> (f)orce | 20 SP\t\t> High citical chance attack")
 	fmt.Println(">> (so)ul \t\t\t> Regenerates some SP")
 
@@ -270,24 +281,24 @@ func (p *player) player_turn() {
 	switch strings.ToLower(user_input) { //gives different options to the player
 
 	case "strike", "st", "str", "stri":
-		p.player_skill_strike(&enemy_1)
+		p.player_skill_strike(&Bandit)
 
 	case "heal", "h", "he", "hea":
 		p.player_skill_heal()
 
 	case "force", "f", "fo", "for", "forc":
-		p.player_skill_force(&enemy_1)
+		p.player_skill_force(&Bandit)
 
 	case "soul", "so", "sou":
 		p.player_skill_soul()
 
 	case "kill", "k", "ki", "kil":
-		p.player_skill_kill(&enemy_1)
+		p.player_skill_kill(&Bandit)
 
 	case "special", "sp", "spe", "spec":
 		if p.special > 2 {
 			p.special = 0
-			p.player_skill_special(&enemy_1)
+			p.player_skill_special(&Bandit)
 		} else {
 			fmt.Println("You dont have the energy for this move")
 		}
@@ -304,7 +315,8 @@ func (p *player) player_turn() {
 
 // Function for enemy turn
 func (e *enemy) enemy_turn() {
-
+	fmt.Println(e.name, "'s turn")
+	fmt.Println("")
 	enemy_input = rand.Intn(3) //gives different options to the enemy
 
 	if e.health >= 1 {
@@ -359,6 +371,11 @@ func (e *enemy) enemy_turn() {
 	}
 }
 
+func reset_enemy(e *enemy) {
+	e.health = e.max_health
+	e.skill_points = e.max_skill_points
+}
+
 // Displays a tutorial if display_tutorial == true
 func tutorial() {
 	display_tutorial = false
@@ -405,6 +422,7 @@ func (p *player) player_skill_kill(e *enemy) {
 
 // Player skill: strike
 func (p *player) player_skill_strike(e *enemy) {
+
 	damage := rand.Intn(20) + 5 + Dario.strength
 	critical_damage := rand.Intn(20) + 30 + Dario.strength
 
@@ -487,14 +505,14 @@ func (p *player) player_skill_special(e *enemy) {
 // Checks if the enemy is dead
 func (e *enemy) check_enemy_life() {
 	if e.health <= 0 {
-		fmt.Println("Victory!")
 		victory = true
+		check_victory()
 	}
 }
 
 // Enemy skill: strike
 func (e *enemy) enemy_skill_strike(p *player) {
-	fmt.Println("Enemy used strike")
+	fmt.Println(e.name, "used strike")
 	damage := rand.Intn(20) + 5 - p.endurance
 	critical_damage := rand.Intn(20) + 30 - p.endurance
 
@@ -515,7 +533,7 @@ func (e *enemy) enemy_skill_strike(p *player) {
 // Enemy skill: heal
 func (e *enemy) enemy_skill_heal() {
 	heal := rand.Intn(20) + 5 //amount healed
-	fmt.Println("Enemy has healed")
+	fmt.Println(e.name, "has healed")
 	e.health += heal
 	fmt.Println(heal, "Healed")
 }
@@ -526,7 +544,7 @@ func (e *enemy) enemy_skill_force(p *player) {
 	damage := rand.Intn(10) + 20 - p.endurance
 	critical_damage := rand.Intn(20) + 30 - p.endurance
 
-	fmt.Println("Enemy cast force")
+	fmt.Println(e.name, "cast force")
 
 	if e.skill_points >= 20 {
 
@@ -567,7 +585,7 @@ func clear_screen() {
 func (p *player) level_check() {
 	if p.exp >= 100 && p.lv < 2 {
 		p.lv++
-		p.max_health += 20
+		p.max_health += 10
 		p.max_skill_points += 5
 		p.health = p.max_health
 		p.skill_points = p.max_skill_points
@@ -577,7 +595,7 @@ func (p *player) level_check() {
 		fmt.Println("")
 		fmt.Scanln(&user_input)
 
-		switch user_input {
+		switch strings.ToLower(user_input) {
 		case "st":
 			p.strength += 2
 		case "in":
@@ -632,7 +650,7 @@ func (p *player) shop() {
 
 // Displays a player's lv, exp and stats
 func (p *player) display_stats() {
-	fmt.Println("\nPlayer lv:", p.lv)
+	fmt.Println("\n", p.name, p.lv)
 	fmt.Println("Exp:", p.exp)
 	fmt.Println("\nStrength:", p.strength)
 	fmt.Println("Intelligence", p.intelligence)
@@ -643,9 +661,9 @@ func (p *player) display_stats() {
 
 	fmt.Scanln(&user_input)
 
-	switch user_input {
+	switch strings.ToLower(user_input) {
 
-	case "back":
+	case "back", "b", "ba", "bac":
 		main()
 
 	default:
@@ -658,13 +676,13 @@ func (p *player) display_inventory() {
 
 	fmt.Println(p.inventory)
 
-	fmt.Println("\n[back]")
+	fmt.Println("\n Type 'back' to retun to main menu")
 
 	fmt.Scanln(&user_input)
 
-	switch user_input {
+	switch strings.ToLower(user_input) {
 
-	case "back":
+	case "(b)ack":
 		main()
 
 	default:

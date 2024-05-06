@@ -124,10 +124,10 @@ type enemy struct {
 
 var Bandit = enemy{
 	name:             "Bandit",
-	health:           100,
+	health:           200,
 	skill_points:     80,
 	max_skill_points: 80,
-	max_health:       100,
+	max_health:       200,
 }
 
 // User
@@ -173,7 +173,7 @@ func main() {
 			combat()
 
 		case "shop", "sh", "sho":
-			Dario.shop()
+			shop()
 
 		case "stats", "st", "sta", "stat":
 			Dario.display_stats()
@@ -191,7 +191,7 @@ func main() {
 			}
 
 		case "inv", "i", "in":
-			Dario.display_inventory()
+			display_inventory()
 
 		case "exit":
 			quit()
@@ -319,6 +319,8 @@ func (p *player) player_turn() {
 		fmt.Println("Thats a typo! lost your turn XD")
 	}
 	p.normalize_stats()
+
+	//insert press to continue...
 }
 
 // Function for enemy turn
@@ -602,7 +604,7 @@ func clear_screen() {
 
 // Checks the exp and increases the player_lv
 func (p *player) level_check() {
-	if p.exp >= 100 && p.lv < 2 {
+	if p.exp >= 100 && p.lv < 2 || p.exp >= 500 && p.lv < 3 || p.exp >= 1500 && p.lv < 4 || p.exp >= 3000 && p.lv < 5 || p.exp >= 5000 && p.lv < 6 || p.exp >= 10000 && p.lv < 7 {
 		p.lv++
 		p.max_health += 10
 		p.max_skill_points += 5
@@ -639,12 +641,12 @@ func (p *player) level_check() {
 }
 
 // Makes the shop work | not finished yet
-func (p *player) shop() {
+func shop() {
 
 	fmt.Println("Welcome to the shop")
 	fmt.Println("\nWe have a variety of products available, please take your time choosing")
 	fmt.Println("\n- potion")
-	fmt.Println("- sword")
+	fmt.Println("- fire_gem")
 	fmt.Println("- shield")
 	fmt.Println("\nleave the shop (back)")
 
@@ -658,9 +660,9 @@ func (p *player) shop() {
 			fmt.Println("you have bought a potion")
 			inventory = append(inventory, "potion")
 
-		case "sword", "sw", "swo", "swor":
-			fmt.Println("you have bought a sword")
-			inventory = append(inventory, "sword")
+		case "fire_gem", "fi", "fir", "fire":
+			fmt.Println("you have bought a fire_gem")
+			inventory = append(inventory, "fire_gem")
 
 		case "shield", "sh", "shi", "shie":
 			fmt.Println("you have bought a shield")
@@ -681,7 +683,7 @@ func (p *player) display_stats() {
 	fmt.Println("\n", p.name, "lv:", p.lv)
 	fmt.Println("Exp:", p.exp)
 	fmt.Println("\nStrength:", p.strength)
-	fmt.Println("Intelligence", p.intelligence)
+	fmt.Println("Intelligence:", p.intelligence)
 	fmt.Println("Agility:", p.agility)
 	fmt.Println("Endurance:", p.endurance)
 	fmt.Println("Social:", p.social)
@@ -690,11 +692,11 @@ func (p *player) display_stats() {
 }
 
 // Displays the player's inventory
-func (p *player) display_inventory() {
+func display_inventory() {
 
 	fmt.Println(inventory)
 
-	fmt.Println("\n Type 'back' to retun to main menu")
+	fmt.Println("\nType '(b)ack' to retun to main menu")
 
 	fmt.Scanln(&user_input)
 
@@ -719,7 +721,7 @@ func contains_string(slice []string, target string) bool {
 }
 
 func (p *player) use_item() {
-	fmt.Println(inventory, "\n\nWhat item to use...")
+	fmt.Println(inventory, "\n\nWhat item to use...\n\nType (ba)ck to return")
 	fmt.Scanln(&user_input)
 	switch strings.ToLower(user_input) {
 
@@ -730,22 +732,16 @@ func (p *player) use_item() {
 		} else {
 			fmt.Println("You do not have a potion")
 		}
-	case "sword":
-		if contains_string(inventory, "sword") {
-			fmt.Println("You have used a sword...")
+	case "fire_gem", "fi", "fir", "fire", "fire_":
+		if contains_string(inventory, "fire_gem") {
+			fmt.Println(p.name, ": has used a fire_gem...")
 			fmt.Println("... DEBUG DEBUG DEBUG ...")
 		}
-	}
+	case "back", "ba", "bac":
 
-	if user_input == "potion" {
-		if contains_string(inventory, "potion") {
-			fmt.Println("You have used a potion... DEBUG DEBUG DEBUG")
-			p.health = +30
-
-		}
-		if contains_string(inventory, "sword") {
-			fmt.Println("You have used a sword... DEBUG DEBUG DEBUG")
-		}
+	default:
+		fmt.Println("Input invalid")
+		p.use_item()
 	}
 }
 

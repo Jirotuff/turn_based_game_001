@@ -44,19 +44,19 @@ type player struct {
 // players
 
 var Dario = player{
-	max_health:       250,
+	max_health:       110,
 	max_skill_points: 50,
 	name:             name_1,
 	special:          0,
 	exp:              0,
 	lv:               1,
-	health:           250,
+	health:           110,
 	skill_points:     75,
-	strength:         11,
-	intelligence:     11,
-	agility:          11,
-	endurance:        11,
-	social:           11,
+	strength:         12,
+	intelligence:     12,
+	agility:          10,
+	endurance:        10,
+	social:           10,
 }
 
 var Pilgrim = player{
@@ -183,6 +183,7 @@ func main() {
 			switch strings.ToLower(user_input) {
 
 			case "back", "b", "ba", "bac":
+				clear_screen()
 				main()
 
 			}
@@ -230,6 +231,7 @@ func check_victory() {
 
 		fmt.Println("\nType any key to continue")
 		fmt.Scanln(&user_input)
+		clear_screen()
 		if user_input == (" ") {
 			main()
 		} else {
@@ -323,7 +325,8 @@ func (p *player) player_turn() {
 	}
 	p.normalize_stats()
 
-	//insert press to continue...
+	fmt.Println("press Enter to continue")
+	fmt.Scanln(&user_input)
 }
 
 // Function for enemy turn
@@ -397,7 +400,7 @@ func (p *player) check_player_life() {
 	if Dario.health <= 0 {
 		fmt.Println("Your hero has been killed!")
 		fmt.Println("\nGold:", gold, "Player level:", Dario.lv)
-		fmt.Println("\nType anything to quit")
+		fmt.Println("\nPress Enter to quit")
 
 		fmt.Scanln("")
 		fmt.Scanf("%s", &user_input)
@@ -517,8 +520,8 @@ func (p *player) player_skill_heal() {
 
 // Triggers a special move when the requirement is met
 func (p *player) player_skill_special(e *enemy) {
-	damage := 70 + Dario.strength
-	critical_damage := rand.Intn(20) + 75 + Dario.strength
+	damage := 70 + p.strength
+	critical_damage := rand.Intn(20) + 75 + p.strength
 
 	if rand.Intn(11) == 9 { //Critical hit chance
 		e.health -= critical_damage
@@ -656,7 +659,7 @@ func shop() {
 	fmt.Println("\nWe have a variety of products available, please take your time choosing")
 	fmt.Println("\n- potion")
 	fmt.Println("- fire_gem")
-	fmt.Println("- revival bead")
+	fmt.Println("- revival_bead")
 	fmt.Println("\nleave the shop (back)")
 
 	for {
@@ -673,11 +676,12 @@ func shop() {
 			fmt.Println("you have bought a fire_gem")
 			inventory = append(inventory, "fire_gem")
 
-		case "revival bead", "re", "rev", "revi":
-			fmt.Println("you have bought a revival bead")
-			inventory = append(inventory, "revival bead")
+		case "revival_bead", "re", "rev", "revi":
+			fmt.Println("you have bought a revival_bead")
+			inventory = append(inventory, "revival_bead")
 
 		case "back", "b", "ba", "bac":
+			clear_screen()
 			main()
 
 		default:
@@ -713,16 +717,18 @@ func display_inventory() {
 
 	fmt.Println(inventory)
 
-	fmt.Println("\nType '(b)ack' to retun to main menu")
+	fmt.Println("\nPress Enter to retun to main menu")
 
 	fmt.Scanln(&user_input)
 
 	switch strings.ToLower(user_input) {
 
-	case "(b)ack":
+	case "back", "b", "ba", "bac":
+		clear_screen()
 		main()
 
 	default:
+		clear_screen()
 		main()
 	}
 }
@@ -744,19 +750,22 @@ func (p *player) use_item() {
 
 	case "potion", "p", "po", "pot", "poti":
 		if contains_string(inventory, "potion") {
+			remove_item(inventory, "potion")
 			fmt.Println("You have used a potion...")
-			p.health = +30
+			p.health += 30
 		} else {
 			fmt.Println("You do not have a potion")
 		}
 	case "fire_gem", "fi", "fir", "fire", "fire_":
 		if contains_string(inventory, "fire_gem") {
+			remove_item(inventory, "fire_gem")
 			fmt.Println(p.name, ": has used a fire_gem...")
 			fmt.Println("... DEBUG DEBUG DEBUG ...")
 		}
-	case "revival bead", "re", "rev", "revi", "reviv":
-		if contains_string(inventory, "revival bead") {
-			fmt.Println("You have used a revival bead...")
+	case "revival_bead", "re", "rev", "revi", "reviv":
+		if contains_string(inventory, "revival_bead") {
+			remove_item(inventory, "revival_bead")
+			fmt.Println("You have used a revival_bead...")
 
 			if Pilgrim.health < 1 {
 				Pilgrim.health = 50
@@ -794,11 +803,16 @@ func (e *enemy) normalize_stats_enemy() {
 	}
 }
 
-/*
-func remove_item(s []string, index int) []string {
-	return append(s[:index], s[index+1:]...)
+func remove_item(s []string, item_to_remove string) {
+	var temp_inv []string
+
+	for _, item := range s {
+		if item != item_to_remove {
+			temp_inv = append(temp_inv, item)
+		}
+	}
+	inventory = temp_inv
 }
-*/
 
 // Exits the game
 func quit() {

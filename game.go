@@ -40,13 +40,14 @@ func main() {
 	Fie.show_status()
 	Jessy.show_status()
 
-	fmt.Println("\ngold: ", gold)
+	fmt.Println("\nGold: ", gold)
 	fmt.Println("\nWhat do you want to do?")
-	fmt.Println("\nbattle\t\t> finds opponent")
-	fmt.Println("shop\t\t> enter the shop")
-	fmt.Println("stats\t\t> show player stats")
-	fmt.Println("inv\t\t> show player inventory")
-	fmt.Println("exit\t\t> exits the game")
+	fmt.Println("\nBattle\t\t> finds opponent")
+	fmt.Println("Shop\t\t> enter the shop")
+	fmt.Println("Smithy\t\t> enter the smithy")
+	fmt.Println("Stats\t\t> show player stats")
+	fmt.Println("Inv\t\t> show player inventory")
+	fmt.Println("Exit\t\t> exits the game")
 	fmt.Println("")
 
 	for {
@@ -59,6 +60,9 @@ func main() {
 
 		case "shop", "sh", "sho":
 			shop()
+
+		case "smithy", "sm", "smi", "smit", "smith":
+			smithy()
 
 		case "stats", "st", "sta", "stat":
 			Dario.display_stats()
@@ -116,6 +120,10 @@ func check_victory() {
 
 		if rand.Intn(20) > 17 {
 			item_gained = append(item_gained, "potion")
+		}
+
+		if rand.Intn(5) == 1 {
+			item_gained = append(item_gained, "iron")
 		}
 
 		inventory = append(inventory, item_gained...)
@@ -217,6 +225,44 @@ func shop() {
 
 		default:
 			fmt.Println("We don't have this item...")
+		}
+
+	}
+}
+
+func smithy() {
+	fmt.Println("Welcome to the smithy")
+	fmt.Println("\nIn here you can craft equipment for your party...")
+	fmt.Println("\n- sword\t\t\tCosts 1 iron and 50 gold")
+	fmt.Println("\nleave the smithy (back)")
+
+	for {
+
+		fmt.Scanln(&user_input)
+
+		switch strings.ToLower(user_input) {
+
+		case "sword", "sw", "swo", "swor":
+			if contains_string(inventory, "iron") {
+				if gold >= 50 {
+					gold -= 50
+					remove_item(inventory, "iron")
+					fmt.Println("you have crafted a sword")
+					inventory = append(inventory, "sword")
+				} else {
+					fmt.Println("You lack gold!")
+				}
+
+			} else {
+				fmt.Println("You lack iron!")
+			}
+
+		case "back", "b", "ba", "bac":
+			clear_screen()
+			main()
+
+		default:
+			fmt.Println("You cant make this...")
 		}
 
 	}

@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// The player type holds stats and limits
 type player struct {
 	max_health       int
 	max_skill_points int
@@ -23,6 +24,7 @@ type player struct {
 	social           int // reduces shop prices
 }
 
+// Dario
 var Dario = player{
 	max_health:       110,
 	max_skill_points: 50,
@@ -358,7 +360,6 @@ func (p *player) Use_item() {
 		if contains_string(inventory, "revival_bead") {
 			remove_item(inventory, "revival_bead")
 			fmt.Println("You have used a revival_bead...")
-
 			if Pilgrim.health < 1 {
 				Pilgrim.health = 50
 			}

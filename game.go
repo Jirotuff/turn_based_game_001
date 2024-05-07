@@ -22,7 +22,8 @@ const (
 var inventory []string
 var gold int
 var exp_gained int
-var gold_earned int
+var gold_gained int
+var item_gained []string
 
 // player struct
 type player struct {
@@ -153,6 +154,7 @@ func main() {
 	Fie.show_status()
 	Jessy.show_status()
 
+	fmt.Println("\ngold: ", gold)
 	fmt.Println("\nWhat do you want to do?")
 	fmt.Println("\nbattle\t\t> finds opponent")
 	fmt.Println("shop\t\t> enter the shop")
@@ -178,6 +180,8 @@ func main() {
 			Fie.display_stats()
 			Jessy.display_stats()
 
+			fmt.Println("\n[back]")
+
 			fmt.Scanln(&user_input)
 
 			switch strings.ToLower(user_input) {
@@ -191,10 +195,11 @@ func main() {
 		case "inv", "i", "in":
 			display_inventory()
 
-		case "exit":
+		case "exit", "ex", "exi":
 			quit()
 
 		default:
+			clear_screen()
 			main()
 		}
 	}
@@ -215,11 +220,24 @@ func check_victory() {
 		Fie.exp += exp_gained
 		Jessy.exp += exp_gained
 
-		gold_earned = rand.Intn(30) + 10
+		gold_gained = rand.Intn(30) + 10
 
-		fmt.Println("\nLoot:\n\nexp:", exp_gained, "\ngold: ", gold_earned)
+		gold = gold + gold_gained
 
-		gold_earned = 0
+		if rand.Intn(20) == 1 {
+			item_gained = append(item_gained, "revival_bead")
+		}
+
+		if rand.Intn(20) > 17 {
+			item_gained = append(item_gained, "potion")
+		}
+
+		inventory = append(inventory, item_gained...)
+
+		fmt.Println("\nLoot:\n\nexp:", exp_gained, "\ngold: ", gold_gained, "\nitems:", item_gained)
+
+		item_gained = nil
+		gold_gained = 0
 		exp_gained = 0
 
 		Dario.level_check()
@@ -279,8 +297,7 @@ func (p *player) player_turn() {
 
 	if p.special >= 3 {
 		{
-			colored := fmt.Sprintf("\x1b[%dm%s\x1b[0m", 91, "You feel a strange power welling up inside... (type 'special' to unleash it)")
-			fmt.Println(colored)
+			fmt.Println(p.name, "\033[95mfeels a strange power welling up inside... (type 'special' to unleash it)\033[0m")
 		}
 	}
 	fmt.Println(p.name, "'s turn")
@@ -669,17 +686,29 @@ func shop() {
 		switch strings.ToLower(user_input) { //gives different options to the player
 
 		case "potion", "po", "pot", "poti":
-			fmt.Println("you have bought a potion")
-			inventory = append(inventory, "potion")
-
+			if gold >= 50 {
+				gold -= 50
+				fmt.Println("you have bought a potion")
+				inventory = append(inventory, "potion")
+			} else {
+				fmt.Println("You lack gold!")
+			}
 		case "fire_gem", "fi", "fir", "fire":
-			fmt.Println("you have bought a fire_gem")
-			inventory = append(inventory, "fire_gem")
-
+			if gold >= 25 {
+				gold -= 25
+				fmt.Println("you have bought a fire_gem")
+				inventory = append(inventory, "fire_gem")
+			} else {
+				fmt.Println("You lack gold!")
+			}
 		case "revival_bead", "re", "rev", "revi":
-			fmt.Println("you have bought a revival_bead")
-			inventory = append(inventory, "revival_bead")
-
+			if gold >= 150 {
+				gold -= 150
+				fmt.Println("you have bought a revival_bead")
+				inventory = append(inventory, "revival_bead")
+			} else {
+				fmt.Println("You lack gold!")
+			}
 		case "back", "b", "ba", "bac":
 			clear_screen()
 			main()
@@ -700,7 +729,6 @@ func (p *player) display_stats() {
 	fmt.Println("Agility:", p.agility)
 	fmt.Println("Endurance:", p.endurance)
 	fmt.Println("Social:", p.social)
-	fmt.Println("\n[back]")
 
 }
 
@@ -761,6 +789,8 @@ func (p *player) use_item() {
 			remove_item(inventory, "fire_gem")
 			fmt.Println(p.name, ": has used a fire_gem...")
 			fmt.Println("... DEBUG DEBUG DEBUG ...")
+		} else {
+			fmt.Println("You do not have a fire_gem")
 		}
 	case "revival_bead", "re", "rev", "revi", "reviv":
 		if contains_string(inventory, "revival_bead") {
@@ -776,6 +806,8 @@ func (p *player) use_item() {
 			if Jessy.health < 1 {
 				Jessy.health = 50
 			}
+		} else {
+			fmt.Println("you do not have a revival bead")
 		}
 	case "back", "ba", "bac":
 

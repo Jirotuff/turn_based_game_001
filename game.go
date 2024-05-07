@@ -42,11 +42,11 @@ func main() {
 
 	fmt.Println("\nGold: ", gold)
 	fmt.Println("\nWhat do you want to do?")
-	fmt.Println("\nBattle\t\t> finds opponent")
+	fmt.Println("\nBattle\t\t> enter the dungeon")
 	fmt.Println("Shop\t\t> enter the shop")
 	fmt.Println("Smithy\t\t> enter the smithy")
 	fmt.Println("Stats\t\t> show player stats")
-	fmt.Println("Inv\t\t> show player inventory")
+	fmt.Println("Inventory\t> show player inventory")
 	fmt.Println("Exit\t\t> exits the game")
 	fmt.Println("")
 
@@ -55,7 +55,7 @@ func main() {
 
 		switch strings.ToLower(user_input) {
 
-		case "battle", "b", "ba", "bat":
+		case "battle", "b", "ba", "bat", "batt", "battl":
 			combat()
 
 		case "shop", "sh", "sho":
@@ -82,10 +82,10 @@ func main() {
 
 			}
 
-		case "inv", "i", "in":
+		case "inventory", "i", "in", "inv", "inve", "inven", "invent", "invento", "inventor":
 			display_inventory()
 
-		case "exit", "ex", "exi":
+		case "exit", "e", "ex", "exi":
 			quit()
 
 		default:
@@ -195,7 +195,7 @@ func shop() {
 
 		switch strings.ToLower(user_input) {
 
-		case "potion", "po", "pot", "poti":
+		case "potion", "po", "pot", "poti", "potio":
 			if gold >= 50 {
 				gold -= 50
 				fmt.Println("you have bought a potion")
@@ -203,7 +203,7 @@ func shop() {
 			} else {
 				fmt.Println("You lack gold!")
 			}
-		case "fire_gem", "fi", "fir", "fire":
+		case "fire_gem", "fi", "fir", "fire", "fire_", "fire_g", "fire_ge":
 			if gold >= 25 {
 				gold -= 25
 				fmt.Println("you have bought a fire_gem")
@@ -211,7 +211,7 @@ func shop() {
 			} else {
 				fmt.Println("You lack gold!")
 			}
-		case "revival_bead", "re", "rev", "revi":
+		case "revival_bead", "re", "rev", "revi", "reviv", "reviva", "revival_", "revival_b":
 			if gold >= 150 {
 				gold -= 150
 				fmt.Println("you have bought a revival_bead")

@@ -118,7 +118,7 @@ func (p *player) Player_turn() {
 	case "item", "i", "it", "ite":
 		p.Use_item()
 
-	case "strike", "st", "str", "stri":
+	case "strike", "st", "str", "stri", "strik":
 		p.Player_skill_strike(&Bandit)
 
 	case "heal", "h", "he", "hea":
@@ -133,7 +133,7 @@ func (p *player) Player_turn() {
 	case "kill", "k", "ki", "kil":
 		p.Player_skill_kill(&Bandit)
 
-	case "special", "sp", "spe", "spec":
+	case "special", "sp", "spe", "spec", "speci", "specia":
 		if p.special > 2 {
 			p.special = 0
 			p.Player_skill_special(&Bandit)
@@ -141,7 +141,8 @@ func (p *player) Player_turn() {
 			fmt.Println("You dont have the energy for this move")
 		}
 	default:
-		fmt.Println("Thats a typo! lost your turn XD")
+		p.Player_turn()
+
 	}
 	p.Normalize_stats()
 

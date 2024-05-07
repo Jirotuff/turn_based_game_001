@@ -78,11 +78,14 @@ func (e *enemy) Enemy_turn() {
 
 // The block below is for storing things that need to be checked (and changed?) in regards to the enemies
 
+// Reset enemy healt and skill points to max
+// TODO is skill supposed to start at max?
 func Reset_enemy(e *enemy) {
 	e.health = e.max_health
 	e.skill_points = e.max_skill_points
 }
 
+// Check if enemy e health depleted and declare victory
 func (e *enemy) Check_enemy_life() {
 	if e.health <= 0 {
 		victory = true
@@ -90,6 +93,8 @@ func (e *enemy) Check_enemy_life() {
 	}
 }
 
+// Validate limits on enemy health
+// TODO put these checks inline?
 func (e *enemy) Normalize_stats_enemy() {
 	if e.health > e.max_health {
 		e.health = e.max_health
@@ -101,6 +106,7 @@ func (e *enemy) Normalize_stats_enemy() {
 
 // The block below is the place to store all skills that the enemies can use
 
+// Heal an enemy by adding 50 plus a random value between 0 and 50 to health
 func (e *enemy) Enemy_skill_heal() {
 	heal := rand.Intn(50) + 50 //amount healed
 	fmt.Println(e.name, "has healed")
@@ -108,6 +114,8 @@ func (e *enemy) Enemy_skill_heal() {
 	fmt.Println(heal, "Healed")
 }
 
+// Enemy e strikes player p and decreases player health using chance
+// TODO could be interesting remodelling this formula and logic
 func (e *enemy) Enemy_skill_strike(p *player) {
 	fmt.Println(e.name, "used strike")
 	damage := rand.Intn(10) + 50 - p.endurance
@@ -127,6 +135,8 @@ func (e *enemy) Enemy_skill_strike(p *player) {
 	}
 }
 
+// Enemey e applies force to player p causing random damage
+// TODO better description of the logic
 func (e *enemy) Enemy_skill_force(p *player) {
 
 	damage := rand.Intn(10) + 70 - p.endurance

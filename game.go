@@ -179,32 +179,7 @@ func check_victory() {
 func after_combat() {
 
 	if rand.Intn(5) == 1 {
-		fmt.Println("\033[96mYou have found a treasure chest\033[0m\n\nWould you like to use a lockpick to open it? [Y/N]\n\n", inventory)
-
-		fmt.Scanln(&user_input)
-		switch strings.ToLower(user_input) {
-
-		case "yes", "y", "ye":
-			if contains_string(inventory, "lockpick") {
-
-				remove_item(inventory, "lockpick")
-				gold_gained = rand.Intn(250) + 100
-				gold += gold_gained
-				item_gained = append(item_gained, "revival bead")
-				inventory = append(inventory, item_gained...)
-
-				fmt.Println("\nLoot:\n\n gold: ", gold_gained, "\nitems: ", item_gained)
-
-				gold_gained = 0
-				item_gained = nil
-			} else {
-				fmt.Println("You don't have any lockpicks...")
-			}
-		case "no", "n":
-
-		default:
-
-		}
+		chest()
 	}
 
 	fmt.Println("Type 'battle' for another enounter or 'entrance' to return to the dungeon entrance")
@@ -230,6 +205,44 @@ func after_combat() {
 	default:
 		fmt.Println("Is that a typo?")
 		after_combat()
+	}
+}
+
+func chest() {
+	fmt.Println("\033[96mYou have found a treasure chest\033[0m\n\nWould you like to use a lockpick to open it? [Y/N]\n\n", inventory)
+
+	fmt.Scanln(&user_input)
+	switch strings.ToLower(user_input) {
+
+	case "yes", "y", "ye":
+		if contains_string(inventory, "lockpick") {
+
+			if current_floor == 1 {
+				remove_item(inventory, "lockpick")
+				gold_gained = rand.Intn(150) + 100
+				gold += gold_gained
+				item_gained = append(item_gained, "potion")
+				inventory = append(inventory, item_gained...)
+			}
+
+			if current_floor == 2 {
+				remove_item(inventory, "lockpick")
+				gold_gained = rand.Intn(250) + 150
+				gold += gold_gained
+				item_gained = append(item_gained, "revival bead")
+				inventory = append(inventory, item_gained...)
+			}
+			fmt.Println("\nLoot:\n\n gold: ", gold_gained, "\nitems: ", item_gained)
+
+			gold_gained = 0
+			item_gained = nil
+		} else {
+			fmt.Println("You don't have any lockpicks...")
+		}
+	case "no", "n":
+
+	default:
+
 	}
 }
 
@@ -383,7 +396,7 @@ func smithy() {
 	fmt.Println("Welcome to the smithy")
 	fmt.Println("\nIn here you can craft equipment for your party...")
 	fmt.Println("\n- sword\t\t\tCosts 1 iron and 50 gold")
-	fmt.Println("- lockpicks\t\t\tCosts 1 iron and 20 gold, used to open treasure chests")
+	fmt.Println("- lockpicks\t\tCosts 1 iron and 20 gold, used to open treasure chests")
 	fmt.Println("\nleave the smithy (back)")
 
 	for {

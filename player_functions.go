@@ -154,6 +154,7 @@ func (p *player) Player_turn() {
 
 // The block below is for storing things that need to be checked (and changed?) in regards to the players
 
+// checks if the player has enough exp to level up, if so increases level and stats
 func (p *player) Level_check() {
 	if p.exp >= 100 && p.lv < 2 || p.exp >= 500 && p.lv < 3 || p.exp >= 1500 && p.lv < 4 || p.exp >= 3000 && p.lv < 5 || p.exp >= 5000 && p.lv < 6 || p.exp >= 10000 && p.lv < 7 {
 		p.lv++
@@ -191,6 +192,7 @@ func (p *player) Level_check() {
 	}
 }
 
+// checks game over
 func (p *player) Check_player_life() {
 	if Dario.health <= 0 {
 		fmt.Println("Your hero has been killed!")

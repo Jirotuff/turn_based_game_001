@@ -177,6 +177,35 @@ func check_victory() {
 
 func after_combat() {
 
+	if rand.Intn(2) == 1 {
+		fmt.Println("\033[96mYou found a treasure chest\033[0m\n\nWould you like to use a lockpick to open it? [Y/N]\n\n", inventory)
+
+		fmt.Scanln(&user_input)
+		switch strings.ToLower(user_input) {
+
+		case "yes", "y", "ye":
+			if contains_string(inventory, "lockpick") {
+
+				remove_item(inventory, "lockpick")
+				gold_gained = rand.Intn(250) + 100
+				gold += gold_gained
+				item_gained = append(item_gained, "revival bead")
+				inventory = append(inventory, item_gained...)
+
+				fmt.Println("\nLoot:\n\n gold: ", gold_gained, "\nitems: ", item_gained)
+
+				gold_gained = 0
+				item_gained = nil
+			} else {
+				fmt.Println("You don't have any lockpicks...")
+			}
+		case "no", "n":
+
+		default:
+
+		}
+	}
+
 	fmt.Println("Type 'battle' for another enounter or 'entrance' to return to the dungeon entrance")
 
 	fmt.Scanln(&user_input)
@@ -191,9 +220,9 @@ func after_combat() {
 		switch current_floor {
 
 		case 1:
-			combat_001()
+			combat_101()
 		case 2:
-			combat_002()
+			combat_202()
 
 		}
 
@@ -205,7 +234,7 @@ func after_combat() {
 
 // The block below is for different "places"
 
-func combat_001() {
+func combat_101() {
 	fmt.Println("\n\nCombat started!")
 
 	for !victory {
@@ -239,7 +268,7 @@ func combat_001() {
 	}
 }
 
-func combat_002() {
+func combat_202() {
 	fmt.Println("\n\nCombat started!")
 
 	if battle_intro {
@@ -281,12 +310,12 @@ func dungeon() {
 
 	case "floor 1", "1":
 		current_floor = 1
-		combat_001()
+		combat_101()
 
 	case "floor 2", "2":
 		if floor_level_key >= 2 {
 			current_floor = 2
-			combat_002()
+			combat_202()
 		} else {
 			fmt.Println("You don't have the required key!")
 		}
@@ -346,7 +375,6 @@ func shop() {
 		default:
 			fmt.Println("We don't have this item...")
 		}
-
 	}
 }
 
@@ -354,6 +382,7 @@ func smithy() {
 	fmt.Println("Welcome to the smithy")
 	fmt.Println("\nIn here you can craft equipment for your party...")
 	fmt.Println("\n- sword\t\t\tCosts 1 iron and 50 gold")
+	fmt.Println("- lockpicks\t\t\tCosts 1 iron and 20 gold, used to open treasure chests")
 	fmt.Println("\nleave the smithy (back)")
 
 	for {
@@ -367,7 +396,7 @@ func smithy() {
 				if gold >= 50 {
 					gold -= 50
 					remove_item(inventory, "iron")
-					fmt.Println("you have crafted a sword")
+					fmt.Println("you've crafted a sword")
 					inventory = append(inventory, "sword")
 				} else {
 					fmt.Println("You lack gold!")
@@ -377,6 +406,17 @@ func smithy() {
 				fmt.Println("You lack iron!")
 			}
 
+		case "lockpick", "l", "lo", "loc", "lock", "lockp", "lockpi", "lockpic":
+			if contains_string(inventory, "iron") {
+				if gold >= 20 {
+					gold -= 20
+					remove_item(inventory, "iron")
+					fmt.Println("you've crafted some lockpicks")
+					inventory = append(inventory, "lockpick", "lockpick", "lockpick")
+				}
+			} else {
+				fmt.Println("You lack iron!")
+			}
 		case "back", "b", "ba", "bac":
 			clear_screen()
 			main()

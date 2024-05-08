@@ -87,7 +87,7 @@ func (e *enemy) Enemy_turn() {
 // The block below is for storing things that need to be checked (and changed?) in regards to the enemies
 
 // Reset enemy healt and skill points to max
-// TODO is skill supposed to start at max?
+// this needs to happen because i cant call an instance of an enemy yet
 func Reset_enemy(e *enemy) {
 	e.health = e.max_health
 	e.skill_points = e.max_skill_points
@@ -144,7 +144,7 @@ func (e *enemy) Enemy_skill_strike(p *player) {
 	}
 }
 
-// Enemey e applies force to player p causing random damage
+// Enemy e casts force to player p causing damage or critical damage
 // TODO better description of the logic
 func (e *enemy) Enemy_skill_force(p *player) {
 

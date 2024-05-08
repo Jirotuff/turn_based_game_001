@@ -175,10 +175,11 @@ func check_victory() {
 	}
 }
 
+// happens after check victory finsishes
 func after_combat() {
 
-	if rand.Intn(2) == 1 {
-		fmt.Println("\033[96mYou found a treasure chest\033[0m\n\nWould you like to use a lockpick to open it? [Y/N]\n\n", inventory)
+	if rand.Intn(5) == 1 {
+		fmt.Println("\033[96mYou have found a treasure chest\033[0m\n\nWould you like to use a lockpick to open it? [Y/N]\n\n", inventory)
 
 		fmt.Scanln(&user_input)
 		switch strings.ToLower(user_input) {

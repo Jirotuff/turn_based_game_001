@@ -16,6 +16,9 @@ const (
 	name_4 string = "Jessy"
 )
 
+var battle_intro bool = true
+var floor_level_key int = 1
+var current_floor int
 var inventory []string
 var gold int
 var exp_gained int
@@ -34,6 +37,7 @@ func main() {
 	if display_tutorial {
 		Tutorial()
 	}
+	battle_intro = true
 
 	Dario.show_status()
 	Pilgrim.show_status()
@@ -42,7 +46,7 @@ func main() {
 
 	fmt.Println("\nGold: ", gold)
 	fmt.Println("\nWhat do you want to do?")
-	fmt.Println("\nBattle\t\t> enter the dungeon")
+	fmt.Println("\nDungeon\t\t> enter the dungeon")
 	fmt.Println("Shop\t\t> enter the shop")
 	fmt.Println("Smithy\t\t> enter the smithy")
 	fmt.Println("Stats\t\t> show player stats")
@@ -55,8 +59,8 @@ func main() {
 
 		switch strings.ToLower(user_input) {
 
-		case "battle", "b", "ba", "bat", "batt", "battl":
-			combat()
+		case "dungeon", "du", "dun", "dung", "dunge", "dungeo":
+			dungeon()
 
 		case "shop", "sh", "sho":
 			shop()
@@ -97,11 +101,54 @@ func main() {
 
 // This block below is for things that need to be checked and or changed
 
+func dungeon() {
+
+	fmt.Println("\nWhich floor?\n\nfloor 1...\nfloor 2...\n\n[back]")
+
+	fmt.Scanln(&user_input)
+	switch strings.ToLower(user_input) {
+
+	case "floor 1", "1":
+		current_floor = 1
+		combat_001()
+
+	case "floor 2", "2":
+		if floor_level_key >= 2 {
+			current_floor = 2
+			combat_002()
+		} else {
+			fmt.Println("You don't have the required key!")
+		}
+	case "back", "b", "ba", "bac":
+		clear_screen()
+		main()
+
+	default:
+		fmt.Println("Something went wrong")
+		dungeon()
+	}
+}
+
 func check_victory() {
 	if victory {
 		victory = false
 
 		fmt.Println("Victory!")
+
+		if rand.Intn(5) == 1 {
+
+			if floor_level_key < 2 {
+				floor_level_key = 2
+				fmt.Println("\nYou've found the key to the second floor!")
+				inventory = append(inventory, "2F_key")
+			}
+
+			if floor_level_key < 3 {
+				floor_level_key = 3
+				fmt.Println("\nYou've found the key to the third floor!")
+				inventory = append(inventory, "3F_key")
+			}
+		}
 
 		exp_gained = rand.Intn(50) + 50
 
@@ -145,9 +192,27 @@ func check_victory() {
 		fmt.Scanln(&user_input)
 		clear_screen()
 		if user_input == (" ") {
-			main()
+			clear_screen()
 		} else {
-			main()
+			clear_screen()
+		}
+
+		fmt.Println("Type 'battle' for another enounter or 'entrance' to return to the dungeon entrance")
+
+		fmt.Scanln(&user_input)
+		switch strings.ToLower(user_input) {
+
+		case "entrance", "en", "ent", "entr", "entra", "entran", "entranc":
+			dungeon()
+
+		case "battle", "ba", "bat", "batt", "battl":
+			switch current_floor {
+
+			case 1:
+				combat_001()
+			case 2:
+				combat_002()
+			}
 		}
 
 	}
@@ -155,28 +220,70 @@ func check_victory() {
 
 // The block below is for different "places"
 
-func combat() {
+func combat_001() {
 	fmt.Println("\n\nCombat started!")
 
 	for !victory {
+		if battle_intro {
+			battle_intro = false
+			fmt.Println("\nYou encountered a Bandit!")
+			fmt.Println("\npress Enter to continue")
+			fmt.Scanln(&user_input)
+
+		}
 		Dario.Check_player_life()
 		Bandit.Check_enemy_life()
 		Dario.Player_turn()
 		Bandit.Check_enemy_life()
 		if Pilgrim.health > 0 {
 			Pilgrim.Player_turn()
+			Bandit.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
 		if Fie.health > 0 {
 			Fie.Player_turn()
+			Bandit.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
 		if Jessy.health > 0 {
 			Jessy.Player_turn()
+			Bandit.Check_enemy_life()
 		}
-		Bandit.Check_enemy_life()
 
 		Bandit.Enemy_turn()
+	}
+}
+
+func combat_002() {
+	fmt.Println("\n\nCombat started!")
+
+	if battle_intro {
+		battle_intro = false
+		fmt.Println("\nYou encountered a Dark knight!")
+		fmt.Println("\npress Enter to continue")
+		fmt.Scanln(&user_input)
+	}
+	for !victory {
+		Dario.Check_player_life()
+		Dark_knight.Check_enemy_life()
+		Dario.Player_turn()
+		Dark_knight.Check_enemy_life()
+		if Pilgrim.health > 0 {
+			Pilgrim.Player_turn()
+			Dark_knight.Check_enemy_life()
+		}
+		Bandit.Check_enemy_life()
+		if Fie.health > 0 {
+			Fie.Player_turn()
+			Dark_knight.Check_enemy_life()
+		}
+		Bandit.Check_enemy_life()
+		if Jessy.health > 0 {
+			Jessy.Player_turn()
+			Dark_knight.Check_enemy_life()
+		}
+
+		Dark_knight.Enemy_turn()
 	}
 }
 

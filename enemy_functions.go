@@ -15,10 +15,18 @@ type enemy struct {
 
 var Bandit = enemy{
 	name:             "Bandit",
-	health:           300,
+	health:           200,
+	skill_points:     80,
+	max_skill_points: 80,
+	max_health:       200,
+}
+
+var Dark_knight = enemy{
+	name:             "Dark knight",
+	health:           350,
 	skill_points:     200,
 	max_skill_points: 200,
-	max_health:       300,
+	max_health:       350,
 }
 
 var enemy_input int
@@ -89,6 +97,7 @@ func Reset_enemy(e *enemy) {
 func (e *enemy) Check_enemy_life() {
 	if e.health <= 0 {
 		victory = true
+
 		check_victory()
 	}
 }

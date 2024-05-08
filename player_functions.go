@@ -237,10 +237,10 @@ func (p *player) Player_skill_kill(e *enemy) {
 
 func (p *player) Player_skill_strike(e *enemy) {
 
-	damage := rand.Intn(20) + 5 + Dario.strength
-	critical_damage := rand.Intn(20) + 30 + Dario.strength
+	damage := rand.Intn(20) + 5 + p.strength
+	critical_damage := rand.Intn(20) + 30 + p.strength
 
-	Dario.special += 1
+	p.special += 1
 
 	if rand.Intn(11) == 9 { //Critical hit chance
 		e.health -= critical_damage
@@ -260,14 +260,14 @@ func (p *player) Player_skill_soul() {
 }
 
 func (p *player) Player_skill_force(e *enemy) {
-	damage := rand.Intn(5) + 20 + Jessy.intelligence
-	critical_damage := rand.Intn(20) + 30 + Jessy.intelligence
+	damage := rand.Intn(5) + 20 + p.intelligence
+	critical_damage := rand.Intn(20) + 30 + p.intelligence
 
-	if Jessy.skill_points >= 20 {
+	if p.skill_points >= 20 {
 
-		Jessy.skill_points -= 20
+		p.skill_points -= 20
 
-		Jessy.special += 1
+		p.special += 1
 
 		if rand.Intn(3) == 2 { //Critical hit chance
 

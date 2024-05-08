@@ -74,18 +74,20 @@ func main() {
 			Fie.display_stats()
 			Jessy.display_stats()
 
-			fmt.Println("\n[back]")
+			fmt.Println("\nPress enter to continue")
 
 			fmt.Scanln(&user_input)
 
 			switch strings.ToLower(user_input) {
 
-			case "back", "b", "ba", "bac":
+			case "":
 				clear_screen()
 				main()
 
+			default:
+				clear_screen()
+				main()
 			}
-
 		case "inventory", "i", "in", "inv", "inve", "inven", "invent", "invento", "inventor":
 			display_inventory()
 
@@ -101,34 +103,6 @@ func main() {
 
 // This block below is for things that need to be checked and or changed
 
-func dungeon() {
-
-	fmt.Println("\nWhich floor?\n\nfloor 1...\nfloor 2...\n\n[back]")
-
-	fmt.Scanln(&user_input)
-	switch strings.ToLower(user_input) {
-
-	case "floor 1", "1":
-		current_floor = 1
-		combat_001()
-
-	case "floor 2", "2":
-		if floor_level_key >= 2 {
-			current_floor = 2
-			combat_002()
-		} else {
-			fmt.Println("You don't have the required key!")
-		}
-	case "back", "b", "ba", "bac":
-		clear_screen()
-		main()
-
-	default:
-		fmt.Println("Something went wrong")
-		dungeon()
-	}
-}
-
 func check_victory() {
 	if victory {
 		victory = false
@@ -143,7 +117,7 @@ func check_victory() {
 				inventory = append(inventory, "2F_key")
 			}
 
-			if floor_level_key < 3 {
+			if floor_level_key < 3 && current_floor == 2 {
 				floor_level_key = 3
 				fmt.Println("\nYou've found the key to the third floor!")
 				inventory = append(inventory, "3F_key")
@@ -193,28 +167,39 @@ func check_victory() {
 		clear_screen()
 		if user_input == (" ") {
 			clear_screen()
+			after_combat()
 		} else {
 			clear_screen()
+			after_combat()
+		}
+	}
+}
+
+func after_combat() {
+
+	fmt.Println("Type 'battle' for another enounter or 'entrance' to return to the dungeon entrance")
+
+	fmt.Scanln(&user_input)
+	switch strings.ToLower(user_input) {
+
+	case "entrance", "e", "en", "ent", "entr", "entra", "entran", "entranc":
+		dungeon()
+
+	case "battle", "b", "ba", "bat", "batt", "battl":
+		battle_intro = true
+
+		switch current_floor {
+
+		case 1:
+			combat_001()
+		case 2:
+			combat_002()
+
 		}
 
-		fmt.Println("Type 'battle' for another enounter or 'entrance' to return to the dungeon entrance")
-
-		fmt.Scanln(&user_input)
-		switch strings.ToLower(user_input) {
-
-		case "entrance", "en", "ent", "entr", "entra", "entran", "entranc":
-			dungeon()
-
-		case "battle", "ba", "bat", "batt", "battl":
-			switch current_floor {
-
-			case 1:
-				combat_001()
-			case 2:
-				combat_002()
-			}
-		}
-
+	default:
+		fmt.Println("Is that a typo?")
+		after_combat()
 	}
 }
 
@@ -284,6 +269,34 @@ func combat_002() {
 		}
 
 		Dark_knight.Enemy_turn()
+	}
+}
+
+func dungeon() {
+
+	fmt.Println("\nWhich floor?\n\nfloor 1...\nfloor 2...\n\n[back]")
+
+	fmt.Scanln(&user_input)
+	switch strings.ToLower(user_input) {
+
+	case "floor 1", "1":
+		current_floor = 1
+		combat_001()
+
+	case "floor 2", "2":
+		if floor_level_key >= 2 {
+			current_floor = 2
+			combat_002()
+		} else {
+			fmt.Println("You don't have the required key!")
+		}
+	case "back", "b", "ba", "bac":
+		clear_screen()
+		main()
+
+	default:
+		fmt.Println("Something went wrong")
+		dungeon()
 	}
 }
 
@@ -445,7 +458,7 @@ func Tutorial() {
 	display_tutorial = false
 	fmt.Println("Welcome to this game...")
 	fmt.Println("\nThis is a turn based game, as the player you can type the one of the moves to execute it.")
-	fmt.Println("Your goal at this moment is to acquire as much gold as possible")
+	fmt.Println("Your goal is to defeat the demon on the bottom of the dungeon")
 }
 
 func (p *player) show_status() {

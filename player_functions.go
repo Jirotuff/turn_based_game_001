@@ -94,11 +94,14 @@ var Jessy = player{
 func (p *player) Player_turn(e *enemy) {
 	clear_screen()
 
+	fmt.Println("Friend")
 	Dario.show_status()
 	Pilgrim.show_status()
 	Fie.show_status()
 	Jessy.show_status()
 	fmt.Println("")
+	fmt.Println("\nFoe")
+	e.show_status()
 
 	if p.special >= 3 {
 		{

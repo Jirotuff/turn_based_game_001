@@ -114,7 +114,7 @@ func (e *enemy) Check_enemy_life() {
 	if e.health <= 0 {
 		victory = true
 
-		check_victory()
+		e.check_victory()
 	}
 }
 

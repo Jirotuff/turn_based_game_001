@@ -32,7 +32,6 @@ var display_tutorial bool = true
 func main() {
 
 	user_input = ""
-	check_victory()
 
 	if display_tutorial {
 		Tutorial()
@@ -103,7 +102,7 @@ func main() {
 
 // This block below is for things that need to be checked and or changed
 
-func check_victory() {
+func (e *enemy) check_victory() {
 	if victory {
 		victory = false
 
@@ -160,7 +159,7 @@ func check_victory() {
 		Pilgrim.Level_check()
 		Jessy.Level_check()
 
-		Reset_enemy(&Bandit)
+		Reset_enemy(e)
 
 		fmt.Println("\nType any key to continue")
 		fmt.Scanln(&user_input)
@@ -178,7 +177,7 @@ func check_victory() {
 // happens after check victory finsishes
 func after_combat() {
 
-	if rand.Intn(5) == 1 {
+	if rand.Intn(8) == 1 {
 		chest()
 	}
 
@@ -218,14 +217,20 @@ func combat_select() {
 		case 2:
 			combat_102()
 
-		case 3:
-			combat_103()
-
 		default:
 			combat_101()
 		}
 	case 2:
-		combat_202()
+		combat_select_var = rand.Intn(2)
+
+		switch combat_select_var {
+
+		case 1:
+			combat_201()
+
+		case 2:
+			combat_202()
+		}
 	}
 }
 
@@ -269,6 +274,8 @@ func chest() {
 
 // The block below is for different "places"
 
+// Floor 1 enemies
+
 func combat_101() {
 	fmt.Println("\n\nCombat started!")
 
@@ -309,42 +316,6 @@ func combat_102() {
 	for !victory {
 		if battle_intro {
 			battle_intro = false
-			fmt.Println("\nYou encounter a stone golem!")
-			fmt.Println("\npress Enter to continue")
-			fmt.Scanln(&user_input)
-
-		}
-		Dario.Check_player_life()
-		Golem.Check_enemy_life()
-		Dario.Player_turn(&Golem)
-		Golem.Check_enemy_life()
-		if Pilgrim.health > 0 {
-			Pilgrim.Player_turn(&Golem)
-			Golem.Check_enemy_life()
-		}
-		Golem.Check_enemy_life()
-		if Fie.health > 0 {
-			Fie.Player_turn(&Golem)
-			Golem.Check_enemy_life()
-		}
-		Golem.Check_enemy_life()
-		if Jessy.health > 0 {
-			Jessy.Player_turn(&Golem)
-			Golem.Check_enemy_life()
-		}
-
-		Golem.Enemy_turn()
-		fmt.Println("Press Enter to continue", Golem.health)
-		fmt.Scanln(&user_input)
-	}
-}
-
-func combat_103() {
-	fmt.Println("\n\nCombat started!")
-
-	for !victory {
-		if battle_intro {
-			battle_intro = false
 			fmt.Println("\nYou encounter a Goblin!")
 			fmt.Println("\npress Enter to continue")
 			fmt.Scanln(&user_input)
@@ -375,7 +346,9 @@ func combat_103() {
 	}
 }
 
-func combat_202() {
+// Floor 2 enemies
+
+func combat_201() {
 	fmt.Println("\n\nCombat started!")
 
 	if battle_intro {
@@ -405,6 +378,42 @@ func combat_202() {
 		}
 
 		Dark_knight.Enemy_turn()
+	}
+}
+
+func combat_202() {
+	fmt.Println("\n\nCombat started!")
+
+	for !victory {
+		if battle_intro {
+			battle_intro = false
+			fmt.Println("\nYou encounter a stone golem!")
+			fmt.Println("\npress Enter to continue")
+			fmt.Scanln(&user_input)
+
+		}
+		Dario.Check_player_life()
+		Golem.Check_enemy_life()
+		Dario.Player_turn(&Golem)
+		Golem.Check_enemy_life()
+		if Pilgrim.health > 0 {
+			Pilgrim.Player_turn(&Golem)
+			Golem.Check_enemy_life()
+		}
+		Golem.Check_enemy_life()
+		if Fie.health > 0 {
+			Fie.Player_turn(&Golem)
+			Golem.Check_enemy_life()
+		}
+		Golem.Check_enemy_life()
+		if Jessy.health > 0 {
+			Jessy.Player_turn(&Golem)
+			Golem.Check_enemy_life()
+		}
+
+		Golem.Enemy_turn()
+		fmt.Println("Press Enter to continue", Golem.health)
+		fmt.Scanln(&user_input)
 	}
 }
 
@@ -612,5 +621,13 @@ func (p *player) show_status() {
 		fmt.Println(p.name, ":\nhealth: ", p.health, "skill points: ", p.skill_points)
 	} else {
 		fmt.Println(p.name, ":\n\033[95m DEAD...\033[0m")
+	}
+}
+
+func (e *enemy) show_status() {
+	if e.health > 0 {
+		fmt.Println(e.name, ":\nhealth: ", e.health, "skill points: ", e.skill_points)
+	} else {
+		fmt.Println(e.name, ":\n\033[95m DEAD...\033[0m")
 	}
 }

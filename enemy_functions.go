@@ -29,6 +29,22 @@ var Dark_knight = enemy{
 	max_health:       350,
 }
 
+var Golem = enemy{
+	name:             "Stone golem",
+	health:           750,
+	skill_points:     0,
+	max_skill_points: 0,
+	max_health:       750,
+}
+
+var Goblin = enemy{
+	name:             "Goblin",
+	health:           80,
+	skill_points:     20,
+	max_skill_points: 20,
+	max_health:       80,
+}
+
 var enemy_input int
 
 // The block below currently only contains the enemy's turn, might expend upon this later

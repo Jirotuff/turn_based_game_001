@@ -91,7 +91,7 @@ var Jessy = player{
 
 // The block below currently only contains the player's turn, might expend upon this later
 
-func (p *player) Player_turn() {
+func (p *player) Player_turn(e *enemy) {
 	clear_screen()
 
 	Dario.show_status()
@@ -121,19 +121,19 @@ func (p *player) Player_turn() {
 		p.Use_item()
 
 	case "strike", "st", "str", "stri", "strik":
-		p.Player_skill_strike(&Bandit)
+		p.Player_skill_strike(e)
 
 	case "heal", "h", "he", "hea":
 		p.Player_skill_heal()
 
 	case "force", "f", "fo", "for", "forc":
-		p.Player_skill_force(&Bandit)
+		p.Player_skill_force(e)
 
 	case "soul", "so", "sou":
 		p.Player_skill_soul()
 
 	case "kill", "k", "ki", "kil":
-		p.Player_skill_kill(&Bandit)
+		p.Player_skill_kill(e)
 
 	case "special", "sp", "spe", "spec", "speci", "specia":
 		if p.special > 2 {
@@ -143,7 +143,7 @@ func (p *player) Player_turn() {
 			fmt.Println("You dont have the energy for this move")
 		}
 	default:
-		p.Player_turn()
+		p.Player_turn(e)
 
 	}
 	p.Normalize_stats()
@@ -222,8 +222,8 @@ func (p *player) Normalize_stats() {
 // The block below is the place to store all skills that the players can use
 
 func (p *player) Player_skill_kill(e *enemy) {
-	damage := rand.Intn(20) + 5 + Dario.strength + 999
-	critical_damage := rand.Intn(20) + 30 + Dario.strength + 999
+	damage := rand.Intn(20) + 5 + Dario.strength + 9999
+	critical_damage := rand.Intn(20) + 30 + Dario.strength + 9999
 
 	if rand.Intn(11) == 9 { //Critical hit chance
 		e.health -= critical_damage

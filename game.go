@@ -192,19 +192,40 @@ func after_combat() {
 
 	case "battle", "b", "ba", "bat", "batt", "battl":
 		battle_intro = true
-
-		switch current_floor {
-
-		case 1:
-			combat_101()
-		case 2:
-			combat_202()
-
-		}
+		combat_select()
 
 	default:
 		fmt.Println("Is that a typo?")
 		after_combat()
+	}
+}
+
+func combat_select() {
+
+	var combat_select_var int
+
+	switch current_floor {
+
+	case 1:
+
+		combat_select_var = rand.Intn(4)
+
+		switch combat_select_var {
+
+		case 1:
+			combat_101()
+
+		case 2:
+			combat_102()
+
+		case 3:
+			combat_103()
+
+		default:
+			combat_101()
+		}
+	case 2:
+		combat_202()
 	}
 }
 
@@ -261,24 +282,96 @@ func combat_101() {
 		}
 		Dario.Check_player_life()
 		Bandit.Check_enemy_life()
-		Dario.Player_turn()
+		Dario.Player_turn(&Bandit)
 		Bandit.Check_enemy_life()
 		if Pilgrim.health > 0 {
-			Pilgrim.Player_turn()
+			Pilgrim.Player_turn(&Bandit)
 			Bandit.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
 		if Fie.health > 0 {
-			Fie.Player_turn()
+			Fie.Player_turn(&Bandit)
 			Bandit.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
 		if Jessy.health > 0 {
-			Jessy.Player_turn()
+			Jessy.Player_turn(&Bandit)
 			Bandit.Check_enemy_life()
 		}
 
 		Bandit.Enemy_turn()
+	}
+}
+
+func combat_102() {
+	fmt.Println("\n\nCombat started!")
+
+	for !victory {
+		if battle_intro {
+			battle_intro = false
+			fmt.Println("\nYou encounter a stone golem!")
+			fmt.Println("\npress Enter to continue")
+			fmt.Scanln(&user_input)
+
+		}
+		Dario.Check_player_life()
+		Golem.Check_enemy_life()
+		Dario.Player_turn(&Golem)
+		Golem.Check_enemy_life()
+		if Pilgrim.health > 0 {
+			Pilgrim.Player_turn(&Golem)
+			Golem.Check_enemy_life()
+		}
+		Golem.Check_enemy_life()
+		if Fie.health > 0 {
+			Fie.Player_turn(&Golem)
+			Golem.Check_enemy_life()
+		}
+		Golem.Check_enemy_life()
+		if Jessy.health > 0 {
+			Jessy.Player_turn(&Golem)
+			Golem.Check_enemy_life()
+		}
+
+		Golem.Enemy_turn()
+		fmt.Println("Press Enter to continue", Golem.health)
+		fmt.Scanln(&user_input)
+	}
+}
+
+func combat_103() {
+	fmt.Println("\n\nCombat started!")
+
+	for !victory {
+		if battle_intro {
+			battle_intro = false
+			fmt.Println("\nYou encounter a Goblin!")
+			fmt.Println("\npress Enter to continue")
+			fmt.Scanln(&user_input)
+
+		}
+		Dario.Check_player_life()
+		Goblin.Check_enemy_life()
+		Dario.Player_turn(&Goblin)
+		Goblin.Check_enemy_life()
+		if Pilgrim.health > 0 {
+			Pilgrim.Player_turn(&Goblin)
+			Goblin.Check_enemy_life()
+		}
+		Goblin.Check_enemy_life()
+		if Fie.health > 0 {
+			Fie.Player_turn(&Goblin)
+			Goblin.Check_enemy_life()
+		}
+		Goblin.Check_enemy_life()
+		if Jessy.health > 0 {
+			Jessy.Player_turn(&Goblin)
+			Goblin.Check_enemy_life()
+		}
+
+		Goblin.Enemy_turn()
+		fmt.Println("Press Enter to continue", Goblin.health)
+		fmt.Scanln(&user_input)
 	}
 }
 
@@ -294,20 +387,20 @@ func combat_202() {
 	for !victory {
 		Dario.Check_player_life()
 		Dark_knight.Check_enemy_life()
-		Dario.Player_turn()
+		Dario.Player_turn(&Dark_knight)
 		Dark_knight.Check_enemy_life()
 		if Pilgrim.health > 0 {
-			Pilgrim.Player_turn()
+			Pilgrim.Player_turn(&Dark_knight)
 			Dark_knight.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
 		if Fie.health > 0 {
-			Fie.Player_turn()
+			Fie.Player_turn(&Dark_knight)
 			Dark_knight.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
 		if Jessy.health > 0 {
-			Jessy.Player_turn()
+			Jessy.Player_turn(&Dark_knight)
 			Dark_knight.Check_enemy_life()
 		}
 
@@ -324,12 +417,11 @@ func dungeon() {
 
 	case "floor 1", "1":
 		current_floor = 1
-		combat_101()
-
+		combat_select()
 	case "floor 2", "2":
 		if floor_level_key >= 2 {
 			current_floor = 2
-			combat_202()
+			combat_select()
 		} else {
 			fmt.Println("You don't have the required key!")
 		}

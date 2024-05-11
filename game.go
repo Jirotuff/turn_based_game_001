@@ -221,7 +221,7 @@ func combat_select() {
 			combat_101()
 		}
 	case 2:
-		combat_select_var = rand.Intn(2)
+		combat_select_var = rand.Intn(3)
 
 		switch combat_select_var {
 
@@ -230,6 +230,9 @@ func combat_select() {
 
 		case 2:
 			combat_202()
+
+		default:
+			combat_201()
 		}
 	}
 }

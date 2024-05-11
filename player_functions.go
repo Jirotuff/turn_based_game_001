@@ -295,7 +295,7 @@ func (p *player) Player_skill_heal() {
 
 		p.skill_points = -10
 
-		heal := rand.Intn(20) + 5 + Jessy.intelligence //amount healed
+		heal := rand.Intn(20) + 5 + p.intelligence //amount healed
 
 		Dario.health += heal
 		if Jessy.health > 0 {
@@ -307,18 +307,10 @@ func (p *player) Player_skill_heal() {
 		if Fie.health > 0 {
 			Fie.health += heal
 		}
-		if Dario.health > Dario.max_health {
-			Dario.health = Dario.max_health
-		}
-		if Pilgrim.health > Pilgrim.max_health {
-			Pilgrim.health = Pilgrim.max_health
-		}
-		if Fie.health > Fie.max_health {
-			Fie.health = Fie.max_health
-		}
-		if Jessy.health > Jessy.max_health {
-			Jessy.health = Jessy.max_health
-		}
+		Dario.Normalize_stats()
+		Fie.Normalize_stats()
+		Pilgrim.Normalize_stats()
+		Jessy.Normalize_stats()
 
 		user_input = ""
 	}

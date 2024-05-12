@@ -137,13 +137,20 @@ func (e *enemy) check_victory() {
 		if rand.Intn(20) == 1 {
 			item_gained = append(item_gained, "revival_bead")
 		}
-
-		if rand.Intn(20) > 17 {
+		if rand.Intn(8) == 1 {
 			item_gained = append(item_gained, "potion")
 		}
-
-		if rand.Intn(5) == 1 {
+		if rand.Intn(30) == 1 {
 			item_gained = append(item_gained, "iron")
+		}
+		if rand.Intn(10) == 1 {
+			item_gained = append(item_gained, "copper")
+		}
+		if rand.Intn(4) == 1 {
+			item_gained = append(item_gained, "tin")
+		}
+		if rand.Intn(5) == 1 {
+			item_gained = append(item_gained, "coal")
 		}
 
 		inventory = append(inventory, item_gained...)
@@ -495,7 +502,7 @@ func shop() {
 func smithy() {
 	fmt.Println("Welcome to the smithy")
 	fmt.Println("\nIn here you can craft equipment for your party...")
-	fmt.Println("\n- sword\t\t\tCosts 1 iron and 50 gold")
+	fmt.Println("\n- sword\t\t\tCosts 1 bronze and 50 gold")
 	fmt.Println("- lockpicks\t\tCosts 1 iron and 20 gold, used to open treasure chests")
 	fmt.Println("\nleave the smithy (back)")
 
@@ -506,18 +513,18 @@ func smithy() {
 		switch strings.ToLower(user_input) {
 
 		case "sword", "sw", "swo", "swor":
-			if contains_string(inventory, "iron") {
+			if contains_string(inventory, "bronze") {
 				if gold >= 50 {
 					gold -= 50
-					remove_item(inventory, "iron")
-					fmt.Println("you've crafted a sword")
-					inventory = append(inventory, "sword")
+					remove_item(inventory, "bronze")
+					fmt.Println("you've crafted a bronze sword")
+					inventory = append(inventory, "bronze sword")
 				} else {
 					fmt.Println("You lack gold!")
 				}
 
 			} else {
-				fmt.Println("You lack iron!")
+				fmt.Println("You lack Bronze!")
 			}
 
 		case "lockpick", "l", "lo", "loc", "lock", "lockp", "lockpi", "lockpic":

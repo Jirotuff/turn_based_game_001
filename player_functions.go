@@ -141,7 +141,7 @@ func (p *player) Player_turn(e *enemy) {
 	case "special", "sp", "spe", "spec", "speci", "specia":
 		if p.special > 2 {
 			p.special = 0
-			p.Player_skill_special(&Bandit)
+			p.Player_skill_special(e)
 		} else {
 			fmt.Println("You dont have the energy for this move")
 		}
@@ -169,29 +169,32 @@ func (p *player) Level_check() {
 		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.max_health, p.max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
 		fmt.Println("(St)rength:", p.strength, "\n(In)telligence: ", p.intelligence, "\n(Ag)ility: ", p.agility, "\n(En)durance: ", p.endurance, "\n(So)cial: ", p.social, "")
-		fmt.Scanln(&user_input)
+		p.level_up()
+	}
+}
+func (p *player) level_up() {
+	user_input = ""
+	fmt.Scanln(&user_input)
 
-		switch user_input {
+	switch user_input {
 
-		case "strength", "st", "str", "stre":
-			p.strength += 2
+	case "strength", "st", "str", "stre":
+		p.strength += 2
 
-		case "intelligence", "in", "int", "inte":
-			p.intelligence += 2
+	case "intelligence", "in", "int", "inte":
+		p.intelligence += 2
 
-		case "agility", "ag", "agi", "agil":
-			p.agility += 2
+	case "agility", "ag", "agi", "agil":
+		p.agility += 2
 
-		case "endurance", "en", "end", "endu":
-			p.endurance += 2
+	case "endurance", "en", "end", "endu":
+		p.endurance += 2
 
-		case "social", "so", "soc", "soci":
-			p.social += 2
+	case "social", "so", "soc", "soci":
+		p.social += 2
 
-		default:
-			fmt.Println("Something went wrong")
-			p.Level_check()
-		}
+	default:
+		p.level_up()
 	}
 }
 
@@ -219,6 +222,9 @@ func (p *player) Normalize_stats() {
 	}
 	if p.skill_points > p.max_skill_points {
 		p.skill_points = p.max_skill_points
+	}
+	if p.special > 3 {
+		p.special = 3
 	}
 }
 

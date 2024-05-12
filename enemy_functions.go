@@ -48,7 +48,6 @@ var Goblin = enemy{
 var enemy_input int
 
 // The block below currently only contains the enemy's turn, might expend upon this later
-
 func (e *enemy) Enemy_turn() {
 	fmt.Println(e.name, "'s turn")
 	fmt.Println("")
@@ -95,9 +94,29 @@ func (e *enemy) Enemy_turn() {
 			case 3:
 				e.Enemy_skill_force(&Jessy)
 			}
+
+		case 3:
+			enemy_input = rand.Intn(3)
+
+			switch enemy_input {
+
+			case 0:
+				e.Enemy_skill_smash(&Dario)
+
+			case 1:
+				e.Enemy_skill_smash(&Pilgrim)
+
+			case 2:
+				e.Enemy_skill_smash(&Fie)
+
+			case 3:
+				e.Enemy_skill_smash(&Jessy)
+			}
 		}
 		e.Normalize_stats_enemy()
 	}
+	fmt.Println("\nPress Enter to continue...")
+	fmt.Scanln(&user_input)
 }
 
 // The block below is for storing things that need to be checked (and changed?) in regards to the enemies
@@ -191,5 +210,24 @@ func (e *enemy) Enemy_skill_force(p *player) {
 		p.health -= damage
 		fmt.Println(damage, "DMG")
 		fmt.Scanln()
+	}
+}
+
+func (e *enemy) Enemy_skill_smash(p *player) {
+	fmt.Println(e.name, "used Smash")
+	damage := rand.Intn(10) + 60 - p.endurance
+	critical_damage := rand.Intn(10) + 70 - p.endurance
+
+	if rand.Intn(100) > p.agility {
+
+		if rand.Intn(11) == 9 { //Critical hit chance
+			p.health -= critical_damage
+			fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
+		} else {
+			p.health -= damage
+			fmt.Println(damage, "DMG")
+		}
+	} else {
+		fmt.Println("But it missed!")
 	}
 }

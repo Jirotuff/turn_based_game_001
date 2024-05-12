@@ -344,8 +344,6 @@ func combat_102() {
 		}
 
 		Goblin.Enemy_turn()
-		fmt.Println("Press Enter to continue", Goblin.health)
-		fmt.Scanln(&user_input)
 	}
 }
 
@@ -415,8 +413,6 @@ func combat_202() {
 		}
 
 		Golem.Enemy_turn()
-		fmt.Println("Press Enter to continue", Golem.health)
-		fmt.Scanln(&user_input)
 	}
 }
 
@@ -621,7 +617,7 @@ func Tutorial() {
 
 func (p *player) show_status() {
 	if p.health > 0 {
-		fmt.Println(p.name, ":\nhealth: ", p.health, "skill points: ", p.skill_points)
+		fmt.Println(p.name, ":\nhealth: ", p.health, "skill points: ", p.skill_points, "Special points: ", p.special)
 	} else {
 		fmt.Println(p.name, ":\n\033[95m DEAD...\033[0m")
 	}

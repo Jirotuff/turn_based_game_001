@@ -16,6 +16,7 @@ var (
 	name_3 string = "Fie"
 	name_4 string = "Jessy"
 
+	get_chest        bool = true
 	name_selected    bool = false
 	battle_intro     bool = true
 	floor_level_key  int  = 1
@@ -193,9 +194,10 @@ func (e *enemy) check_victory() {
 // happens after check victory finsishes
 func after_combat() {
 
-	if rand.Intn(8) == 1 {
+	if rand.Intn(8) == 1 && get_chest {
 		chest()
 	}
+	get_chest = true
 
 	fmt.Println("Type 'battle' for another enounter or 'entrance' to return to the dungeon entrance")
 
@@ -256,38 +258,41 @@ func combat_select() {
 func chest() {
 	fmt.Println("\033[96mYou have found a treasure chest\033[0m\n\nWould you like to use a lockpick to open it? [Y/N]\n\n", inventory)
 
-	fmt.Scanln(&user_input)
-	switch strings.ToLower(user_input) {
+	for {
+		fmt.Scanln(&user_input)
+		switch strings.ToLower(user_input) {
 
-	case "yes", "y", "ye":
-		if contains_string(inventory, "lockpick") {
+		case "yes", "y", "ye":
+			if contains_string(inventory, "lockpick") {
 
-			if current_floor == 1 {
-				remove_item(inventory, "lockpick")
-				gold_gained = rand.Intn(150) + 100
-				gold += gold_gained
-				item_gained = append(item_gained, "potion")
-				inventory = append(inventory, item_gained...)
+				if current_floor == 1 {
+					remove_item(inventory, "lockpick")
+					gold_gained = rand.Intn(150) + 100
+					gold += gold_gained
+					item_gained = append(item_gained, "potion")
+					inventory = append(inventory, item_gained...)
+				}
+
+				if current_floor == 2 {
+					remove_item(inventory, "lockpick")
+					gold_gained = rand.Intn(250) + 150
+					gold += gold_gained
+					item_gained = append(item_gained, "revival bead")
+					inventory = append(inventory, item_gained...)
+				}
+				fmt.Println("\nLoot:\n\n gold: ", gold_gained, "\nitems: ", item_gained)
+
+				gold_gained = 0
+				item_gained = nil
+			} else {
+				fmt.Println("You don't have any lockpicks...")
 			}
-
-			if current_floor == 2 {
-				remove_item(inventory, "lockpick")
-				gold_gained = rand.Intn(250) + 150
-				gold += gold_gained
-				item_gained = append(item_gained, "revival bead")
-				inventory = append(inventory, item_gained...)
-			}
-			fmt.Println("\nLoot:\n\n gold: ", gold_gained, "\nitems: ", item_gained)
-
-			gold_gained = 0
-			item_gained = nil
-		} else {
-			fmt.Println("You don't have any lockpicks...")
+		case "no", "n":
+			get_chest = false
+			after_combat()
+		default:
+			chest()
 		}
-	case "no", "n":
-
-	default:
-
 	}
 }
 
@@ -531,6 +536,9 @@ func smithy() {
 	case "item", "it", "ite", "i":
 		smithy_item()
 
+	case "materials", "material", "materia", "materi", "mater", "mate", "mat", "ma", "m":
+		smithy_material()
+
 	default:
 		smithy()
 	}
@@ -539,7 +547,7 @@ func smithy() {
 
 func smithy_equip() {
 	fmt.Println("\n- sword\t\t\tCosts 1 bronze and 50 gold")
-	fmt.Println("- tin foil hat\t\t\tCosts 1 tin and 5 gold")
+	fmt.Println("- tin foil hat\tCosts 1 tin and 5 gold")
 
 	for {
 
@@ -627,6 +635,47 @@ func smithy_item() {
 	}
 }
 
+func smithy_material() {
+	fmt.Println("\n- bronze\t\tCosts 1 copper, 1 tin and 30 gold")
+
+	for {
+		fmt.Scanln(&user_input)
+
+		switch strings.ToLower(user_input) {
+
+		case "bronze", "bronz", "bron", "bro", "br":
+			if contains_string(inventory, "copper") {
+				if contains_string(inventory, "tin") {
+					if gold >= 30 {
+						gold -= 30
+						remove_item(inventory, "copper")
+						fmt.Println("you've crafted some bronze")
+						inventory = append(inventory, "bronze")
+					} else {
+						fmt.Println("You lack gold")
+					}
+				} else {
+					fmt.Println("You lack tin")
+				}
+
+			} else {
+				fmt.Println("You lack copper!")
+			}
+
+		case "back", "ba", "bac":
+			clear_screen()
+			smithy()
+
+		case "exit", "ex", "exi":
+			clear_screen()
+			main()
+
+		default:
+			fmt.Println("You can't craft this...")
+		}
+	}
+}
+
 func (p *player) display_stats() {
 
 	fmt.Println("\n", p.name, "lv:", p.lv)
@@ -635,7 +684,6 @@ func (p *player) display_stats() {
 	fmt.Println("Intelligence:", p.intelligence)
 	fmt.Println("Agility:", p.agility)
 	fmt.Println("Endurance:", p.endurance)
-	fmt.Println("Social:", p.social)
 }
 
 func display_inventory() {

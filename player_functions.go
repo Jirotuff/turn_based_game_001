@@ -21,13 +21,12 @@ type player struct {
 	intelligence     int // increases magical damage
 	agility          int // increases chance to dodge
 	endurance        int // reduces damage taken
-	social           int // reduces shop prices
 }
 
 // Player
 var Player = player{
 	max_health:       110,
-	max_skill_points: 50,
+	max_skill_points: 75,
 	name:             "",
 	special:          0,
 	exp:              0,
@@ -38,12 +37,11 @@ var Player = player{
 	intelligence:     12,
 	agility:          10,
 	endurance:        10,
-	social:           10,
 }
 
 var Pilgrim = player{
 	max_health:       120,
-	max_skill_points: 50,
+	max_skill_points: 70,
 	name:             name_2,
 	special:          0,
 	exp:              0,
@@ -54,12 +52,11 @@ var Pilgrim = player{
 	intelligence:     8,
 	agility:          8,
 	endurance:        14,
-	social:           10,
 }
 
 var Fie = player{
 	max_health:       90,
-	max_skill_points: 50,
+	max_skill_points: 80,
 	name:             name_3,
 	special:          0,
 	exp:              0,
@@ -70,7 +67,6 @@ var Fie = player{
 	intelligence:     10,
 	agility:          14,
 	endurance:        8,
-	social:           10,
 }
 
 var Jessy = player{
@@ -86,7 +82,6 @@ var Jessy = player{
 	intelligence:     14,
 	agility:          12,
 	endurance:        10,
-	social:           12,
 }
 
 // The block below currently only contains the player's turn, might expend upon this later
@@ -168,7 +163,7 @@ func (p *player) Level_check() {
 		fmt.Println("\n", p.name, ":\033[92m Level up!!\033[0m")
 		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.max_health, p.max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
-		fmt.Println("(St)rength:", p.strength, "\n(In)telligence: ", p.intelligence, "\n(Ag)ility: ", p.agility, "\n(En)durance: ", p.endurance, "\n(So)cial: ", p.social, "")
+		fmt.Println("(St)rength:", p.strength, "\n(In)telligence: ", p.intelligence, "\n(Ag)ility: ", p.agility, "\n(En)durance: ", p.endurance, "\n(So)cial: ", "")
 		p.level_up()
 	}
 }
@@ -189,9 +184,6 @@ func (p *player) level_up() {
 
 	case "endurance", "en", "end", "endu":
 		p.endurance += 2
-
-	case "social", "so", "soc", "soci":
-		p.social += 2
 
 	default:
 		p.level_up()

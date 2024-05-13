@@ -28,7 +28,7 @@ type player struct {
 var Dario = player{
 	max_health:       110,
 	max_skill_points: 50,
-	name:             name_1,
+	name:             "",
 	special:          0,
 	exp:              0,
 	lv:               1,

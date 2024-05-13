@@ -9,27 +9,36 @@ import (
 	"strings"
 )
 
-const (
-	name_1 string = "Dario"
+const ()
+
+var (
 	name_2 string = "Pilgrim"
 	name_3 string = "Fie"
 	name_4 string = "Jessy"
+
+	name_selected    bool = false
+	battle_intro     bool = true
+	floor_level_key  int  = 1
+	current_floor    int
+	inventory        []string
+	gold             int
+	exp_gained       int
+	gold_gained      int
+	item_gained      []string
+	user_input       string
+	victory          bool = false
+	display_tutorial bool = true
 )
 
-var battle_intro bool = true
-var floor_level_key int = 1
-var current_floor int
-var inventory []string
-var gold int
-var exp_gained int
-var gold_gained int
-var item_gained []string
-
-var user_input string
-var victory bool = false
-var display_tutorial bool = true
-
 func main() {
+
+	if !name_selected {
+		name_selected = true
+		fmt.Println("What is your name?")
+		fmt.Scanln(&user_input)
+		Dario.name = user_input
+		fmt.Println(Dario.name)
+	}
 
 	user_input = ""
 

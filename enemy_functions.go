@@ -62,7 +62,7 @@ func (e *enemy) Enemy_turn() {
 			switch enemy_input {
 
 			case 0:
-				e.Enemy_skill_strike(&Dario)
+				e.Enemy_skill_strike(&Player)
 
 			case 1:
 				e.Enemy_skill_strike(&Pilgrim)
@@ -83,7 +83,7 @@ func (e *enemy) Enemy_turn() {
 			switch enemy_input {
 
 			case 0:
-				e.Enemy_skill_force(&Dario)
+				e.Enemy_skill_force(&Player)
 
 			case 1:
 				e.Enemy_skill_force(&Pilgrim)
@@ -101,7 +101,7 @@ func (e *enemy) Enemy_turn() {
 			switch enemy_input {
 
 			case 0:
-				e.Enemy_skill_smash(&Dario)
+				e.Enemy_skill_smash(&Player)
 
 			case 1:
 				e.Enemy_skill_smash(&Pilgrim)

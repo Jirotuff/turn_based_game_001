@@ -36,8 +36,8 @@ func main() {
 		name_selected = true
 		fmt.Println("What is your name?")
 		fmt.Scanln(&user_input)
-		Dario.name = user_input
-		fmt.Println(Dario.name)
+		Player.name = user_input
+		fmt.Println(Player.name)
 	}
 
 	user_input = ""
@@ -47,7 +47,7 @@ func main() {
 	}
 	battle_intro = true
 
-	Dario.show_status()
+	Player.show_status()
 	Pilgrim.show_status()
 	Fie.show_status()
 	Jessy.show_status()
@@ -77,7 +77,7 @@ func main() {
 			smithy()
 
 		case "stats", "st", "sta", "stat":
-			Dario.display_stats()
+			Player.display_stats()
 			Pilgrim.display_stats()
 			Fie.display_stats()
 			Jessy.display_stats()
@@ -134,7 +134,7 @@ func (e *enemy) check_victory() {
 
 		exp_gained = rand.Intn(50) + 50
 
-		Dario.exp += exp_gained
+		Player.exp += exp_gained
 		Pilgrim.exp += exp_gained
 		Fie.exp += exp_gained
 		Jessy.exp += exp_gained
@@ -170,7 +170,7 @@ func (e *enemy) check_victory() {
 		gold_gained = 0
 		exp_gained = 0
 
-		Dario.Level_check()
+		Player.Level_check()
 		Fie.Level_check()
 		Pilgrim.Level_check()
 		Jessy.Level_check()
@@ -306,9 +306,9 @@ func combat_101() {
 			fmt.Scanln(&user_input)
 
 		}
-		Dario.Check_player_life()
+		Player.Check_player_life()
 		Bandit.Check_enemy_life()
-		Dario.Player_turn(&Bandit)
+		Player.Player_turn(&Bandit)
 		Bandit.Check_enemy_life()
 		if Pilgrim.health > 0 {
 			Pilgrim.Player_turn(&Bandit)
@@ -340,9 +340,9 @@ func combat_102() {
 			fmt.Scanln(&user_input)
 
 		}
-		Dario.Check_player_life()
+		Player.Check_player_life()
 		Goblin.Check_enemy_life()
-		Dario.Player_turn(&Goblin)
+		Player.Player_turn(&Goblin)
 		Goblin.Check_enemy_life()
 		if Pilgrim.health > 0 {
 			Pilgrim.Player_turn(&Goblin)
@@ -375,9 +375,9 @@ func combat_201() {
 		fmt.Scanln(&user_input)
 	}
 	for !victory {
-		Dario.Check_player_life()
+		Player.Check_player_life()
 		Dark_knight.Check_enemy_life()
-		Dario.Player_turn(&Dark_knight)
+		Player.Player_turn(&Dark_knight)
 		Dark_knight.Check_enemy_life()
 		if Pilgrim.health > 0 {
 			Pilgrim.Player_turn(&Dark_knight)
@@ -409,9 +409,9 @@ func combat_202() {
 			fmt.Scanln(&user_input)
 
 		}
-		Dario.Check_player_life()
+		Player.Check_player_life()
 		Golem.Check_enemy_life()
-		Dario.Player_turn(&Golem)
+		Player.Player_turn(&Golem)
 		Golem.Check_enemy_life()
 		if Pilgrim.health > 0 {
 			Pilgrim.Player_turn(&Golem)

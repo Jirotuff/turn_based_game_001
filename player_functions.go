@@ -24,8 +24,8 @@ type player struct {
 	social           int // reduces shop prices
 }
 
-// Dario
-var Dario = player{
+// Player
+var Player = player{
 	max_health:       110,
 	max_skill_points: 50,
 	name:             "",
@@ -95,7 +95,7 @@ func (p *player) Player_turn(e *enemy) {
 	clear_screen()
 
 	fmt.Println("Friend")
-	Dario.show_status()
+	Player.show_status()
 	Pilgrim.show_status()
 	Fie.show_status()
 	Jessy.show_status()
@@ -200,9 +200,9 @@ func (p *player) level_up() {
 
 // checks game over
 func (p *player) Check_player_life() {
-	if Dario.health <= 0 {
+	if Player.health <= 0 {
 		fmt.Println("Your hero has been killed!")
-		fmt.Println("\nGold:", gold, "Player level:", Dario.lv)
+		fmt.Println("\nGold:", gold, "Player level:", Player.lv)
 		fmt.Println("\nPress Enter to quit")
 
 		fmt.Scanln("")
@@ -231,8 +231,8 @@ func (p *player) Normalize_stats() {
 // The block below is the place to store all skills that the players can use
 
 func (p *player) Player_skill_kill(e *enemy) {
-	damage := rand.Intn(20) + 5 + Dario.strength + 9999
-	critical_damage := rand.Intn(20) + 30 + Dario.strength + 9999
+	damage := rand.Intn(20) + 5 + Player.strength + 9999
+	critical_damage := rand.Intn(20) + 30 + Player.strength + 9999
 
 	if rand.Intn(11) == 9 { //Critical hit chance
 		e.health -= critical_damage
@@ -303,7 +303,7 @@ func (p *player) Player_skill_heal() {
 
 		heal := rand.Intn(20) + 5 + p.intelligence //amount healed
 
-		Dario.health += heal
+		Player.health += heal
 		if Jessy.health > 0 {
 			Jessy.health += heal
 		}
@@ -313,7 +313,7 @@ func (p *player) Player_skill_heal() {
 		if Fie.health > 0 {
 			Fie.health += heal
 		}
-		Dario.Normalize_stats()
+		Player.Normalize_stats()
 		Fie.Normalize_stats()
 		Pilgrim.Normalize_stats()
 		Jessy.Normalize_stats()

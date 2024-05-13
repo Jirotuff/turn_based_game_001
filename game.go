@@ -42,7 +42,7 @@ func main() {
 		Player.name = user_input
 	}
 
-	if contains_string(inventory, "bronze sword") {
+	if contains_string(inventory, "bronze_sword") {
 		equipment_phys_offense = 10
 	}
 	if contains_string(inventory, "tin_foil_hat") {
@@ -447,7 +447,7 @@ func combat_202() {
 func dungeon() {
 	clear_screen()
 
-	fmt.Println("\nWhich floor?\n\nfloor 1...\nfloor 2...\n\n[back]")
+	fmt.Println("\nWhich floor?\n\nfloor 1...\nfloor 2...\nfloor 3...\n\n[back]")
 
 	fmt.Scanln(&user_input)
 	switch strings.ToLower(user_input) {
@@ -461,7 +461,11 @@ func dungeon() {
 			combat_select()
 		} else {
 			fmt.Println("You don't have the required key!")
+
 		}
+	case "floor 3", "3":
+		game_finished()
+
 	case "back", "b", "ba", "bac":
 		clear_screen()
 		main()
@@ -546,7 +550,7 @@ func smithy() {
 
 func smithy_equip() {
 	fmt.Println("\n- sword\t\t\tCosts 1 bronze and 50 gold | increases physical offense for the entire party by 10")
-	fmt.Println("- tin foil hat\tCosts 1 tin and 5 gold | increases magical defense for the entire party by 5")
+	fmt.Println("- tin foil hat\t\tCosts 1 tin and 5 gold | increases magical defense for the entire party by 5")
 
 	for {
 
@@ -559,7 +563,7 @@ func smithy_equip() {
 				if gold >= 50 {
 					gold -= 50
 					remove_item(inventory, "bronze")
-					fmt.Println("you've crafted a bronze sword")
+					fmt.Println("you've crafted a bronze_sword")
 					inventory = append(inventory, "bronze_sword")
 				} else {
 					fmt.Println("You lack gold!")
@@ -745,6 +749,7 @@ func Tutorial() {
 	display_tutorial = false
 	fmt.Println("Welcome to this game", Player.name)
 	fmt.Println("\nThis is a turn based game, as the player you can type the one of the moves to execute it.")
+	fmt.Println("Your goal is to progress to the third floor of the dungeon. defeating enemies on one floor will get you the key to the next")
 	fmt.Println("This is a debug version")
 	fmt.Println("")
 }
@@ -763,4 +768,11 @@ func (e *enemy) show_status() {
 	} else {
 		fmt.Println(e.name, ":\n\033[95m DEAD...\033[0m")
 	}
+}
+
+func game_finished() {
+	clear_screen()
+	fmt.Println("You have beaten this game!!! congratz!\n\nGame made by Jimmy Roodzant / 2024\n\nPress Enter to exit")
+	fmt.Scanln(&user_input)
+	os.Exit(0)
 }

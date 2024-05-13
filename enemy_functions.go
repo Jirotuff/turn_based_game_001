@@ -183,8 +183,8 @@ func (e *enemy) Enemy_skill_strike(p *player) {
 // TODO better description of the logic
 func (e *enemy) Enemy_skill_force(p *player) {
 
-	damage := rand.Intn(10) + 70 - p.endurance
-	critical_damage := rand.Intn(20) + 80 - p.endurance
+	damage := rand.Intn(10) + 70 - p.endurance - equipment_magic_defense
+	critical_damage := rand.Intn(20) + 80 - p.endurance - equipment_magic_defense
 
 	fmt.Println(e.name, "cast force")
 

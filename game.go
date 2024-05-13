@@ -16,19 +16,21 @@ var (
 	name_3 string = "Fie"
 	name_4 string = "Jessy"
 
-	get_chest        bool = true
-	name_selected    bool = false
-	battle_intro     bool = true
-	floor_level_key  int  = 1
-	current_floor    int
-	inventory        []string
-	gold             int
-	exp_gained       int
-	gold_gained      int
-	item_gained      []string
-	user_input       string
-	victory          bool = false
-	display_tutorial bool = true
+	equipment_phys_offense  int
+	equipment_magic_defense int
+	get_chest               bool = true
+	name_selected           bool = false
+	battle_intro            bool = true
+	floor_level_key         int  = 1
+	current_floor           int
+	inventory               []string
+	gold                    int
+	exp_gained              int
+	gold_gained             int
+	item_gained             []string
+	user_input              string
+	victory                 bool = false
+	display_tutorial        bool = true
 )
 
 func main() {
@@ -38,9 +40,14 @@ func main() {
 		fmt.Println("What is your name?")
 		fmt.Scanln(&user_input)
 		Player.name = user_input
-		fmt.Println(Player.name)
 	}
 
+	if contains_string(inventory, "bronze sword") {
+		equipment_phys_offense = 10
+	}
+	if contains_string(inventory, "tin_foil_hat") {
+		equipment_magic_defense = 5
+	}
 	user_input = ""
 
 	if display_tutorial {
@@ -471,7 +478,6 @@ func shop() {
 	fmt.Println("Welcome to the shop")
 	fmt.Println("\ngold: ", gold)
 	fmt.Println("\n- potion\t\t50 gold")
-	fmt.Println("- fire_gem")
 	fmt.Println("- revival_bead\t\t150 gold")
 	fmt.Println("\nleave the shop (back)")
 
@@ -489,14 +495,7 @@ func shop() {
 			} else {
 				fmt.Println("You lack gold!")
 			}
-		case "fire_gem", "fi", "fir", "fire", "fire_", "fire_g", "fire_ge":
-			if gold >= 25 {
-				gold -= 25
-				fmt.Println("you have bought a fire_gem")
-				inventory = append(inventory, "fire_gem")
-			} else {
-				fmt.Println("You lack gold!")
-			}
+
 		case "revival_bead", "re", "rev", "revi", "reviv", "reviva", "revival_", "revival_b":
 			if gold >= 150 {
 				gold -= 150
@@ -546,8 +545,8 @@ func smithy() {
 }
 
 func smithy_equip() {
-	fmt.Println("\n- sword\t\t\tCosts 1 bronze and 50 gold")
-	fmt.Println("- tin foil hat\tCosts 1 tin and 5 gold")
+	fmt.Println("\n- sword\t\t\tCosts 1 bronze and 50 gold | increases physical offense for the entire party by 10")
+	fmt.Println("- tin foil hat\tCosts 1 tin and 5 gold | increases magical defense for the entire party by 5")
 
 	for {
 
@@ -561,7 +560,7 @@ func smithy_equip() {
 					gold -= 50
 					remove_item(inventory, "bronze")
 					fmt.Println("you've crafted a bronze sword")
-					inventory = append(inventory, "bronze sword")
+					inventory = append(inventory, "bronze_sword")
 				} else {
 					fmt.Println("You lack gold!")
 				}
@@ -744,9 +743,10 @@ func quit() {
 
 func Tutorial() {
 	display_tutorial = false
-	fmt.Println("Welcome to this game...")
+	fmt.Println("Welcome to this game", Player.name)
 	fmt.Println("\nThis is a turn based game, as the player you can type the one of the moves to execute it.")
-	fmt.Println("Your goal is to defeat the demon on the bottom of the dungeon")
+	fmt.Println("This is a debug version")
+	fmt.Println("")
 }
 
 func (p *player) show_status() {

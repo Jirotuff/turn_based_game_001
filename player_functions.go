@@ -89,13 +89,13 @@ var Jessy = player{
 func (p *player) Player_turn(e *enemy) {
 	clear_screen()
 
-	fmt.Println("Friend")
+	fmt.Println("Friendly party:")
 	Player.show_status()
 	Pilgrim.show_status()
 	Fie.show_status()
 	Jessy.show_status()
 	fmt.Println("")
-	fmt.Println("\nFoe")
+	fmt.Println("\nFoe:")
 	e.show_status()
 
 	if p.special >= 3 {
@@ -163,7 +163,7 @@ func (p *player) Level_check() {
 		fmt.Println("\n", p.name, ":\033[92m Level up!!\033[0m")
 		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.max_health, p.max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
-		fmt.Println("(St)rength:", p.strength, "\n(In)telligence: ", p.intelligence, "\n(Ag)ility: ", p.agility, "\n(En)durance: ", p.endurance, "\n(So)cial: ", "")
+		fmt.Println("(St)rength:", p.strength, "\n(In)telligence: ", p.intelligence, "\n(Ag)ility: ", p.agility, "\n(En)durance: ", p.endurance)
 		p.level_up()
 	}
 }
@@ -194,7 +194,7 @@ func (p *player) level_up() {
 func (p *player) Check_player_life() {
 	if Player.health <= 0 {
 		fmt.Println("Your hero has been killed!")
-		fmt.Println("\nGold:", gold, "Player level:", Player.lv)
+		fmt.Println("\nGold: ", gold, "Player level: ", Player.lv)
 		fmt.Println("\nPress Enter to quit")
 
 		fmt.Scanln("")
@@ -240,8 +240,8 @@ func (p *player) Player_skill_kill(e *enemy) {
 
 func (p *player) Player_skill_strike(e *enemy) {
 
-	damage := rand.Intn(20) + 5 + p.strength
-	critical_damage := rand.Intn(20) + 30 + p.strength
+	damage := rand.Intn(20) + 5 + p.strength + equipment_phys_offense
+	critical_damage := rand.Intn(20) + 30 + p.strength + equipment_phys_offense
 
 	p.special += 1
 
@@ -258,8 +258,11 @@ func (p *player) Player_skill_strike(e *enemy) {
 }
 
 func (p *player) Player_skill_soul() {
+	var skill_points_added = rand.Intn(10) + 25
 
-	p.skill_points += 25
+	p.skill_points += skill_points_added
+
+	fmt.Println("Skill points revitalised: ", skill_points_added)
 }
 
 func (p *player) Player_skill_force(e *enemy) {
@@ -291,7 +294,7 @@ func (p *player) Player_skill_force(e *enemy) {
 func (p *player) Player_skill_heal() {
 	if p.skill_points >= 10 {
 
-		p.skill_points = -10
+		p.skill_points -= 10
 
 		heal := rand.Intn(20) + 5 + p.intelligence //amount healed
 
@@ -310,13 +313,15 @@ func (p *player) Player_skill_heal() {
 		Pilgrim.Normalize_stats()
 		Jessy.Normalize_stats()
 
+		fmt.Println("\nParty has healed: ", heal)
+
 		user_input = ""
 	}
 }
 
 func (p *player) Player_skill_special(e *enemy) {
-	damage := 70 + p.strength
-	critical_damage := rand.Intn(20) + 75 + p.strength
+	damage := 70 + p.strength + equipment_phys_offense
+	critical_damage := rand.Intn(20) + 75 + p.strength + equipment_phys_offense
 
 	if rand.Intn(11) == 9 { //Critical hit chance
 		e.health -= critical_damage
@@ -331,6 +336,8 @@ func (p *player) Player_skill_special(e *enemy) {
 }
 
 func (p *player) Use_item() {
+	var heal = 30
+
 	fmt.Println(inventory, "\n\nWhat item to use...\n\nType (ba)ck to return")
 	fmt.Scanln(&user_input)
 	switch strings.ToLower(user_input) {
@@ -338,19 +345,12 @@ func (p *player) Use_item() {
 	case "potion", "p", "po", "pot", "poti":
 		if contains_string(inventory, "potion") {
 			remove_item(inventory, "potion")
-			fmt.Println("You have used a potion...")
-			p.health += 30
+			p.health += heal
+			fmt.Println("You have used a potion, healed: ", heal)
 		} else {
 			fmt.Println("You do not have a potion")
 		}
-	case "fire_gem", "fi", "fir", "fire", "fire_":
-		if contains_string(inventory, "fire_gem") {
-			remove_item(inventory, "fire_gem")
-			fmt.Println(p.name, ": has used a fire_gem...")
-			fmt.Println("... DEBUG DEBUG DEBUG ...")
-		} else {
-			fmt.Println("You do not have a fire_gem")
-		}
+
 	case "revival_bead", "re", "rev", "revi", "reviv":
 		if contains_string(inventory, "revival_bead") {
 			remove_item(inventory, "revival_bead")

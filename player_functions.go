@@ -176,7 +176,7 @@ func (p *player) level_up() {
 	user_input = ""
 	fmt.Scanln(&user_input)
 
-	switch user_input {
+	switch strings.ToLower(user_input) {
 
 	case "strength", "st", "str", "stre":
 		p.strength += 2

@@ -464,7 +464,11 @@ func dungeon() {
 
 		}
 	case "floor 3", "3":
-		game_finished()
+		if floor_level_key >= 3 {
+			game_finished()
+		} else {
+			fmt.Println("You don't have the required key!")
+		}
 
 	case "back", "b", "ba", "bac":
 		clear_screen()

@@ -204,7 +204,6 @@ func after_combat() {
 	if rand.Intn(8) == 1 && get_chest {
 		chest()
 	}
-	get_chest = true
 
 	fmt.Println("Type 'battle' for another enounter or 'entrance' to return to the dungeon entrance")
 
@@ -212,13 +211,16 @@ func after_combat() {
 	switch strings.ToLower(user_input) {
 
 	case "entrance", "e", "en", "ent", "entr", "entra", "entran", "entranc":
+		get_chest = true
 		dungeon()
 
 	case "battle", "b", "ba", "bat", "batt", "battl":
+		get_chest = true
 		battle_intro = true
 		combat_select()
 
 	default:
+		get_chest = false
 		fmt.Println("Is that a typo?")
 		after_combat()
 	}
@@ -270,6 +272,7 @@ func chest() {
 		switch strings.ToLower(user_input) {
 
 		case "yes", "y", "ye":
+			get_chest = false
 			if contains_string(inventory, "lockpick") {
 
 				if current_floor == 1 {

@@ -722,16 +722,9 @@ func display_inventory() {
 
 	fmt.Scanln(&user_input)
 
-	switch strings.ToLower(user_input) {
+	clear_screen()
+	main()
 
-	case "back", "b", "ba", "bac":
-		clear_screen()
-		main()
-
-	default:
-		clear_screen()
-		main()
-	}
 }
 
 // This block below is for misc
@@ -741,7 +734,6 @@ func contains_string(slice []string, target string) bool {
 		if element == target {
 			return true
 		}
-
 	}
 	return false
 }

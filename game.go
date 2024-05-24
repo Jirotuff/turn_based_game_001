@@ -36,23 +36,17 @@ var (
 func main() {
 
 	if !name_selected {
-		name_selected = true
-		fmt.Println("What is your name?")
-		fmt.Scanln(&user_input)
-		Player.name = user_input
+		name_selection()
 	}
-
-	if contains_string(inventory, "bronze_sword") {
-		equipment_phys_offense = 10
-	}
-	if contains_string(inventory, "tin_foil_hat") {
-		equipment_magic_defense = 5
-	}
-	user_input = ""
 
 	if display_tutorial {
 		Tutorial()
 	}
+
+	check_equipment()
+
+	user_input = ""
+
 	battle_intro = true
 
 	Player.show_status()
@@ -117,6 +111,23 @@ func main() {
 	}
 }
 
+func name_selection() {
+
+	name_selected = true
+	fmt.Println("What is your name?")
+	fmt.Scanln(&user_input)
+	Player.name = user_input
+}
+
+func check_equipment() {
+	if contains_string(inventory, "bronze_sword") {
+		equipment_phys_offense = 10
+	}
+	if contains_string(inventory, "tin_foil_hat") {
+		equipment_magic_defense = 5
+	}
+}
+
 // This block below is for things that need to be checked and or changed
 
 func (e *enemy) check_victory() {
@@ -149,7 +160,7 @@ func (e *enemy) check_victory() {
 
 		gold_gained = rand.Intn(30) + 10
 
-		gold = gold + gold_gained
+		gold += gold_gained
 
 		if rand.Intn(20) == 1 {
 			item_gained = append(item_gained, "revival_bead")
@@ -157,7 +168,7 @@ func (e *enemy) check_victory() {
 		if rand.Intn(8) == 1 {
 			item_gained = append(item_gained, "potion")
 		}
-		if rand.Intn(30) == 1 {
+		if rand.Intn(15) == 1 {
 			item_gained = append(item_gained, "iron")
 		}
 		if rand.Intn(10) == 1 {
@@ -165,9 +176,6 @@ func (e *enemy) check_victory() {
 		}
 		if rand.Intn(4) == 1 {
 			item_gained = append(item_gained, "tin")
-		}
-		if rand.Intn(5) == 1 {
-			item_gained = append(item_gained, "coal")
 		}
 
 		inventory = append(inventory, item_gained...)
@@ -188,13 +196,7 @@ func (e *enemy) check_victory() {
 		fmt.Println("\nType any key to continue")
 		fmt.Scanln(&user_input)
 		clear_screen()
-		if user_input == (" ") {
-			clear_screen()
-			after_combat()
-		} else {
-			clear_screen()
-			after_combat()
-		}
+		after_combat()
 	}
 }
 
@@ -273,35 +275,37 @@ func chest() {
 
 		case "yes", "y", "ye":
 			get_chest = false
-			if contains_string(inventory, "lockpick") {
-
-				if current_floor == 1 {
-					remove_item(inventory, "lockpick")
-					gold_gained = rand.Intn(150) + 100
-					gold += gold_gained
-					item_gained = append(item_gained, "potion")
-					inventory = append(inventory, item_gained...)
-				}
-
-				if current_floor == 2 {
-					remove_item(inventory, "lockpick")
-					gold_gained = rand.Intn(250) + 150
-					gold += gold_gained
-					item_gained = append(item_gained, "revival bead")
-					inventory = append(inventory, item_gained...)
-				}
-				fmt.Println("\nLoot:\n\n gold: ", gold_gained, "\nitems: ", item_gained)
-
-				gold_gained = 0
-				item_gained = nil
-			} else {
+			if !contains_string(inventory, "lockpick") {
 				fmt.Println("You don't have any lockpicks...")
+				continue
 			}
+
+			if current_floor == 1 {
+				remove_item(inventory, "lockpick")
+				gold_gained = rand.Intn(150) + 100
+				gold += gold_gained
+				item_gained = append(item_gained, "potion")
+				inventory = append(inventory, item_gained...)
+			}
+
+			if current_floor == 2 {
+				remove_item(inventory, "lockpick")
+				gold_gained = rand.Intn(250) + 150
+				gold += gold_gained
+				item_gained = append(item_gained, "revival bead")
+				inventory = append(inventory, item_gained...)
+			}
+			fmt.Println("\nLoot:\n\n gold: ", gold_gained, "\nitems: ", item_gained)
+
+			gold_gained = 0
+			item_gained = nil
+
 		case "no", "n":
 			get_chest = false
 			after_combat()
 		default:
-			chest()
+			fmt.Println("Was that a typo?")
+			continue
 		}
 	}
 }

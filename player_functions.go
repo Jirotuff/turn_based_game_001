@@ -199,11 +199,7 @@ func (p *player) Check_player_life() {
 
 		fmt.Scanln("")
 		fmt.Scanf("%s", &user_input)
-		if user_input == "exit" {
-			os.Exit(0)
-		} else {
-			os.Exit(0)
-		}
+		os.Exit(0)
 
 	}
 }
@@ -299,6 +295,7 @@ func (p *player) Player_skill_heal() {
 		heal := rand.Intn(20) + 5 + p.intelligence //amount healed
 
 		Player.health += heal
+
 		if Jessy.health > 0 {
 			Jessy.health += heal
 		}

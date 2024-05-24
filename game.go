@@ -488,50 +488,6 @@ func dungeon() {
 	}
 }
 
-/*
-func shop() {
-	clear_screen()
-
-	fmt.Println("Welcome to the shop")
-	fmt.Println("\ngold: ", gold)
-	fmt.Println("\n- potion\t\t50 gold")
-	fmt.Println("- revival_bead\t\t150 gold")
-	fmt.Println("\nleave the shop (back)")
-
-	for {
-
-		fmt.Scanln(&user_input)
-
-		switch strings.ToLower(user_input) {
-
-		case "potion", "po", "pot", "poti", "potio":
-			if gold >= 50 {
-				gold -= 50
-				fmt.Println("you have bought a potion")
-				inventory = append(inventory, "potion")
-			} else {
-				fmt.Println("You lack gold!")
-			}
-
-		case "revival_bead", "re", "rev", "revi", "reviv", "reviva", "revival_", "revival_b":
-			if gold >= 150 {
-				gold -= 150
-				fmt.Println("you have bought a revival_bead")
-				inventory = append(inventory, "revival_bead")
-			} else {
-				fmt.Println("You lack gold!")
-			}
-		case "back", "b", "ba", "bac":
-			clear_screen()
-			main()
-
-		default:
-			fmt.Println("We don't have this item...")
-		}
-	}
-}
-*/
-
 func shop() {
 	clear_screen()
 
@@ -607,64 +563,6 @@ func smithy() {
 
 }
 
-/*
-
-func smithy_equip() {
-	fmt.Println("\n- sword\t\t\tCosts 1 bronze and 50 gold | increases physical offense for the entire party by 10")
-	fmt.Println("- tin foil hat\t\tCosts 1 tin and 5 gold | increases magical defense for the entire party by 5")
-
-	for {
-
-		fmt.Scanln(&user_input)
-
-		switch strings.ToLower(user_input) {
-
-		case "sword", "sw", "swo", "swor":
-			if contains_string(inventory, "bronze") {
-				if gold >= 50 {
-					gold -= 50
-					remove_item(inventory, "bronze")
-					fmt.Println("you've crafted a bronze_sword")
-					inventory = append(inventory, "bronze_sword")
-				} else {
-					fmt.Println("You lack gold!")
-				}
-
-			} else {
-				fmt.Println("You lack Bronze!")
-			}
-
-		case "tin_foil_hat", "tin_foil_ha", "tin_foil_h", "tin_foil", "tin_foi", "tin_fo", "tin_f", "tin", "ti":
-			if contains_string(inventory, "tin") {
-				if gold >= 5 {
-					gold -= 5
-					remove_item(inventory, "tin")
-					fmt.Println("you've crafted a tin foil hat")
-					inventory = append(inventory, "tin_foil_hat")
-				} else {
-					fmt.Println("You lack gold")
-				}
-			} else {
-				fmt.Println("You lack tin!")
-			}
-
-		case "back", "b", "ba", "bac":
-			clear_screen()
-			smithy()
-
-		case "exit", "ex", "exi":
-			clear_screen()
-			main()
-
-		default:
-			fmt.Println("You cant make this...")
-		}
-
-	}
-}
-
-*/
-
 func smithy_equip() {
 	fmt.Println("\n- sword\t\t\tCosts 1 bronze and 50 gold | increases physical offense for the entire party by 10")
 	fmt.Println("- tin foil hat\t\tCosts 1 tin and 5 gold | increases magical defense for the entire party by 5")
@@ -722,44 +620,6 @@ func smithy_equip() {
 	}
 }
 
-/*
-func smithy_item() {
-
-	fmt.Println("\n- lockpicks\t\tCosts 1 iron and 20 gold, used to open treasure chests")
-
-	for {
-		fmt.Scanln(&user_input)
-
-		switch strings.ToLower(user_input) {
-
-		case "lockpick", "l", "lo", "loc", "lock", "lockp", "lockpi", "lockpic":
-			if contains_string(inventory, "iron") {
-				if gold >= 20 {
-					gold -= 20
-					remove_item(inventory, "iron")
-					fmt.Println("you've crafted some lockpicks")
-					inventory = append(inventory, "lockpick", "lockpick", "lockpick")
-				}
-
-			} else {
-				fmt.Println("You lack iron!")
-			}
-
-		case "back", "b", "ba", "bac":
-			clear_screen()
-			smithy()
-
-		case "exit", "ex", "exi":
-			clear_screen()
-			main()
-
-		default:
-			fmt.Println("You can't craft this...")
-		}
-	}
-}
-*/
-
 func smithy_item() {
 
 	fmt.Println("\n- lockpicks\t\tCosts 1 iron and 20 gold, used to open treasure chests")
@@ -798,50 +658,6 @@ func smithy_item() {
 		}
 	}
 }
-
-/*
-
-func smithy_material() {
-	fmt.Println("\n- bronze\t\tCosts 1 copper, 1 tin and 30 gold")
-
-	for {
-		fmt.Scanln(&user_input)
-
-		switch strings.ToLower(user_input) {
-
-		case "bronze", "bronz", "bron", "bro", "br":
-			if contains_string(inventory, "copper") {
-				if contains_string(inventory, "tin") {
-					if gold >= 30 {
-						gold -= 30
-						remove_item(inventory, "copper")
-						fmt.Println("you've crafted some bronze")
-						inventory = append(inventory, "bronze")
-					} else {
-						fmt.Println("You lack gold")
-					}
-				} else {
-					fmt.Println("You lack tin")
-				}
-
-			} else {
-				fmt.Println("You lack copper!")
-			}
-
-		case "back", "ba", "bac":
-			clear_screen()
-			smithy()
-
-		case "exit", "ex", "exi":
-			clear_screen()
-			main()
-
-		default:
-			fmt.Println("You can't craft this...")
-		}
-	}
-}
-*/
 
 func smithy_material() {
 	fmt.Println("\n- bronze\t\tCosts 1 copper, 1 tin and 30 gold")

@@ -9,79 +9,79 @@ import (
 
 // The player type holds stats and limits
 type player struct {
-	max_health       int
-	max_skill_points int
-	name             string
-	special          int
-	exp              int
-	lv               int
-	health           int // player health
-	skill_points     int // points used to cast magic spells
-	strength         int // increases physical damage
-	intelligence     int // increases magical damage
-	agility          int // increases chance to dodge
-	endurance        int // reduces damage taken
+	Max_health       int
+	Max_skill_points int
+	Name             string
+	Special          int
+	Exp              int
+	Lv               int
+	Health           int // player Health
+	Skill_points     int // points used to cast magic spells
+	Strength         int // increases physical damage
+	Intelligence     int // increases magical damage
+	Agility          int // increases chance to dodge
+	Endurance        int // reduces damage taken
 }
 
 // Player
 var Player = player{
-	max_health:       110,
-	max_skill_points: 75,
-	name:             "",
-	special:          0,
-	exp:              0,
-	lv:               1,
-	health:           110,
-	skill_points:     75,
-	strength:         12,
-	intelligence:     12,
-	agility:          10,
-	endurance:        10,
+	Max_health:       110,
+	Max_skill_points: 75,
+	Name:             "",
+	Special:          0,
+	Exp:              0,
+	Lv:               1,
+	Health:           110,
+	Skill_points:     75,
+	Strength:         12,
+	Intelligence:     12,
+	Agility:          10,
+	Endurance:        10,
 }
 
 var Pilgrim = player{
-	max_health:       120,
-	max_skill_points: 70,
-	name:             name_2,
-	special:          0,
-	exp:              0,
-	lv:               1,
-	health:           120,
-	skill_points:     70,
-	strength:         10,
-	intelligence:     8,
-	agility:          8,
-	endurance:        14,
+	Max_health:       120,
+	Max_skill_points: 70,
+	Name:             name_2,
+	Special:          0,
+	Exp:              0,
+	Lv:               1,
+	Health:           120,
+	Skill_points:     70,
+	Strength:         10,
+	Intelligence:     8,
+	Agility:          8,
+	Endurance:        14,
 }
 
 var Fie = player{
-	max_health:       90,
-	max_skill_points: 80,
-	name:             name_3,
-	special:          0,
-	exp:              0,
-	lv:               1,
-	health:           90,
-	skill_points:     80,
-	strength:         10,
-	intelligence:     10,
-	agility:          14,
-	endurance:        8,
+	Max_health:       90,
+	Max_skill_points: 80,
+	Name:             name_3,
+	Special:          0,
+	Exp:              0,
+	Lv:               1,
+	Health:           90,
+	Skill_points:     80,
+	Strength:         10,
+	Intelligence:     10,
+	Agility:          14,
+	Endurance:        8,
 }
 
 var Jessy = player{
-	max_health:       80,
-	max_skill_points: 90,
-	name:             name_4,
-	special:          0,
-	exp:              0,
-	lv:               1,
-	health:           100,
-	skill_points:     90,
-	strength:         8,
-	intelligence:     14,
-	agility:          12,
-	endurance:        10,
+	Max_health:       80,
+	Max_skill_points: 90,
+	Name:             name_4,
+	Special:          0,
+	Exp:              0,
+	Lv:               1,
+	Health:           100,
+	Skill_points:     90,
+	Strength:         8,
+	Intelligence:     14,
+	Agility:          12,
+	Endurance:        10,
 }
 
 // The block below currently only contains the player's turn, might expend upon this later
@@ -98,12 +98,12 @@ func (p *player) Player_turn(e *enemy) {
 	fmt.Println("\nFoe:")
 	e.show_status()
 
-	if p.special >= 3 {
+	if p.Special >= 3 {
 		{
-			fmt.Println(p.name, "\033[95mfeels a strange power welling up inside... (type 'special' to unleash it)\033[0m")
+			fmt.Println(p.Name, "\033[95mfeels a strange power welling up inside... (type 'Special' to unleash it)\033[0m")
 		}
 	}
-	fmt.Println(p.name, "'s turn")
+	fmt.Println(p.Name, "'s turn")
 	fmt.Println("\nWhat's your move?")
 	fmt.Println("\n>> (st)rike\t\t\t> Use your basic weapon\t")
 	fmt.Println(">> (h)eal	| 10 SP\t\t> Use an healing spell\t")
@@ -133,9 +133,9 @@ func (p *player) Player_turn(e *enemy) {
 	case "kill", "k", "ki", "kil":
 		p.Player_skill_kill(e)
 
-	case "special", "sp", "spe", "spec", "speci", "specia":
-		if p.special > 2 {
-			p.special = 0
+	case "Special", "sp", "spe", "spec", "speci", "specia":
+		if p.Special > 2 {
+			p.Special = 0
 			p.Player_skill_special(e)
 		} else {
 			fmt.Println("You dont have the energy for this move")
@@ -152,18 +152,18 @@ func (p *player) Player_turn(e *enemy) {
 
 // The block below is for storing things that need to be checked (and changed?) in regards to the players
 
-// checks if the player has enough exp to level up, if so increases level and stats
+// checks if the player has enough Exp to level up, if so increases level and stats
 func (p *player) Level_check() {
-	if p.exp >= 100 && p.lv < 2 || p.exp >= 500 && p.lv < 3 || p.exp >= 1500 && p.lv < 4 || p.exp >= 3000 && p.lv < 5 || p.exp >= 5000 && p.lv < 6 || p.exp >= 10000 && p.lv < 7 {
-		p.lv++
-		p.max_health += 10
-		p.max_skill_points += 5
-		p.health = p.max_health
-		p.skill_points = p.max_skill_points
-		fmt.Println("\n", p.name, ":\033[92m Level up!!\033[0m")
-		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.max_health, p.max_skill_points)
+	if p.Exp >= 100 && p.Lv < 2 || p.Exp >= 500 && p.Lv < 3 || p.Exp >= 1500 && p.Lv < 4 || p.Exp >= 3000 && p.Lv < 5 || p.Exp >= 5000 && p.Lv < 6 || p.Exp >= 10000 && p.Lv < 7 {
+		p.Lv++
+		p.Max_health += 10
+		p.Max_skill_points += 5
+		p.Health = p.Max_health
+		p.Skill_points = p.Max_skill_points
+		fmt.Println("\n", p.Name, ":\033[92m Level up!!\033[0m")
+		fmt.Printf("\nMax HP: %d, Max SP: %d\n", p.Max_health, p.Max_skill_points)
 		fmt.Println("\nWhat stat would you like to improve?")
-		fmt.Println("(St)rength:", p.strength, "\n(In)telligence: ", p.intelligence, "\n(Ag)ility: ", p.agility, "\n(En)durance: ", p.endurance)
+		fmt.Println("(St)rength:", p.Strength, "\n(In)telligence: ", p.Intelligence, "\n(Ag)ility: ", p.Agility, "\n(En)durance: ", p.Endurance)
 		p.level_up()
 	}
 }
@@ -173,17 +173,17 @@ func (p *player) level_up() {
 
 	switch strings.ToLower(user_input) {
 
-	case "strength", "st", "str", "stre":
-		p.strength += 2
+	case "Strength", "st", "str", "stre":
+		p.Strength += 2
 
-	case "intelligence", "in", "int", "inte":
-		p.intelligence += 2
+	case "Intelligence", "in", "int", "inte":
+		p.Intelligence += 2
 
-	case "agility", "ag", "agi", "agil":
-		p.agility += 2
+	case "Agility", "ag", "agi", "agil":
+		p.Agility += 2
 
-	case "endurance", "en", "end", "endu":
-		p.endurance += 2
+	case "Endurance", "en", "end", "endu":
+		p.Endurance += 2
 
 	default:
 		p.level_up()
@@ -192,9 +192,9 @@ func (p *player) level_up() {
 
 // checks game over
 func (p *player) Check_player_life() {
-	if Player.health <= 0 {
+	if Player.Health <= 0 {
 		fmt.Println("Your hero has been killed!")
-		fmt.Println("\nGold: ", gold, "Player level: ", Player.lv)
+		fmt.Println("\nGold: ", gold, "Player level: ", Player.Lv)
 		fmt.Println("\nPress Enter to quit")
 
 		fmt.Scanln("")
@@ -205,30 +205,30 @@ func (p *player) Check_player_life() {
 }
 
 func (p *player) Normalize_stats() {
-	if p.health > p.max_health {
-		p.health = p.max_health
+	if p.Health > p.Max_health {
+		p.Health = p.Max_health
 	}
-	if p.skill_points > p.max_skill_points {
-		p.skill_points = p.max_skill_points
+	if p.Skill_points > p.Max_skill_points {
+		p.Skill_points = p.Max_skill_points
 	}
-	if p.special > 3 {
-		p.special = 3
+	if p.Special > 3 {
+		p.Special = 3
 	}
 }
 
 // The block below is the place to store all skills that the players can use
 
 func (p *player) Player_skill_kill(e *enemy) {
-	damage := rand.Intn(20) + 5 + Player.strength + 9999
-	critical_damage := rand.Intn(20) + 30 + Player.strength + 9999
+	damage := rand.Intn(20) + 5 + Player.Strength + 9999
+	critical_damage := rand.Intn(20) + 30 + Player.Strength + 9999
 
 	if rand.Intn(11) == 9 { //Critical hit chance
-		e.health -= critical_damage
+		e.Health -= critical_damage
 		fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		fmt.Println("")
 		user_input = ""
 	} else {
-		e.health -= damage
+		e.Health -= damage
 		fmt.Println(damage, "DMG")
 		user_input = ""
 	}
@@ -236,18 +236,18 @@ func (p *player) Player_skill_kill(e *enemy) {
 
 func (p *player) Player_skill_strike(e *enemy) {
 
-	damage := rand.Intn(20) + 5 + p.strength + equipment_phys_offense
-	critical_damage := rand.Intn(20) + 30 + p.strength + equipment_phys_offense
+	damage := rand.Intn(20) + 5 + p.Strength + equipment_phys_offense
+	critical_damage := rand.Intn(20) + 30 + p.Strength + equipment_phys_offense
 
-	p.special += 1
+	p.Special += 1
 
 	if rand.Intn(11) == 9 { //Critical hit chance
-		e.health -= critical_damage
+		e.Health -= critical_damage
 		fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		fmt.Println("")
 		user_input = ""
 	} else {
-		e.health -= damage
+		e.Health -= damage
 		fmt.Println(damage, "DMG")
 		user_input = ""
 	}
@@ -256,28 +256,28 @@ func (p *player) Player_skill_strike(e *enemy) {
 func (p *player) Player_skill_soul() {
 	var skill_points_added = rand.Intn(10) + 25
 
-	p.skill_points += skill_points_added
+	p.Skill_points += skill_points_added
 
 	fmt.Println("Skill points revitalised: ", skill_points_added)
 }
 
 func (p *player) Player_skill_force(e *enemy) {
-	damage := rand.Intn(5) + 20 + p.intelligence
-	critical_damage := rand.Intn(20) + 30 + p.intelligence
+	damage := rand.Intn(5) + 20 + p.Intelligence
+	critical_damage := rand.Intn(20) + 30 + p.Intelligence
 
-	if p.skill_points >= 20 {
+	if p.Skill_points >= 20 {
 
-		p.skill_points -= 20
+		p.Skill_points -= 20
 
-		p.special += 1
+		p.Special += 1
 
 		if rand.Intn(3) == 2 { //Critical hit chance
 
-			e.health -= critical_damage
+			e.Health -= critical_damage
 			fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 			user_input = ""
 		} else {
-			e.health -= damage
+			e.Health -= damage
 			fmt.Println(damage, "DMG")
 			user_input = ""
 		}
@@ -288,22 +288,22 @@ func (p *player) Player_skill_force(e *enemy) {
 }
 
 func (p *player) Player_skill_heal() {
-	if p.skill_points >= 10 {
+	if p.Skill_points >= 10 {
 
-		p.skill_points -= 10
+		p.Skill_points -= 10
 
-		heal := rand.Intn(20) + 5 + p.intelligence //amount healed
+		heal := rand.Intn(20) + 5 + p.Intelligence //amount healed
 
-		Player.health += heal
+		Player.Health += heal
 
-		if Jessy.health > 0 {
-			Jessy.health += heal
+		if Jessy.Health > 0 {
+			Jessy.Health += heal
 		}
-		if Pilgrim.health > 0 {
-			Pilgrim.health += heal
+		if Pilgrim.Health > 0 {
+			Pilgrim.Health += heal
 		}
-		if Fie.health > 0 {
-			Fie.health += heal
+		if Fie.Health > 0 {
+			Fie.Health += heal
 		}
 		Player.Normalize_stats()
 		Fie.Normalize_stats()
@@ -317,16 +317,16 @@ func (p *player) Player_skill_heal() {
 }
 
 func (p *player) Player_skill_special(e *enemy) {
-	damage := 70 + p.strength + equipment_phys_offense
-	critical_damage := rand.Intn(20) + 75 + p.strength + equipment_phys_offense
+	damage := 70 + p.Strength + equipment_phys_offense
+	critical_damage := rand.Intn(20) + 75 + p.Strength + equipment_phys_offense
 
 	if rand.Intn(11) == 9 { //Critical hit chance
-		e.health -= critical_damage
+		e.Health -= critical_damage
 		fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		fmt.Println("")
 		user_input = ""
 	} else {
-		e.health -= damage
+		e.Health -= damage
 		fmt.Println(damage, "DMG")
 		user_input = ""
 	}
@@ -342,7 +342,7 @@ func (p *player) Use_item() {
 	case "potion", "p", "po", "pot", "poti":
 		if contains_string(inventory, "potion") {
 			remove_item(inventory, "potion")
-			p.health += heal
+			p.Health += heal
 			fmt.Println("You have used a potion, healed: ", heal)
 		} else {
 			fmt.Println("You do not have a potion")
@@ -352,14 +352,14 @@ func (p *player) Use_item() {
 		if contains_string(inventory, "revival_bead") {
 			remove_item(inventory, "revival_bead")
 			fmt.Println("You have used a revival_bead...")
-			if Pilgrim.health < 1 {
-				Pilgrim.health = 50
+			if Pilgrim.Health < 1 {
+				Pilgrim.Health = 50
 			}
-			if Fie.health < 1 {
-				Fie.health = 50
+			if Fie.Health < 1 {
+				Fie.Health = 50
 			}
-			if Jessy.health < 1 {
-				Jessy.health = 50
+			if Jessy.Health < 1 {
+				Jessy.Health = 50
 			}
 		} else {
 			fmt.Println("you do not have a revival bead")

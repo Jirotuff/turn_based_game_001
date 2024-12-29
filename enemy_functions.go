@@ -6,54 +6,54 @@ import (
 )
 
 type enemy struct {
-	name             string
-	health           int
-	skill_points     int
-	max_skill_points int
-	max_health       int
+	Name             string
+	Health           int
+	Skill_points     int
+	Max_skill_points int
+	Max_health       int
 }
 
 var Bandit = enemy{
-	name:             "Bandit",
-	health:           200,
-	skill_points:     80,
-	max_skill_points: 80,
-	max_health:       200,
+	Name:             "Bandit",
+	Health:           200,
+	Skill_points:     80,
+	Max_skill_points: 80,
+	Max_health:       200,
 }
 
 var Dark_knight = enemy{
-	name:             "Dark knight",
-	health:           350,
-	skill_points:     200,
-	max_skill_points: 200,
-	max_health:       350,
+	Name:             "Dark knight",
+	Health:           350,
+	Skill_points:     200,
+	Max_skill_points: 200,
+	Max_health:       350,
 }
 
 var Golem = enemy{
-	name:             "Stone golem",
-	health:           750,
-	skill_points:     0,
-	max_skill_points: 0,
-	max_health:       750,
+	Name:             "Stone golem",
+	Health:           750,
+	Skill_points:     0,
+	Max_skill_points: 0,
+	Max_health:       750,
 }
 
 var Goblin = enemy{
-	name:             "Goblin",
-	health:           80,
-	skill_points:     20,
-	max_skill_points: 20,
-	max_health:       80,
+	Name:             "Goblin",
+	Health:           80,
+	Skill_points:     20,
+	Max_skill_points: 20,
+	Max_health:       80,
 }
 
 var enemy_input int
 
 // The block below currently only contains the enemy's turn, might expend upon this later
 func (e *enemy) Enemy_turn() {
-	fmt.Println(e.name, "'s turn")
+	fmt.Println(e.Name, "'s turn")
 	fmt.Println("")
 	enemy_input = rand.Intn(3)
 
-	if e.health >= 1 {
+	if e.Health >= 1 {
 		switch enemy_input {
 
 		case 0:
@@ -124,54 +124,54 @@ func (e *enemy) Enemy_turn() {
 // Reset enemy healt and skill points to max
 // this needs to happen because i cant call an instance of an enemy yet
 func Reset_enemy(e *enemy) {
-	e.health = e.max_health
-	e.skill_points = e.max_skill_points
+	e.Health = e.Max_health
+	e.Skill_points = e.Max_skill_points
 }
 
-// Check if enemy e health depleted and declare victory
+// Check if enemy e Health depleted and declare victory
 func (e *enemy) Check_enemy_life() {
-	if e.health <= 0 {
+	if e.Health <= 0 {
 		victory = true
 
 		e.check_victory()
 	}
 }
 
-// Validate limits on enemy health
+// Validate limits on enemy Health
 // TODO put these checks inline?
 func (e *enemy) Normalize_stats_enemy() {
-	if e.health > e.max_health {
-		e.health = e.max_health
+	if e.Health > e.Max_health {
+		e.Health = e.Max_health
 	}
-	if e.skill_points > e.max_skill_points {
-		e.skill_points = e.max_skill_points
+	if e.Skill_points > e.Max_skill_points {
+		e.Skill_points = e.Max_skill_points
 	}
 }
 
 // The block below is the place to store all skills that the enemies can use
 
-// Heal an enemy by adding 50 plus a random value between 0 and 50 to health
+// Heal an enemy by adding 50 plus a random value between 0 and 50 to Health
 func (e *enemy) Enemy_skill_heal() {
 	heal := rand.Intn(50) + 50 //amount healed
-	fmt.Println(e.name, "has healed")
-	e.health += heal
+	fmt.Println(e.Name, "has healed")
+	e.Health += heal
 	fmt.Println(heal, "Healed")
 }
 
-// Enemy e strikes player p and decreases player health using chance
+// Enemy e strikes player p and decreases player Health using chance
 // TODO could be interesting remodelling this formula and logic
 func (e *enemy) Enemy_skill_strike(p *player) {
-	fmt.Println(e.name, "used strike")
-	damage := rand.Intn(10) + 50 - p.endurance
-	critical_damage := rand.Intn(20) + 60 - p.endurance
+	fmt.Println(e.Name, "used strike")
+	damage := rand.Intn(10) + 50 - p.Endurance
+	critical_damage := rand.Intn(20) + 60 - p.Endurance
 
-	if rand.Intn(100) > p.agility {
+	if rand.Intn(100) > p.Agility {
 
 		if rand.Intn(11) == 9 { //Critical hit chance
-			p.health -= critical_damage
+			p.Health -= critical_damage
 			fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		} else {
-			p.health -= damage
+			p.Health -= damage
 			fmt.Println(damage, "DMG")
 		}
 	} else {
@@ -183,22 +183,22 @@ func (e *enemy) Enemy_skill_strike(p *player) {
 // TODO better description of the logic
 func (e *enemy) Enemy_skill_force(p *player) {
 
-	damage := rand.Intn(10) + 70 - p.endurance - equipment_magic_defense
-	critical_damage := rand.Intn(20) + 80 - p.endurance - equipment_magic_defense
+	damage := rand.Intn(10) + 70 - p.Endurance - equipment_magic_defense
+	critical_damage := rand.Intn(20) + 80 - p.Endurance - equipment_magic_defense
 
-	fmt.Println(e.name, "cast force")
+	fmt.Println(e.Name, "cast force")
 
-	if e.skill_points >= 20 {
+	if e.Skill_points >= 20 {
 
-		e.skill_points -= 20
+		e.Skill_points -= 20
 
-		if rand.Intn(100) >= p.agility {
+		if rand.Intn(100) >= p.Agility {
 
 			if rand.Intn(3) == 1 { //Critical hit chance
-				p.health -= critical_damage
+				p.Health -= critical_damage
 				fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 			} else {
-				p.health -= damage
+				p.Health -= damage
 				fmt.Println(damage, "DMG")
 			}
 		} else {
@@ -207,24 +207,24 @@ func (e *enemy) Enemy_skill_force(p *player) {
 	} else {
 		fmt.Println("but nothing happened...")
 		damage = 0
-		p.health -= damage
+		p.Health -= damage
 		fmt.Println(damage, "DMG")
 		fmt.Scanln()
 	}
 }
 
 func (e *enemy) Enemy_skill_smash(p *player) {
-	fmt.Println(e.name, "used Smash")
-	damage := rand.Intn(10) + 60 - p.endurance
-	critical_damage := rand.Intn(10) + 70 - p.endurance
+	fmt.Println(e.Name, "used Smash")
+	damage := rand.Intn(10) + 60 - p.Endurance
+	critical_damage := rand.Intn(10) + 70 - p.Endurance
 
-	if rand.Intn(100) > p.agility {
+	if rand.Intn(100) > p.Agility {
 
 		if rand.Intn(11) == 9 { //Critical hit chance
-			p.health -= critical_damage
+			p.Health -= critical_damage
 			fmt.Println(critical_damage, "DMG / CRITICAL HIT!!")
 		} else {
-			p.health -= damage
+			p.Health -= damage
 			fmt.Println(damage, "DMG")
 		}
 	} else {

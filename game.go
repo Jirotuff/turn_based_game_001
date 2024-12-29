@@ -62,6 +62,7 @@ func main() {
 	fmt.Println("Smithy\t\t> enter the smithy")
 	fmt.Println("Stats\t\t> show player stats")
 	fmt.Println("Inventory\t> show player inventory")
+	fmt.Println("Data management\t> save and load here")
 	fmt.Println("Exit\t\t> exits the game")
 	fmt.Println("")
 
@@ -70,7 +71,7 @@ func main() {
 
 		switch strings.ToLower(user_input) {
 
-		case "data":
+		case "data", "dat", "da":
 			data_management()
 
 		case "dungeon", "du", "dun", "dung", "dunge", "dungeo":
@@ -742,38 +743,24 @@ func data_management() {
 	switch strings.ToLower(user_input) {
 
 	case "save":
-		clear_screen()
 		save_game()
 	}
 }
 
-type Person struct {
-	Name  string `json:"Name"`
-	Age   int    `json:"age"`
-	Email string `json:"email,omitempty"`
-}
-
 func save_game() {
 
-	person := Person{
-		Name:  "John Doe",
-		Age:   30,
-		Email: "john@example.com",
-	}
+	characters := []player{Player, Pilgrim, Fie, Jessy}
 
-	jsonBytes, err := json.Marshal(Pilgrim)
+	fmt.Println("Saving game data...")
+
+	character_save, err := json.Marshal(characters)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
-	fmt.Println(string(jsonBytes))
-	jsonBytes2, err := json.Marshal(person)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	fmt.Println(string(jsonBytes2))
-	fmt.Println(Pilgrim)
+	fmt.Println("Save completed!\n")
+	fmt.Println(string(character_save))
+	fmt.Println("\n***Press enter to continue***")
 }
 
 // This block below is for misc

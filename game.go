@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"os"
@@ -61,6 +62,7 @@ func main() {
 	fmt.Println("Smithy\t\t> enter the smithy")
 	fmt.Println("Stats\t\t> show player stats")
 	fmt.Println("Inventory\t> show player inventory")
+	fmt.Println("Data management\t> save and load here")
 	fmt.Println("Exit\t\t> exits the game")
 	fmt.Println("")
 
@@ -68,6 +70,9 @@ func main() {
 		fmt.Scanln(&user_input)
 
 		switch strings.ToLower(user_input) {
+
+		case "data", "dat", "da":
+			data_management()
 
 		case "dungeon", "du", "dun", "dung", "dunge", "dungeo":
 			dungeon()
@@ -114,9 +119,9 @@ func main() {
 func name_selection() {
 
 	name_selected = true
-	fmt.Println("What is your name?")
+	fmt.Println("What is your Name?")
 	fmt.Scanln(&user_input)
-	Player.name = user_input
+	Player.Name = user_input
 }
 
 func check_equipment() {
@@ -153,10 +158,10 @@ func (e *enemy) check_victory() {
 
 		exp_gained = rand.Intn(50) + 50
 
-		Player.exp += exp_gained
-		Pilgrim.exp += exp_gained
-		Fie.exp += exp_gained
-		Jessy.exp += exp_gained
+		Player.Exp += exp_gained
+		Pilgrim.Exp += exp_gained
+		Fie.Exp += exp_gained
+		Jessy.Exp += exp_gained
 
 		gold_gained = rand.Intn(30) + 10
 
@@ -329,17 +334,17 @@ func combat_101() {
 		Bandit.Check_enemy_life()
 		Player.Player_turn(&Bandit)
 		Bandit.Check_enemy_life()
-		if Pilgrim.health > 0 {
+		if Pilgrim.Health > 0 {
 			Pilgrim.Player_turn(&Bandit)
 			Bandit.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
-		if Fie.health > 0 {
+		if Fie.Health > 0 {
 			Fie.Player_turn(&Bandit)
 			Bandit.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
-		if Jessy.health > 0 {
+		if Jessy.Health > 0 {
 			Jessy.Player_turn(&Bandit)
 			Bandit.Check_enemy_life()
 		}
@@ -363,17 +368,17 @@ func combat_102() {
 		Goblin.Check_enemy_life()
 		Player.Player_turn(&Goblin)
 		Goblin.Check_enemy_life()
-		if Pilgrim.health > 0 {
+		if Pilgrim.Health > 0 {
 			Pilgrim.Player_turn(&Goblin)
 			Goblin.Check_enemy_life()
 		}
 		Goblin.Check_enemy_life()
-		if Fie.health > 0 {
+		if Fie.Health > 0 {
 			Fie.Player_turn(&Goblin)
 			Goblin.Check_enemy_life()
 		}
 		Goblin.Check_enemy_life()
-		if Jessy.health > 0 {
+		if Jessy.Health > 0 {
 			Jessy.Player_turn(&Goblin)
 			Goblin.Check_enemy_life()
 		}
@@ -398,17 +403,17 @@ func combat_201() {
 		Dark_knight.Check_enemy_life()
 		Player.Player_turn(&Dark_knight)
 		Dark_knight.Check_enemy_life()
-		if Pilgrim.health > 0 {
+		if Pilgrim.Health > 0 {
 			Pilgrim.Player_turn(&Dark_knight)
 			Dark_knight.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
-		if Fie.health > 0 {
+		if Fie.Health > 0 {
 			Fie.Player_turn(&Dark_knight)
 			Dark_knight.Check_enemy_life()
 		}
 		Bandit.Check_enemy_life()
-		if Jessy.health > 0 {
+		if Jessy.Health > 0 {
 			Jessy.Player_turn(&Dark_knight)
 			Dark_knight.Check_enemy_life()
 		}
@@ -432,17 +437,17 @@ func combat_202() {
 		Golem.Check_enemy_life()
 		Player.Player_turn(&Golem)
 		Golem.Check_enemy_life()
-		if Pilgrim.health > 0 {
+		if Pilgrim.Health > 0 {
 			Pilgrim.Player_turn(&Golem)
 			Golem.Check_enemy_life()
 		}
 		Golem.Check_enemy_life()
-		if Fie.health > 0 {
+		if Fie.Health > 0 {
 			Fie.Player_turn(&Golem)
 			Golem.Check_enemy_life()
 		}
 		Golem.Check_enemy_life()
-		if Jessy.health > 0 {
+		if Jessy.Health > 0 {
 			Jessy.Player_turn(&Golem)
 			Golem.Check_enemy_life()
 		}
@@ -706,12 +711,12 @@ func smithy_material() {
 
 func (p *player) display_stats() {
 
-	fmt.Println("\n", p.name, "lv:", p.lv)
-	fmt.Println("Exp:", p.exp)
-	fmt.Println("\nStrength:", p.strength)
-	fmt.Println("Intelligence:", p.intelligence)
-	fmt.Println("Agility:", p.agility)
-	fmt.Println("Endurance:", p.endurance)
+	fmt.Println("\n", p.Name, "lv:", p.Lv)
+	fmt.Println("Exp:", p.Exp)
+	fmt.Println("\nStrength:", p.Strength)
+	fmt.Println("Intelligence:", p.Intelligence)
+	fmt.Println("Agility:", p.Agility)
+	fmt.Println("Endurance:", p.Endurance)
 }
 
 func display_inventory() {
@@ -725,6 +730,37 @@ func display_inventory() {
 	clear_screen()
 	main()
 
+}
+
+func data_management() {
+	clear_screen()
+
+	fmt.Println("In this menu you can save your progress")
+	fmt.Println("Type 'save'")
+
+	fmt.Scanln(&user_input)
+
+	switch strings.ToLower(user_input) {
+
+	case "save":
+		save_game()
+	}
+}
+
+func save_game() {
+
+	characters := []player{Player, Pilgrim, Fie, Jessy}
+
+	fmt.Println("Saving game data...")
+
+	character_save, err := json.Marshal(characters)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println("Save completed!\n")
+	fmt.Println(string(character_save))
+	fmt.Println("\n***Press enter to continue***")
 }
 
 // This block below is for misc
@@ -764,7 +800,7 @@ func quit() {
 
 func Tutorial() {
 	display_tutorial = false
-	fmt.Println("Welcome to this game", Player.name)
+	fmt.Println("Welcome to this game", Player.Name)
 	fmt.Println("\nThis is a turn based game, as the player you can type the one of the moves to execute it.")
 	fmt.Println("Your goal is to progress to the third floor of the dungeon. defeating enemies on one floor will get you the key to the next")
 	fmt.Println("This is a debug version")
@@ -772,18 +808,18 @@ func Tutorial() {
 }
 
 func (p *player) show_status() {
-	if p.health > 0 {
-		fmt.Println(p.name, ":\nhealth: ", p.health, "skill points: ", p.skill_points, "Special points: ", p.special)
+	if p.Health > 0 {
+		fmt.Println(p.Name, ":\nhealth: ", p.Health, "skill points: ", p.Skill_points, "Special points: ", p.Special)
 	} else {
-		fmt.Println(p.name, ":\n\033[95m DEAD...\033[0m")
+		fmt.Println(p.Name, ":\n\033[95m DEAD...\033[0m")
 	}
 }
 
 func (e *enemy) show_status() {
-	if e.health > 0 {
-		fmt.Println(e.name, ":\nhealth: ", e.health, "skill points: ", e.skill_points)
+	if e.Health > 0 {
+		fmt.Println(e.Name, ":\nhealth: ", e.Health, "skill points: ", e.Skill_points)
 	} else {
-		fmt.Println(e.name, ":\n\033[95m DEAD...\033[0m")
+		fmt.Println(e.Name, ":\n\033[95m DEAD...\033[0m")
 	}
 }
 

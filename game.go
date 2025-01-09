@@ -758,9 +758,15 @@ func save_game() {
 		fmt.Println("Error:", err)
 		return
 	}
-	fmt.Println("Save completed!\n")
-	fmt.Println(string(character_save))
+
+	err = os.WriteFile("output.json", character_save, 0644)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Save completed!")
 	fmt.Println("\n***Press enter to continue***")
+
 }
 
 // This block below is for misc
